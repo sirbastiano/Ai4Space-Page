@@ -1,0 +1,35 @@
+\subsection{Topics covered and subject areas}
+\label{subsec: topics}
+\subsubsection{Background}
+The space sector is characterized by significant growth due to substantial investment and technology advancements. Areas like Earth Observation (EO), space situational awareness, telecommunication, space exploration have witnessed a remarkable expansion. 
+
+In this scenario, Artificial Intelligence (AI) is playing a pivotal role in unlocking novel commercial and  operational mission paradigms thanks to its unprecedented capabilities to enhance spacecraft and satellites' automation, process vast amount of space-borne data and extract actionable information. Examples of applications enabled by AI include autonomous and intelligent rovers for planetary explorations, onboard payload data processing for low-latency deliverable of actionable information from EO satellites, detection of exoplanets from scientific mission data, among others.
+
+Despite these advancements, several technical challenges remain that hinder AI application in space. These include fundamental difficulties in vision and learning for space (\eg, lack of training data, unknown operating environments), limited computing resources and energy budget, harsh operative environment (radiation, extreme temperatures).  
+
+\subsubsection{Objectives and subject areas}
+This workshop aims to explore \textbf{Artificial Intelligence and computer vision algorithms for space applications} (\textbf{primary subject area}). 
+
+More specifically, the workshop focuses on these specific \textbf{secondary subject areas (SSA)}  relevant to space applications:
+
+\begin{itemize}
+    \item \textbf{SSA1}: ML for onboard spacecraft payload data processing
+    \item \textbf{SSA2}: Autonomous and reliable space systems 
+    \item \textbf{SSA3}: Novel sensors and computing devices for AI-powered space systems
+    \item \textbf{SSA4}: Novel datasets, learning and domain adaptation techniques for space applications
+    \item \textbf{SSA5}: ML for astronomy
+\end{itemize}
+
+\subsubsection{Topics}
+A non-exhaustive list of topics relevant to the workshop is as follow. The related SSAs are indicated among brackets:
+
+\begin{itemize}
+\item \textbf{Onboard AI for payload data processing for EO and other scientific missions (SSA1)} (\eg, near-real-time disaster monitoring and latency-constrained applications, distributed learning on satellites, tip and cue systems for satellite missions or telescopes, etc.) 
+\item \textbf{Vision and learning for spacecraft navigation, space robotics, space-situational-awareness, and operations (SSA2)} (\eg, rendezvous, proximity operations, docking, space maneuvers, entry descent landingrovers, UAVs, UGVs, UUWs, space debris and space object monitoring)
+\item \textbf{Fault tolerant vision and learning systems and reliability} (\eg, mitigation to challenges of the space environment, AI for Fault Detection Isolation and Recovery) 
+\item \textbf{Sensors for space applications (SSA3)} (\eg, optical, multispectral, lidar, radar, neuromorphic)
+\item \textbf{Onboard computing hardware for vision and learning (SSA3)} (\eg, neural network accelerators, neuromorphic processors)
+\item \textbf{Datasets for space applications, Domain-gap problems, domain adaptation techniques for space applications (SSA4)} (\eg, foundation models for space applications, transfer-learning, including training techniques for unlabeled/partially labeled datasets)
+\item \textbf{ML for astronomy (SSA5)}  (\eg, planetary bodies mapping and global positioning, ML for Astronomical Image Processing and Analysis, ML-based Monocular Depth Estimation, Anomaly and Outlier Detection, Differentiable and physics-informed methods)
+
+\end{itemize}
