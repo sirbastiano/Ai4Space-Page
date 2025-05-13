@@ -8,22 +8,11 @@ body {
     padding: 0;
     color: #333; /* Default text color, will be overridden by specific sections if needed */
     line-height: 1.6;
-    /* Solid dark blue background for the bottom part */
-    background-color: #0d0d2b; /* Dark blue from a previous space theme */
-    overflow-x: hidden; /* Prevent horizontal scrollbar from animations */
-}
-
-/* New layer for the animated gradient at the top */
-#top-gradient-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60vh; /* Top 60% of viewport height for the gradient */
+    /* Animated gradient background for the whole body */
     background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     background-size: 400% 400%;
     animation: gradientAnimation 15s ease infinite;
-    z-index: -2; /* Behind stars and content */
+    overflow-x: hidden; /* Prevent horizontal scrollbar from animations */
 }
 
 @keyframes gradientAnimation {
@@ -79,9 +68,7 @@ body {
     42vw -24vh 0px 1px #fff, -24vw 42vh 1px 0px #fff, 3vw -48vh 1px 1px #fff, -48vw 3vh 0px 0px #fff;
     /* Combined zoom and twinkle animation */
     animation: zoomAndTwinkle 10s alternate infinite;
-    z-index: -1; /* Ensure stars are above the top gradient layer but behind content */
-    /* Clip the starfield to the top 60% of the viewport height */
-    clip-path: polygon(0 0, 100% 0, 100% 60vh, 0 60vh);
+    z-index: -1; /* Ensure stars are above body gradient but behind content */
 }
 
 @keyframes zoomAndTwinkle {
@@ -403,6 +390,7 @@ footer p {
 /* Styles for Committee Page */
 .committee-section {
     padding: 40px 20px;
+    border-top-color: #3498db;
 }
 
 .committee-grid {
@@ -479,6 +467,85 @@ commitment-card .committee-member-image {
 .committee-info .affiliation {
     font-size: 0.9em;
     color: #5a6878;
+}
+
+/* Styles for Workshop Topics Section */
+.topics-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 20px;
+}
+
+.topics-list li {
+    background-color: #f9f9f9;
+    border-left: 5px solid #23a6d5; /* Accent color */
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 0 5px 5px 0;
+    font-size: 1.05em;
+    color: #333;
+}
+
+.topics-list li strong {
+    color: #1a7fa8; /* Darker shade of accent for emphasis */
+}
+
+/* Styles for Invited Speakers Section */
+.speaker-card {
+    /* Reuses .content-card styles, add specific overrides if needed */
+    text-align: center; /* Center content within speaker card */
+}
+
+.speaker-card img {
+    width: 150px; /* Standard size for speaker images */
+    height: 150px;
+    border-radius: 50%; /* Circular images */
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid #e0eafc;
+}
+
+.speaker-card .talk-type {
+    font-size: 0.9em;
+    color: #e73c7e; /* A distinct color for talk type */
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.speaker-card .bio-preview {
+    font-size: 0.95em;
+    color: #555;
+    margin-bottom: 12px;
+    text-align: left; /* Align bio text to left for readability */
+}
+
+.btn-details-inline {
+    display: inline-block;
+    background-color: transparent;
+    color: #007bff;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid #007bff;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.btn-details-inline:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Styles for long description preview */
+.long-description-preview {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #eee;
 }
 
 /* Ensure keywords are bolded */

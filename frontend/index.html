@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet"> <!-- Added Montserrat font -->
 </head>
 <body>
-    <div id="top-gradient-layer"></div>
     <div class="main"></div> <!-- Added for animated starfield background -->
     <div id="app">
         <header>
@@ -34,6 +33,32 @@
             <section id="overview" class="overview-section fade-in-section">
                 <h2>🌌 Workshop Vision: AI Beyond Earth</h2>
                 <p>{{ workshopOverview }}</p>
+                <h3>Workshop Objectives</h3>
+                <p>{{ workshopObjectives }}</p>
+            </section>
+
+            <section id="topics" class="content-section fade-in-section">
+                <h2>Workshop Topics</h2>
+                <ul class="topics-list">
+                    <li v-for="topic in workshopTopics" :key="topic.title">
+                        <strong>{{ topic.title }}:</strong> {{ topic.details }}
+                    </li>
+                </ul>
+            </section>
+
+            <section id="speakers" class="content-section fade-in-section">
+                <h2>Invited Speakers</h2>
+                <div class="content-grid">
+                    <div class="content-card speaker-card" v-for="speaker in invitedSpeakers" :key="speaker.name">
+                        <img :src="speaker.imageUrl" :alt="speaker.name">
+                        <div class="content-info">
+                            <h3>{{ speaker.name }}</h3>
+                            <p class="talk-type">{{ speaker.talkType }}</p>
+                            <p class="bio-preview">{{ speaker.bio.substring(0, 150) + (speaker.bio.length > 150 ? '...' : '') }}</p>
+                            <a :href="speaker.homepage" target="_blank" class="btn-details-inline">Learn More</a>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section id="tracks" class="content-section fade-in-section">
@@ -49,6 +74,7 @@
                                 <span v-if="item.keywords && item.keywords.length" class="keywords">
                                     <strong>Keywords:</strong> {{ item.keywords.join(', ') }}
                                 </span>
+                                <p class="long-description-preview" v-if="item.longDescription">{{ item.longDescription.substring(0, 200) + (item.longDescription.length > 200 ? '...' : '') }}</p>
                                 <span class="btn-details-inline">View Details</span>
                             </div>
                         </a>
@@ -67,7 +93,7 @@
                         <div class="content-info">
                             <h3>{{ item.title }}</h3>
                             <p>{{ item.description }}</p>
-                            <!-- The detailsLink from backend is now a relative path -->
+                            <p class="long-description-preview" v-if="item.longDescription">{{ item.longDescription.substring(0, 200) + (item.longDescription.length > 200 ? '...' : '') }}</p>
                             <a v-if="item.detailsLink" :href="item.detailsLink" class="btn-details" target="_blank">Challenge Details</a>
                             <span v-if="item.keywords && item.keywords.length" class="keywords">
                                 <strong>Keywords:</strong> {{ item.keywords.join(', ') }}

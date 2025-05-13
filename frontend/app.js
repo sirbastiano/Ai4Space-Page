@@ -3,7 +3,10 @@ const { createApp } = Vue
 createApp({
   data() {
     return {
-      workshopOverview: 'Welcome to AI4Space @ NeurIPS! This workshop brings together researchers and practitioners to explore the frontiers of artificial intelligence in space applications. From autonomous exploration to deciphering cosmic data, join us to discuss breakthroughs, challenges, and the future trajectory of AI in the final frontier.',
+      workshopOverview: 'Loading workshop overview...',
+      workshopObjectives: 'Loading workshop objectives...',
+      workshopTopics: [],
+      invitedSpeakers: [],
       tracks: [],
       challenges: [],
       contact: {
@@ -16,7 +19,7 @@ createApp({
   methods: {
     async fetchAi4SpaceContent() {
       try {
-        const response = await fetch('/api/ai4space-content'); // Updated API endpoint
+        const response = await fetch('/api/ai4space-content');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -29,6 +32,35 @@ createApp({
         this.challenges = [];
       }
     },
+    async fetchWorkshopDetails() {
+      try {
+        const response = await fetch('/api/topics'); // API endpoint for overview, objectives, topics
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        this.workshopOverview = data.overview;
+        this.workshopObjectives = data.objectives;
+        this.workshopTopics = data.topics_list;
+      } catch (error) {
+        console.error("Could not fetch workshop details:", error);
+        this.workshopOverview = "Failed to load workshop overview.";
+        this.workshopObjectives = "Failed to load workshop objectives.";
+        this.workshopTopics = [];
+      }
+    },
+    async fetchInvitedSpeakers() {
+      try {
+        const response = await fetch('/api/speakers');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        this.invitedSpeakers = await response.json();
+      } catch (error) {
+        console.error("Could not fetch invited speakers:", error);
+        this.invitedSpeakers = [];
+      }
+    },
     submitForm() {
       alert(`Thank you, ${this.contact.name}! Your message has been received.`);
       this.contact.name = '';
@@ -37,6 +69,8 @@ createApp({
     }
   },
   mounted() {
-    this.fetchAi4SpaceContent(); // Call the renamed fetch method
+    this.fetchAi4SpaceContent();
+    this.fetchWorkshopDetails();
+    this.fetchInvitedSpeakers();
   }
 }).mount('#app')
