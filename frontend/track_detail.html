@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ track.title || 'Track Details' }} - AI4Space @ NeurIPS</title>
+    <link rel="stylesheet" href="/style.css"> <!-- Ensure path is absolute from root -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="top-gradient-layer"></div>
+    <div class="main"></div> <!-- Added for animated starfield background -->
+    <div id="track-detail-app">
+        <header>
+            <nav>
+                <div class="logo">🌌 AI4Space</div>
+                <ul>
+                    <li><a href="/">Overview</a></li>
+                    <li><a href="/#tracks">Tracks</a></li>
+                    <li><a href="/#challenges">Challenges</a></li>
+                    <li><a href="/committee">Organizing Committee</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hero">
+                <h1>{{ track.title || 'Loading Track Details...' }}</h1>
+                <p v-if="track.lead">Track Lead: {{ track.lead }}</p>
+            </div>
+        </header>
+
+        <main class="track-detail-main">
+            <section v-if="track.id" class="track-content-section">
+                <div class="track-image-container">
+                    <img :src="track.imageUrl" :alt="track.title" v-if="track.imageUrl">
+                </div>
+                <h2>Track Overview</h2>
+                <p class="description">{{ track.description }}</p>
+                
+                <div v-if="track.keywords && track.keywords.length" class="keywords-container">
+                    <h3>Keywords</h3>
+                    <ul class="keywords-list">
+                        <li v-for="keyword in track.keywords" :key="keyword">{{ keyword }}</li>
+                    </ul>
+                </div>
+
+                <!-- Placeholder for more detailed content like schedule, papers, speakers -->
+                <div class="more-details-placeholder">
+                    <h3>Further Information</h3>
+                    <p>More detailed information about this track, including accepted papers, speaker lineup, and schedule, will be available here soon.</p>
+                </div>
+            </section>
+            <section v-else-if="loadingError">
+                <h2>Error</h2>
+                <p>Could not load track details. Please try again later or navigate back to the <a href="/">main page</a>.</p>
+            </section>
+            <section v-else>
+                <p>Loading...</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/track_detail_app.js"></script> <!-- Ensure path is absolute from root -->
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 AI4Space @ NeurIPS </title> <!-- Catchier Title -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet"> <!-- Added Montserrat font -->
+</head>
+<body>
+    <div id="top-gradient-layer"></div>
+    <div class="main"></div> <!-- Added for animated starfield background -->
+    <div id="app">
+        <header>
+            <nav>
+                <div class="logo">🌌 AI4Space</div> <!-- Catchier Logo -->
+                <ul>
+                    <li><a href="/">Overview</a></li> <!-- Changed to root path -->
+                    <li><a href="/#tracks">Tracks</a></li> <!-- Link to section on main page -->
+                    <li><a href="/#challenges">Challenges</a></li> <!-- Link to section on main page -->
+                    <li><a href="/committee">Organizing Committee</a></li> <!-- New Link -->
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hero">
+                <h1>🚀 AI4Space@NeurIPS</h1> <!-- Catchier Hero Title -->
+                <p>Join the workshop at NeurIPS! Explore groundbreaking AI, tackle cosmic challenges, and shape the future of space exploration.</p> <!-- Catchier Hero Subtitle -->
+                <a href="/#overview" class="cta-button">Discover the Workshop</a>
+            </div>
+        </header>
+
+        <main>
+            <section id="overview" class="overview-section fade-in-section">
+                <h2>🌌 Workshop Vision: AI Beyond Earth</h2>
+                <p>{{ workshopOverview }}</p>
+            </section>
+
+            <section id="tracks" class="content-section fade-in-section">
+                <h2>Tracks: Chart Your Course</h2>
+                <div class="content-grid">
+                    <div class="content-card" v-for="item in tracks" :key="item.id">
+                        <a :href="item.detailsLink" class="card-link-wrapper">
+                            <img :src="item.imageUrl" :alt="item.title">
+                            <div class="content-info">
+                                <h3>{{ item.title }}</h3>
+                                <p class="lead">Track Lead: {{ item.lead }}</p>
+                                <p class="short-description">{{ item.description.substring(0, 150) + (item.description.length > 150 ? '...' : '') }}</p>
+                                <span v-if="item.keywords && item.keywords.length" class="keywords">
+                                    <strong>Keywords:</strong> {{ item.keywords.join(', ') }}
+                                </span>
+                                <span class="btn-details-inline">View Details</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div v-if="tracks.length === 0" class="no-content">
+                    <p>Our groundbreaking tracks are being finalized. Stay tuned!</p>
+                </div>
+            </section>
+
+            <section id="challenges" class="content-section fade-in-section">
+                <h2>Challenges: Dare to Innovate</h2>
+                <div class="content-grid">
+                    <div class="content-card" v-for="item in challenges" :key="item.id">
+                        <img :src="item.imageUrl" :alt="item.title">
+                        <div class="content-info">
+                            <h3>{{ item.title }}</h3>
+                            <p>{{ item.description }}</p>
+                            <!-- The detailsLink from backend is now a relative path -->
+                            <a v-if="item.detailsLink" :href="item.detailsLink" class="btn-details" target="_blank">Challenge Details</a>
+                            <span v-if="item.keywords && item.keywords.length" class="keywords">
+                                <strong>Keywords:</strong> {{ item.keywords.join(', ') }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="challenges.length === 0" class="no-content">
+                    <p>Epic challenges are on the horizon. Prepare for launch!</p>
+                </div>
+            </section>
+
+            <section id="about" class="about-section fade-in-section"> <!-- Added fade-in-section for consistency -->
+                <h2>About Us</h2>
+                <p>We are passionate about providing high-quality, engaging workshops to help individuals and teams grow their skills and knowledge. Our instructors are industry experts dedicated to your learning success. The AI4Space workshop is spearheaded by a dedicated group of researchers and practitioners in AI and space exploration.</p>
+                <div class="about-button-container">
+                    <a href="/committee" class="cta-button">Meet the Organizing Committee</a>
+                </div>
+            </section>
+
+            <section id="contact" class="contact-section fade-in-section">
+                <h2>Get In Touch</h2>
+                <p>Questions? Ideas? Want to collaborate? Reach out to the AI4Space mission control!</p>
+                <form @submit.prevent="submitForm">
+                    <input type="text" v-model="contact.name" placeholder="Your Name / Organization" required>
+                    <input type="email" v-model="contact.email" placeholder="Your Email Address" required>
+                    <textarea v-model="contact.message" placeholder="Your Cosmic Message" rows="5" required></textarea>
+                    <button type="submit" class="btn-submit">Transmit Message</button>
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved. Charting new territories in AI.</p> <!-- Catchier Footer -->
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
