@@ -25,7 +25,7 @@ organizers_text = r"""
     \\item Roberto Del Prete (University of Napoli Federico II)
     \\item Gianluca Furano (ESTEC, European Space Agency)
     \\item Alberto Candela (JPL, NASA)
-    \\item Pablo G{\\\'o}mez (ESAC, European  Space Agency)
+    \\item Pablo Gòmez (ESAC, European Space Agency)
     \\item Arunkumar Rathinam (University of Luxembourg)
 \\end{itemize}
 \\subsection{Primary organizer}
@@ -35,7 +35,7 @@ organizers_text = r"""
 \\subsection{Organizing team’s experience and background}
 \\paragraph{Gabriele Meoni}
 is an Innovation Officer at the European Centre for Earth Observation (ESRIN), European Space Agency. He is part of the Advanced Concepts and Studies Office and the $\\Phi$-lab divisions. Gabriele received his Master\'s degree in Electronic Engineering and his PhD in information engineering from University of Pisa. His research interests include satellite onboard processing, orbital edge computing,  AI for EO, and neuromorphic computing.
-He is currently Associate Editor of Astrodynamics (Springer) and was part of the program and scientific committees of various international conferences, including the 1$^st$, 2$^nd$, 3$^rd$ Workshop in AI for space -- of which he was also co-organizer for the  $3^rd$ edition-- FOSS4G 2022, Living Planet Symposium 2022, and  Living  Planet Symposium 2025.
+He is currently Associate Editor of Astrodynamics (Springer) and was part of the program and scientific committees of various international conferences, including the 1$^st$, 2$^nd$, 3$^rd$ Workshop in AI for space -- of which he was also co-organizer for the  $3^rd$ edition-- FOSS4G 2022, Living Planet Symposium 2022, and  Living Planet Symposium 2025.
 Gabriele received the ESA Corporate Team Award for his contribution to the $\\Phi$-Sat-1 mission, the PRIME 2018 Bronze Leaf paper Award, and
 DATE 2019 - University Booth - Best Demonstrator Award.
 He is also organized an ESA Workshop on Cognitive Cloud  Computing in Space.
@@ -72,7 +72,7 @@ and support electronics, meeting very stringent requirements in terms of radiati
 blocks such as platform mass memories, remote terminal units, on-board buses, and data networks; and on-board and space to ground data communication protocols including protocol security aspects. He also provides support to European Standardization [Consultative Committee for Space Data
 Systems (CCSDS), European Cooperation for Space Standardization (ECSS)] in areas such as telemetry, telecommand and on-board data, and wireless and
 monitoring control interfaces.
-\\paragraph{Pablo G{\\\'o}mez}
+\\paragraph{Pablo Gòmez}
 is a Data Scientist in the Data Science Section at the European Space Agency (ESA), based at the European Space Astronomy Center (ESAC) near Madrid. His work focuses on leveraging ML methods to maximise the scientific return from missions such as Gaia, XMM-Newton, Euclid, and Ariel, alongside building and improving the ESA Datalabs platform for enhanced science data analysis.
 Previously, Pablo was a Research Fellow in ESA’s Advanced Concepts Team (ACT), where he worked on various projects involving remote sensing, semi-supervised learning, astrophysics, and differentiable methods. He completed a secondment to AI Sweden in Stockholm on distributed onboard ML. He holds an M.Sc. in Computer Science from the Technical University of Munich (TUM) and a Ph.D. in Electrical Engineering from the Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU), where he developed deep learning techniques for high-speed video endoscopy and numerical models of the human voice.
 Pablo has extensive experience in organising events, including the AI for Space workshop at CVPR 2021, the Space Optimisation Competition at GECCO 2022, the Accessibility in Human Spaceflight webinar in 2023, and the forthcoming ESA Datalabs Ariel Hackathon in 2025.
@@ -111,9 +111,22 @@ for org_item in raw_organizers:
         image_url = "https://avatars.githubusercontent.com/u/71963566?v=4"
     elif "Tat-Jun Chin" in name:
         role = "Co-Chair" # Example role
+        image_url = "https://dtb.solutions/wp-content/uploads/2025/02/AIML_TJ_Chin-480x480.jpg" # Updated image URL
     elif "Djamila Aouada" in name:
         role = "Co-Chair" # Example role
-
+        image_url = "https://hitlaml.uni.lu/img/speakers/3_.jpg" # Updated image URL
+    elif "Rajat Talak" in name:
+        image_url = "https://media.licdn.com/dms/image/v2/D4E03AQE21FbA8trgAw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1699225243205?e=2147483647&v=beta&t=H9Y3yQtMJkhzgD0R_DGG31yjgKHsd659-wqaYof6sno"
+    elif "Viorela Ila" in name:
+        image_url = "https://www.sydney.edu.au/AcademicProfiles/profile/resource?urlid=viorela.ila"
+    elif "Gianluca Furano" in name:
+        image_url = "https://media.gettyimages.com/id/165847424/it/foto/capra.jpg?s=612x612&w=gi&k=20&c=jtbGJY37rJcW2jY6MLSI4zQjKF0nmNs8rnAarJDAUOY="
+    elif "Alberto Candela" in name:
+        image_url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9EN_CCkAkCSlgpSFYC-jllZtT9nLOEkLAgA&s"
+    elif "Arunkumar Rathinam" in name: # Corrected name from Arankumar to Arunkumar
+        image_url = "https://media.licdn.com/dms/image/v2/C5603AQEXyHGZAwZlhw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1521003185275?e=2147483647&v=beta&t=uEfZeNiWqmPxghrvoQQfP1tInk1VN_eEEKBMLx6IAuk"
+    elif "Pablo Gòmez" in name: # Added entry for Pablo Gòmez
+        image_url = "https://media.licdn.com/dms/image/v2/C4E03AQFKIocgRlS3lQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1660475809846?e=2147483647&v=beta&t=uT8IPpErdb5nyl1HEpW9BhOGAHLuPt4l7Z7tawp-njs"
 
     bio = parsed_bios.get(name.strip(), "Biography not available.")
     organizing_committee_data.append({
@@ -204,40 +217,52 @@ invited_speakers_data = [
 
 # --- Data from src/topics.txt ---
 topics_text = r"""
-\\subsection{Topics covered and subject areas}
-\\label{subsec: topics}
-\\subsubsection{Background}
+Topics covered and subject areas
+
+Background
 The space sector is characterized by significant growth due to substantial investment and technology advancements. Areas like Earth Observation (EO), space situational awareness, telecommunication, space exploration have witnessed a remarkable expansion.
 In this scenario, Artificial Intelligence (AI) is playing a pivotal role in unlocking novel commercial and  operational mission paradigms thanks to its unprecedented capabilities to enhance spacecraft and satellites' automation, process vast amount of space-borne data and extract actionable information. Examples of applications enabled by AI include autonomous and intelligent rovers for planetary explorations, onboard payload data processing for low-latency deliverable of actionable information from EO satellites, detection of exoplanets from scientific mission data, among others.
-Despite these advancements, several technical challenges remain that hinder AI application in space. These include fundamental difficulties in vision and learning for space (\eg, lack of training data, unknown operating environments), limited computing resources and energy budget, harsh operative environment (radiation, extreme temperatures).
-\\subsubsection{Objectives and subject areas}
-This workshop aims to explore \\textbf{Artificial Intelligence and computer vision algorithms for space applications} (\\textbf{primary subject area}).
-More specifically, the workshop focuses on these specific \\textbf{secondary subject areas (SSA)}  relevant to space applications:
-\\begin{itemize}
-    \\item \\textbf{SSA1}: ML for onboard spacecraft payload data processing
-    \\item \\textbf{SSA2}: Autonomous and reliable space systems
-    \\item \\textbf{SSA3}: Novel sensors and computing devices for AI-powered space systems
-    \\item \\textbf{SSA4}: Novel datasets, learning and domain adaptation techniques for space applications
-    \\item \\textbf{SSA5}: ML for astronomy
-\\end{itemize}
-\\subsubsection{Topics}
+Despite these advancements, several technical challenges remain that hinder AI application in space. These include fundamental difficulties in vision and learning for space (e.g., lack of training data, unknown operating environments), limited computing resources and energy budget, harsh operative environment (radiation, extreme temperatures).
+
+Objectives and subject areas
+This workshop aims to explore Artificial Intelligence and computer vision algorithms for space applications (primary subject area).
+More specifically, the workshop focuses on these specific secondary subject areas (SSA)  relevant to space applications:
+
+    SSA1: ML for onboard spacecraft payload data processing
+    SSA2: Autonomous and reliable space systems
+    SSA3: Novel sensors and computing devices for AI-powered space systems
+    SSA4: Novel datasets, learning and domain adaptation techniques for space applications
+    SSA5: ML for astronomy
+
+Topics
 A non-exhaustive list of topics relevant to the workshop is as follow. The related SSAs are indicated among brackets:
-\\begin{itemize}
-\\item \\textbf{Onboard AI for payload data processing for EO and other scientific missions (SSA1)} (\eg, near-real-time disaster monitoring and latency-constrained applications, distributed learning on satellites, tip and cue systems for satellite missions or telescopes, etc.)
-\\item \\textbf{Vision and learning for spacecraft navigation, space robotics, space-situational-awareness, and operations (SSA2)} (\eg, rendezvous, proximity operations, docking, space maneuvers, entry descent landingrovers, UAVs, UGVs, UUWs, space debris and space object monitoring)
-\\item \\textbf{Fault tolerant vision and learning systems and reliability} (\eg, mitigation to challenges of the space environment, AI for Fault Detection Isolation and Recovery)
-\\item \\textbf{Sensors for space applications (SSA3)} (\eg, optical, multispectral, lidar, radar, neuromorphic)
-\\item \\textbf{Onboard computing hardware for vision and learning (SSA3)} (\eg, neural network accelerators, neuromorphic processors)
-\\item \\textbf{Datasets for space applications, Domain-gap problems, domain adaptation techniques for space applications (SSA4)} (\eg, foundation models for space applications, transfer-learning, including training techniques for unlabeled/partially labeled datasets)
-\\item \\textbf{ML for astronomy (SSA5)}  (\eg, planetary bodies mapping and global positioning, ML for Astronomical Image Processing and Analysis, ML-based Monocular Depth Estimation, Anomaly and Outlier Detection, Differentiable and physics-informed methods)
-\\end{itemize}
+
+Onboard AI for payload data processing for EO and other scientific missions (SSA1) (e.g., near-real-time disaster monitoring and latency-constrained applications, distributed learning on satellites, tip and cue systems for satellite missions or telescopes, etc.)
+Vision and learning for spacecraft navigation, space robotics, space-situational-awareness, and operations (SSA2) (e.g., rendezvous, proximity operations, docking, space maneuvers, entry descent landing rovers, UAVs, UGVs, UUWs, space debris and space object monitoring)
+Fault tolerant vision and learning systems and reliability (e.g., mitigation to challenges of the space environment, AI for Fault Detection Isolation and Recovery)
+Sensors for space applications (SSA3) (e.g., optical, multispectral, lidar, radar, neuromorphic)
+Onboard computing hardware for vision and learning (SSA3) (e.g., neural network accelerators, neuromorphic processors)
+Datasets for space applications, Domain-gap problems, domain adaptation techniques for space applications (SSA4) (e.g., foundation models for space applications, transfer-learning, including training techniques for unlabeled/partially labeled datasets)
+ML for astronomy (SSA5)  (e.g., planetary bodies mapping and global positioning, ML for Astronomical Image Processing and Analysis, ML-based Monocular Depth Estimation, Anomaly and Outlier Detection, Differentiable and physics-informed methods)
 """
 
-workshop_overview_text = clean_text(re.search(r'\\subsubsection{Background}(.*?)\\subsubsection{Objectives and subject areas}', topics_text, re.DOTALL).group(1) if re.search(r'\\subsubsection{Background}(.*?)\\subsubsection{Objectives and subject areas}', topics_text, re.DOTALL) else "Detailed overview coming soon.")
-workshop_objectives_text = clean_text(re.search(r'\\subsubsection{Objectives and subject areas}(.*?)\\subsubsection{Topics}', topics_text, re.DOTALL).group(1) if re.search(r'\\subsubsection{Objectives and subject areas}(.*?)\\subsubsection{Topics}', topics_text, re.DOTALL) else "Detailed objectives coming soon.")
+workshop_overview_text = clean_text(re.search(r'Background\n(.*?)\n\nObjectives and subject areas', topics_text, re.DOTALL).group(1) if re.search(r'Background\n(.*?)\n\nObjectives and subject areas', topics_text, re.DOTALL) else "Detailed overview coming soon.")
+workshop_objectives_text = clean_text(re.search(r'Objectives and subject areas\n(.*?)\n\nTopics', topics_text, re.DOTALL).group(1) if re.search(r'Objectives and subject areas\n(.*?)\n\nTopics', topics_text, re.DOTALL) else "Detailed objectives coming soon.")
 
-raw_topics_list = re.findall(r'\\item \\textbf{(.*?)}', topics_text.split('\\subsubsection{Topics}')[1]) if len(topics_text.split('\\subsubsection{Topics}')) > 1 else []
-workshop_topics_data = [{"title": clean_text(topic.split('(')[0]), "details": clean_text(topic)} for topic in raw_topics_list]
+# Extract topics from the plain text format (each topic starts with a paragraph)
+topics_section = topics_text.split('Topics\n')[1] if len(topics_text.split('Topics\n')) > 1 else ""
+raw_topics_list = [line.strip() for line in topics_section.split('\n') if line.strip() and not line.strip().startswith('A non-exhaustive')]
+
+workshop_topics_data = []
+for topic in raw_topics_list:
+    # Extract the main title (everything before the first parenthesis)
+    title_match = re.search(r'^(.*?)\s*\(', topic)
+    title = title_match.group(1).strip() if title_match else topic.strip()
+    
+    # Use the full topic text as details
+    details = clean_text(topic)
+    
+    workshop_topics_data.append({"title": title, "details": details})
 
 # Data for the AI4Space Workshop (Tracks and Challenges)
 ai4space_content = [
