@@ -61,11 +61,28 @@ createApp({
         this.invitedSpeakers = [];
       }
     },
-    submitForm() {
-      alert(`Thank you, ${this.contact.name}! Your message has been received.`);
-      this.contact.name = '';
-      this.contact.email = '';
-      this.contact.message = '';
+    async submitForm() {
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.contact),
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        alert(result.message || `Thank you, ${this.contact.name}! Your message has been received.`);
+        this.contact.name = '';
+        this.contact.email = '';
+        this.contact.message = '';
+      } catch (error) {
+        console.error("Could not submit contact form:", error);
+        alert(`Error submitting form: ${error.message}`);
+      }
     }
   },
   mounted() {

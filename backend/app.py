@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, jsonify
+from flask import Flask, send_from_directory, jsonify, request
 import os
 import re
 
@@ -344,6 +344,30 @@ def get_topics_data():
         "objectives": workshop_objectives_text,
         "topics_list": workshop_topics_data
     })
+
+@app.route('/api/contact', methods=['POST'])
+def handle_contact_form():
+    if not request.is_json:
+        return jsonify({"error": "Missing JSON in request"}), 400
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    message = data.get('message')
+
+    if not name or not email or not message:
+        return jsonify({"error": "Missing name, email, or message"}), 400
+
+    # For now, just print to console
+    print(f"Contact Form Submission:")
+    print(f"  Name: {name}")
+    print(f"  Email: {email}")
+    print(f"  Message: {message}")
+
+    # You could save this to a file or database here
+    # with open("contact_submissions.txt", "a") as f:
+    #     f.write(f"Name: {name}, Email: {email}, Message: {message}\n")
+
+    return jsonify({"message": "Message received successfully!"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

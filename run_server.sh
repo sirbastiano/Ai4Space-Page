@@ -1,2 +1,7 @@
-cd /Users/roberto.delprete/Library/CloudStorage/OneDrive-ESA/Desktop/Repos/website/project/backend
-pdm run python app.py
+#!/bin/bash
+# Navigate to the backend directory
+cd "$(dirname "$0")/backend"
+
+# Run the Flask application using PDM
+echo "Starting Flask server via PDM..."
+pdm run flask --app app run --debug --host=0.0.0.0 --port=5000
