@@ -27,12 +27,12 @@ body {
     padding: 30px;
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 600px;
+    right: 30px; /* Adjusted from 100px to move it further right */
+    transform: translateY(-50%);
+    width: auto;
+    max-width: 500px;
     z-index: 10;
-    text-align: center;
+    text-align: left;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     opacity: 0;
@@ -90,12 +90,12 @@ code {
 }
 
 .solar-syst {
-    margin: 0 auto;
+    /* margin: 0 auto; */ /* Removed as it's not effective with absolute positioning and explicit left */
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
-    left: 0;
+    left: -15%; /* Adjusted to -15% as per user request */
     overflow: hidden;
     z-index: 0;
 }
@@ -167,8 +167,9 @@ code {
     position: absolute;
 }
 
-.solar-syst div:not(.asteroids-belt):before {
+.solar-syst div:not(.sun):not(.asteroids-belt):before {
     box-shadow: inset 0 6px 0 -2px rgba(0, 0, 0, 0.25);
+    animation: zoomInPlanet 10s ease-in-out forwards;
 }
 
 .sun {
@@ -422,6 +423,15 @@ code {
     }
     to {
         transform: rotate(-360deg);
+    }
+}
+
+@keyframes zoomInPlanet {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.5);
     }
 }
 

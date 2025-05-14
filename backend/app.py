@@ -126,81 +126,81 @@ for org_item in raw_organizers:
 
 
 # --- Data from src/list_speakers.txt ---
-speakers_text = r"""
-\\subsection{List of invited speakers}
-\\subsubsection*{Invited Speaker 1: Victoria Ashley Villar}
-\\begin{itemize}[parsep=1em]
-\\item \\textbf{Brief biography}
-Victoria Ashley Villar received her B.S. in Physics from MIT in 2014 and her Ph.D. in Astronomy and Astrophysics from Harvard University in 2020. She was formerly a Simons Junior Postdoctoral Fellow at Columbia University (2020-2021) and a faculty member at Penn State University (2021-2023), before joining the Harvard Astronomy faculty in 2023. Prof. Villar’s research interests include theoretical and observational studies of extragalactic transients, including core-collapse supernovae and kilonovae, development of statistical and deep learning methodologies for wide-field surveys, such as the Vera C. Rubin Observatory\'s Legacy Survey of Space and Time and Nancy Grace Roman Observatory. Prof. Ashley Villar is a Packard Fellow, RCSA Scialog Fellow and Harvard Aramont Fellow.
-\\item \\textbf{Relevance to workshop}
-Prof. Villar is a prominent researcher from Harvard University in the use of data-driven methods in astronomy.
-She has made significant contributions to the field by developing statistical and deep learning methodologies to study chemical compositions of supernovae, stellar phenomena such as eruptions, mergers, and explosions, and detect celestial bodies in astronomical data.
-The invited talk will provide insight novel applications in the field of astronomy enabled by ML and deep learning, showcasing the potential of AI for astronomical data processing.
-\\item \\textbf{Confirmation status}
-Confirmed/Final (In person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.).
-\\item \\textbf{Link to homepage}
-\\url{http://ashleyvillar.com/}
-\\end{itemize}
-\\subsubsection*{Invited Speaker 2 (Industrial talk): David Rijlaarsdam}
-\\begin{itemize}[parsep=1em]
-\\item \\textbf{Brief biography}
-David Rijlaarsdam is Director of Space System Engineering for Ubotica Technologies, where he manages the Space System R&D team and is involved as a System Engineer in several space missions. He has a Master of Science in Aerospace Engineering from Delft University of Technology with a specialization in Space System Engineering. David has previously been part of the Automation and Robotics Section of the European Space Agency where he researched relative navigation for spacecraft and has been part of the advanced architecture team of Intel Movidius, where he researched the application of AI for star identification algorithms.
-\\item \\textbf{Relevance to workshop}
-Ubotica Technologies contributed to integrate machine learning solutions for payload image processing in numerous satellite missions, such as ESA $\\Phi$-Sat-1, and $\\Phi$Sat-2, and CogniSat-6 (proprietary satellite). In this keynote, David Rijlaarsdam will share Ubotica\'s vision on challenges and perspectives related to the use of Machine Learning and Artificial Intelligence solutions in spacecraft missions.
-\\item \\textbf{Confirmation status}
-Confirmed/Final (in person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)
-\\item \\textbf{Link to homepage}
-\\url{https://ubotica.com/}
-\\end{itemize}
-\\subsubsection*{Invited Speaker 3: James Parr}
-\\begin{itemize}[parsep=1em]
-\\item \\textbf{Brief biography}
-James is the founder and Chief Executive Officer (CEO) of Trillium Technologies - a global technology contractor that specialises in the application of AI and systems approaches to grand challenges, such as climate change, violent extremism, prevention strategies for cancer and obesity, deforestation mitigation, climate resilience and planetary defence.
-He is founder of FDL, an AI research lab partnership with ESA in Europe (ESLab.ai) and NASA in the USA. FDL has over 50 applied AI firsts and was awarded the best AI accelerator at the 2023 Cog X awards in London.
-He lives in London with his wife and twin daughters.
-\\item \\textbf{Relevance to workshop}
-James Parr is the CEO of Trillium Technologies, which oversees the Frontiers Development Lab (FDL) Europe project. This initiative, in partnership with ESA’s $\\Phi$-Lab, ESA ESRIN, and the University of Oxford, focuses on advancing AI and high-performance computing for EO applications. Through numerous research sprints, Trillium Technologies fosters collaboration to develop AI-based solutions to complex research problems, such as: the design of a Deep Learning model for onboard satellite detection of floods or the use of AI to support the design of ESA VIGIL mission.
-\\item \\textbf{Confirmation status}
-Confirmed/Final (in person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)
-\\item \\textbf{Link to homepage}
-\\url{https://trillium.tech/}
-\\end{itemize}
-"""
-
-invited_speakers_data = []
-speaker_sections = speakers_text.split('\\subsubsection*')
-for section in speaker_sections:
-    if not section.strip():
-        continue
-
-    name_match = re.search(r'Invited Speaker \d+(?: \(Industrial talk\))?: (.*?)', section)
-    name = clean_text(name_match.group(1)) if name_match else "N/A"
-
-    bio_match = re.search(r'Brief biography(.*?)(?:\\item|\\end{itemize})', section, re.DOTALL)
-    bio = clean_text(bio_match.group(1)) if bio_match else "N/A"
-
-    relevance_match = re.search(r'Relevance to workshop(.*?)(?:\\item|\\end{itemize})', section, re.DOTALL)
-    relevance = clean_text(relevance_match.group(1)) if relevance_match else "N/A"
-    
-    status_match = re.search(r'Confirmation status(.*?)(?:\\item|\\end{itemize})', section, re.DOTALL)
-    status = clean_text(status_match.group(1)) if status_match else "N/A"
-
-    homepage_match = re.search(r'Link to homepage\\s*\\url{(.*?)}', section)
-    homepage = homepage_match.group(1) if homepage_match else "#"
-    
-    talk_type = "Academic Talk"
-    if "(Industrial talk)" in section:
-        talk_type = "Industrial Talk"
-
-    invited_speakers_data.append({
-        "name": name,
-        "bio": bio,
-        "relevance": relevance,
-        "status": status,
-        "homepage": homepage,
-        "imageUrl": default_image, # Placeholder, ideally replace with actual images
-        "talkType": talk_type
-    })
+invited_speakers_data = [
+    {
+        "name": "Victoria Ashley Villar",
+        "bio": (
+            "Victoria Ashley Villar received her B.S. in Physics from MIT in 2014 and her Ph.D. in Astronomy "
+            "and Astrophysics from Harvard University in 2020. She was formerly a Simons Junior Postdoctoral "
+            "Fellow at Columbia University (2020–2021) and a faculty member at Penn State University (2021–2023), "
+            "before joining the Harvard Astronomy faculty in 2023. Prof. Villar’s research interests include "
+            "theoretical and observational studies of extragalactic transients, including core-collapse supernovae "
+            "and kilonovae, development of statistical and deep learning methodologies for wide-field surveys, such as "
+            "the Vera C. Rubin Observatory's Legacy Survey of Space and Time and Nancy Grace Roman Observatory. "
+            "Prof. Ashley Villar is a Packard Fellow, RCSA Scialog Fellow and Harvard Aramont Fellow."
+        ),
+        "relevance": (
+            "Prof. Villar is a prominent researcher from Harvard University in the use of data-driven methods in astronomy. "
+            "She has made significant contributions to the field by developing statistical and deep learning methodologies "
+            "to study chemical compositions of supernovae, stellar phenomena such as eruptions, mergers, and explosions, "
+            "and detect celestial bodies in astronomical data. The invited talk will provide insight into novel applications "
+            "in the field of astronomy enabled by ML and deep learning, showcasing the potential of AI for astronomical data processing."
+        ),
+        "status": (
+            "Confirmed/Final (In person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
+        ),
+        "homepage": "http://ashleyvillar.com/",
+        "imageUrl": "https://ecos-appdev-production.s3.amazonaws.com/science_site/s3fs-public/2021-09/HispanicHeritageMonthAshleyVillar300_300.png",
+        "talkType": "Academic Talk"
+    },
+    {
+        "name": "David Rijlaarsdam",
+        "bio": (
+            "David Rijlaarsdam is Director of Space System Engineering for Ubotica Technologies, where he manages the "
+            "Space System R&D team and is involved as a System Engineer in several space missions. He has a Master of "
+            "Science in Aerospace Engineering from Delft University of Technology with a specialization in Space System Engineering. "
+            "David has previously been part of the Automation and Robotics Section of the European Space Agency where he "
+            "researched relative navigation for spacecraft and has been part of the advanced architecture team of Intel Movidius, "
+            "where he researched the application of AI for star identification algorithms."
+        ),
+        "relevance": (
+            "Ubotica Technologies contributed to integrate machine learning solutions for payload image processing in numerous satellite "
+            "missions, such as ESA Φ-Sat-1, ΦSat-2, and CogniSat-6 (proprietary satellite). In this keynote, David Rijlaarsdam will share "
+            "Ubotica's vision on challenges and perspectives related to the use of Machine Learning and Artificial Intelligence solutions "
+            "in spacecraft missions."
+        ),
+        "status": (
+            "Confirmed/Final (in person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
+        ),
+        "homepage": "https://ubotica.com/",
+        "imageUrl": "https://media.licdn.com/dms/image/v2/C4E03AQHDbVMMnf6F4A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1550244386287?e=2147483647&v=beta&t=9OweAVjd6m7RawvvYgZOwuAGbDoyw3RwSJHGJsiTANY",
+        "talkType": "Industrial Talk"
+    },
+    {
+        "name": "James Parr",
+        "bio": (
+            "James is the founder and Chief Executive Officer (CEO) of Trillium Technologies - a global technology contractor "
+            "that specialises in the application of AI and systems approaches to grand challenges, such as climate change, violent "
+            "extremism, prevention strategies for cancer and obesity, deforestation mitigation, climate resilience and planetary defence. "
+            "He is founder of FDL, an AI research lab partnership with ESA in Europe (ESLab.ai) and NASA in the USA. FDL has over 50 "
+            "applied AI firsts and was awarded the best AI accelerator at the 2023 Cog X awards in London. He lives in London with his wife "
+            "and twin daughters."
+        ),
+        "relevance": (
+            "James Parr is the CEO of Trillium Technologies, which oversees the Frontiers Development Lab (FDL) Europe project. This initiative, "
+            "in partnership with ESA’s Φ-Lab, ESA ESRIN, and the University of Oxford, focuses on advancing AI and high-performance computing "
+            "for EO applications. Through numerous research sprints, Trillium Technologies fosters collaboration to develop AI-based solutions "
+            "to complex research problems, such as: the design of a Deep Learning model for onboard satellite detection of floods or the use of "
+            "AI to support the design of ESA VIGIL mission."
+        ),
+        "status": (
+            "Confirmed/Final (in person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
+        ),
+        "homepage": "https://trillium.tech/",
+        "imageUrl": "https://i1.rgstatic.net/ii/profile.image/682472295636996-1539725483467_Q512/James-Parr-3.jpg",
+        "talkType": "Academic Talk"
+    }
+]
 
 # --- Data from src/topics.txt ---
 topics_text = r"""
