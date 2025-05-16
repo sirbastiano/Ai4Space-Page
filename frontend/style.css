@@ -23,6 +23,12 @@ body {
     overflow-x: hidden;
 }
 
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .description {
     padding: 30px;
     position: absolute;
