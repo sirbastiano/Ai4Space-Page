@@ -337,23 +337,7 @@ function anim(){
 	all.sort( function( a, b ){ return b.screen.z - a.screen.z } );
 	all.map( function( item ){ item.draw(); } );
 	
-	/*ctx.beginPath();
-	ctx.strokeStyle = 'red';
-	ctx.arc( opts.vanishPoint.x, opts.vanishPoint.y, opts.range * opts.focalLength / opts.depth, 0, Tau );
-	ctx.stroke();*/
-
-	// --- HERO AI4Space TEXT ---
-	// ctx.save();
-	// ctx.textAlign = 'center';
-	// ctx.shadowColor = 'rgba(0,255,255,0.7)';
-	// ctx.shadowBlur = 32 + 16 * Math.sin(tick * 0.04);
-	// ctx.font = '900 40px Montserrat, Arial, sans-serif';
-	// ctx.lineWidth = 4;
-	// ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-	// ctx.fillStyle = '#fff';
-	// ctx.strokeText('AI4Space', opts.vanishPoint.x, opts.vanishPoint.y);
-	// ctx.fillText('AI4Space', opts.vanishPoint.x, opts.vanishPoint.y);
-	// ctx.restore();
+	
 }
 
 // Countdown timer for hero section (deadline: May 30, 2025)
