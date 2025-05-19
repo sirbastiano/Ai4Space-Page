@@ -343,18 +343,43 @@ function anim(){
 	ctx.stroke();*/
 
 	// --- HERO AI4Space TEXT ---
-	ctx.save();
-	ctx.textAlign = 'center';
-	ctx.shadowColor = 'rgba(0,255,255,0.7)';
-	ctx.shadowBlur = 32 + 16 * Math.sin(tick * 0.04);
-	ctx.font = '900 40px Montserrat, Arial, sans-serif';
-	ctx.lineWidth = 4;
-	ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-	ctx.fillStyle = '#fff';
-	ctx.strokeText('AI4Space', opts.vanishPoint.x, opts.vanishPoint.y);
-	ctx.fillText('AI4Space', opts.vanishPoint.x, opts.vanishPoint.y);
-	ctx.restore();
+	// ctx.save();
+	// ctx.textAlign = 'center';
+	// ctx.shadowColor = 'rgba(0,255,255,0.7)';
+	// ctx.shadowBlur = 32 + 16 * Math.sin(tick * 0.04);
+	// ctx.font = '900 40px Montserrat, Arial, sans-serif';
+	// ctx.lineWidth = 4;
+	// ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+	// ctx.fillStyle = '#fff';
+	// ctx.strokeText('AI4Space', opts.vanishPoint.x, opts.vanishPoint.y);
+	// ctx.fillText('AI4Space', opts.vanishPoint.x, opts.vanishPoint.y);
+	// ctx.restore();
 }
+
+// Countdown timer for hero section (deadline: May 30, 2025)
+function updateCountdown() {
+    const countdown = document.getElementById('hero-countdown');
+    if (!countdown) return;
+    const deadline = new Date('2025-05-30T23:59:59Z');
+    const now = new Date();
+    let diff = Math.max(0, deadline - now);
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff -= days * (1000 * 60 * 60 * 24);
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    diff -= hours * (1000 * 60 * 60);
+    const minutes = Math.floor(diff / (1000 * 60));
+    diff -= minutes * (1000 * 60);
+    const seconds = Math.floor(diff / 1000);
+    countdown.innerHTML = `
+        <span style="font-size:1.2em; color:#fff; letter-spacing:0.1em;">Countdown to Submission</span><br>
+        <span style="display:inline-block; margin:0 10px;"><span style="font-size:1.3em; color:#ffe082; font-weight:900;">${days}</span><br><span style="font-size:0.5em; color:#ffe082; font-weight:700;">DAYS</span></span>
+        <span style="display:inline-block; margin:0 10px;"><span style="font-size:1.3em; color:#ffe082; font-weight:900;">${hours}</span><br><span style="font-size:0.5em; color:#ffe082; font-weight:700;">HRS</span></span>
+        <span style="display:inline-block; margin:0 10px;"><span style="font-size:1.3em; color:#ffe082; font-weight:900;">${minutes}</span><br><span style="font-size:0.5em; color:#ffe082; font-weight:700;">MIN</span></span>
+        <span style="display:inline-block; margin:0 10px;"><span style="font-size:1.3em; color:#ffe082; font-weight:900;">${seconds}</span><br><span style="font-size:0.5em; color:#ffe082; font-weight:700;">SEC</span></span>
+    `;
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
 
 window.addEventListener( 'resize', function(){
 	
