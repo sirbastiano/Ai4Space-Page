@@ -435,6 +435,214 @@ body #c {
     filter: drop-shadow(0 0 32px #00fff7) drop-shadow(0 0 16px #fff) drop-shadow(0 0 8px #00fff7);
 }
 
+/* Dramatic cosmic hero background with animated nebula and starfield overlay */
+.hero {
+    height: 100vh;
+    position: relative;
+    color: white;
+    background: radial-gradient(ellipse at 60% 40%, #2e3a5c 0%, #1C2837 60%, #050608 100%),
+                repeating-conic-gradient(from 0deg, #1a1a2e 0deg 10deg, #23234a 10deg 20deg, #1a1a2e 20deg 30deg);
+    background-size: 200% 200%, 300% 300%;
+    animation: heroBgMove 12s ease-in-out infinite, nebulaMove 24s linear infinite;
+    overflow: hidden;
+    box-shadow: 0 0 120px 40px #0a0a23 inset;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes nebulaMove {
+    0% { background-position: 0% 0%, 0% 0%; }
+    50% { background-position: 100% 100%, 50% 50%; }
+    100% { background-position: 0% 0%, 0% 0%; }
+}
+
+/* Starfield overlay */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="1.5" fill="white" opacity="0.7"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.5"/><circle cx="200" cy="120" r="2" fill="white" opacity="0.8"/><circle cx="300" cy="60" r="1.2" fill="white" opacity="0.6"/><circle cx="500" cy="200" r="1.7" fill="white" opacity="0.7"/><circle cx="700" cy="100" r="1.3" fill="white" opacity="0.5"/></svg>');
+    background-size: 400px 300px;
+    animation: starfieldMove 60s linear infinite;
+}
+@keyframes starfieldMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 400px 300px; }
+}
+
+/* Animated headline container */
+.hero .animated-headline {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    z-index: 10;
+}
+
+.animated-headline .content {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    height: 80px;
+    overflow: hidden;
+    font-family: 'Montserrat', 'Lato', Arial, sans-serif;
+    font-size: 2.8em;
+    line-height: 1.2em;
+    color: #ffe082;
+    font-weight: 900;
+    text-align: center;
+    letter-spacing: 0.04em;
+    background: none;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.animated-headline .content__container {
+    font-weight: 700;
+    overflow: hidden;
+    height: 1.2em;
+    padding: 0 32px;
+    position: relative;
+    display: inline-block;
+}
+.animated-headline .content__container:before {
+    content: '[';
+    left: 0;
+    position: absolute;
+    top: 0;
+    color: #23a6d5;
+    font-size: 1.1em;
+    line-height: 1.2em;
+    animation: opacity 2s infinite;
+}
+.animated-headline .content__container:after {
+    content: ']';
+    right: 0;
+    position: absolute;
+    top: 0;
+    color: #e73c7e;
+    font-size: 1.1em;
+    line-height: 1.2em;
+    animation: opacity 2s infinite;
+}
+.animated-headline .content__container__text {
+    display: inline;
+    float: left;
+    margin: 0;
+}
+.animated-headline .content__container__list {
+    margin-top: 0;
+    padding-left: 0;
+    text-align: left;
+    list-style: none;
+    animation: change 10s infinite;
+}
+.animated-headline .content__container__list__item {
+    line-height: 1.2em;
+    margin: 0;
+}
+@keyframes opacity {
+  0%, 100% {opacity:0;}
+  50% {opacity:1;}
+}
+@keyframes change {
+  0%, 12.66%, 100% {transform:translate3d(0,0,0);}
+  16.66%, 29.32% {transform:translate3d(0,-25%,0);}
+  33.32%,45.98% {transform:translate3d(0,-50%,0);}
+  49.98%,62.64% {transform:translate3d(0,-75%,0);}
+  66.64%,79.3% {transform:translate3d(0,-50%,0);}
+  83.3%,95.96% {transform:translate3d(0,-25%,0);}
+}
+
+/* Hero main text enhancements */
+.hero .hero-title {
+    display: none;
+}
+
+.hero .hero-subtitle {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 500;
+    font-size: 2em;
+    letter-spacing: 0.04em;
+    color: #fff;
+    text-shadow: 0 0 12px #23a6d5, 0 2px 8px #000a;
+    text-align: center;
+    margin-bottom: 1.2em;
+    z-index: 10;
+    position: relative;
+}
+
+/* Countdown: much larger, bolder, glowing, and centered */
+.hero-countdown.center-countdown {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 900;
+    text-transform: none;
+    font-size: 2.6em;
+    padding: 24px 48px;
+    border-radius: 18px;
+    color: #ffe082;
+    background: rgba(0,0,0,0.28);
+    box-shadow: 0 0 64px 8px #ffe08244, 0 0 32px #23a6d544;
+    border: 2px solid #ffe08244;
+    animation: pulse-countdown 2.5s alternate infinite;
+    text-align: center;
+    position: absolute;
+    top: 54%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    letter-spacing: 0.12em;
+    line-height: 1.5em;
+    filter: drop-shadow(0 0 12px #ffe082cc);
+}
+@media (max-width: 900px) {
+    .hero .hero-title {
+        font-size: 2.2em;
+    }
+    .hero .hero-subtitle {
+        font-size: 1.1em;
+    }
+    .hero-countdown.center-countdown {
+        font-size: 1.2em;
+        padding: 10px 4px;
+        border-radius: 10px;
+    }
+}
+
+/* Call for Papers button: cosmic style */
+.hero .cta-button {
+    display: block;
+    background: linear-gradient(90deg, #23a6d5 0%, #e73c7e 100%);
+    color: #fff;
+    padding: 18px 38px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 1.3em;
+    letter-spacing: 0.06em;
+    box-shadow: 0 4px 24px #23a6d588, 0 2px 8px #000a;
+    margin: 0 auto 2.2em auto;
+    text-align: center;
+    transition: background 0.3s, transform 0.2s;
+    z-index: 10;
+    position: relative;
+    border: 2px solid #fff2;
+}
+.hero .cta-button:hover {
+    background: linear-gradient(90deg, #e73c7e 0%, #23a6d5 100%);
+    color: #ffe082;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 32px #e73c7e88, 0 2px 8px #000a;
+    border: 2px solid #ffe082;
+}
+
 main {
     max-width: 1200px;
     margin: 40px auto;
@@ -591,12 +799,6 @@ nav ul li a:hover {
 nav ul li a:hover::after {
     width: 100%;
     left: 0;
-}
-
-.hero {
-    height: 100vh;
-    position: relative;
-    color: white;
 }
 
 .hero-top-left-box {
