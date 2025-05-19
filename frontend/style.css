@@ -23,6 +23,9 @@ body {
     overflow-x: hidden;
 }
 
+/* Import Montserrat Black font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+
 canvas {
     position: absolute;
     top: 0;
@@ -95,12 +98,12 @@ code {
 }
 
 .solar-syst {
-    /* margin: 0 auto; */ /* Removed as it's not effective with absolute positioning and explicit left */
-    width: 100%;
-    height: 100%;
+    width: 50%; /* Reduce width to half */
+    height: 50%; /* Reduce height to half */
     position: absolute;
-    top: 0;
-    left: -15%; /* Adjusted to -15% as per user request */
+    top: 2%; /* Move closer to the top */
+    left: 55%; /* Move more to the right */
+    transform: translate(0, 0); /* Remove previous centering */
     overflow: hidden;
     z-index: 0;
 }
@@ -189,6 +192,7 @@ code {
     background-size: 175%;
     box-shadow: 0 0 10px 2px rgba(255, 107, 0, 0.4), 0 0 22px 11px rgba(255, 203, 0, 0.13);
     z-index: 2;
+    animation-duration: 5s !important;
 }
 
 .mercury {
@@ -196,7 +200,7 @@ code {
     width: 70px;
     margin-top: -35px;
     margin-left: -35px;
-    animation: orb 7.19s linear infinite;
+    animation: orb 3.595s linear infinite;
     z-index: 10;
 }
 
@@ -214,7 +218,7 @@ code {
     width: 100px;
     margin-top: -50px;
     margin-left: -50px;
-    animation: orb 18.45s linear infinite;
+    animation: orb 9.225s linear infinite;
     z-index: 11;
 }
 
@@ -232,7 +236,7 @@ code {
     width: 145px;
     margin-top: -72.5px;
     margin-left: -72.5px;
-    animation: orb 30s linear infinite;
+    animation: orb 15s linear infinite;
     z-index: 12;
 }
 
@@ -276,7 +280,7 @@ code {
     width: 190px;
     margin-top: -95px;
     margin-left: -95px;
-    animation: orb 56.42s linear infinite;
+    animation: orb 28.21s linear infinite;
     z-index: 13;
 }
 
@@ -296,7 +300,7 @@ code {
     width: 300px;
     margin-top: -150px;
     margin-left: -150px;
-    animation: orb 180s linear infinite;
+    animation: orb 90s linear infinite;
     overflow: hidden;
     z-index: 14;
 }
@@ -322,7 +326,7 @@ code {
     width: 340px;
     margin-top: -170px;
     margin-left: -170px;
-    animation: orb 355.7s linear infinite;
+    animation: orb 177.85s linear infinite;
     z-index: 15;
 }
 
@@ -340,7 +344,7 @@ code {
     width: 440px;
     margin-top: -220px;
     margin-left: -220px;
-    animation: orb 882.5s linear infinite;
+    animation: orb 441.25s linear infinite;
     z-index: 16;
 }
 
@@ -373,7 +377,7 @@ code {
     width: 520px;
     margin-top: -260px;
     margin-left: -260px;
-    animation: orb 2512s linear infinite;
+    animation: orb 1256s linear infinite;
     z-index: 17;
 }
 
@@ -391,7 +395,7 @@ code {
     width: 630px;
     margin-top: -315px;
     margin-left: -315px;
-    animation: orb 4911s linear infinite;
+    animation: orb 2455.5s linear infinite;
     z-index: 18;
 }
 
@@ -409,7 +413,7 @@ code {
     width: 780px;
     margin-top: -390px;
     margin-left: -390px;
-    animation: orb 7439s linear infinite;
+    animation: orb 3719.5s linear infinite;
     z-index: 19;
 }
 
@@ -438,6 +442,16 @@ code {
     100% {
         transform: scale(1.5);
     }
+}
+
+/* Hero Canvas Text Enhancement */
+body #c {
+    font-family: 'Montserrat', Arial, sans-serif !important;
+}
+
+/* Optional: fallback for browsers that support ::backdrop-filter for extra glow */
+.hero-canvas-glow {
+    filter: drop-shadow(0 0 32px #00fff7) drop-shadow(0 0 16px #fff) drop-shadow(0 0 8px #00fff7);
 }
 
 main {
@@ -943,4 +957,45 @@ main .content-card .btn-details { /* For challenge cards */
 main .content-card .btn-details:hover {
     background-color: #d35400;
     color: white !important;
+}
+
+/* Key Dates Banner Styles */
+.key-dates-banner {
+    width: 100%;
+    background: linear-gradient(90deg, #2c3e50 0%, #4ca1af 100%);
+    color: #fff;
+    padding: 10px 0 7px 0;
+    text-align: center;
+    font-size: 0.98em;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    z-index: 100;
+    position: relative;
+}
+.key-dates-title, .program-title {
+    margin-right: 12px;
+    color: #ffe082;
+    font-size: 1em;
+}
+.key-date-item, .program-item {
+    margin: 0 8px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.98em;
+}
+@media (max-width: 900px) {
+    .key-dates-banner {
+        font-size: 0.92em;
+        padding: 7px 0 5px 0;
+    }
+    .key-date-item, .program-item {
+        display: block;
+        margin: 3px 0;
+    }
+    .program-title {
+        display: block;
+        margin: 8px 0 0 0;
+    }
 }

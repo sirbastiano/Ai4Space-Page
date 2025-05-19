@@ -4,17 +4,17 @@ var w = c.width = window.innerWidth,
 		
 		opts = {
 			
-			range: 180,
-			baseConnections: 3,
-			addedConnections: 5,
+			range: 155, // Increased from 90
+			baseConnections: 5, // Increased from 4
+			addedConnections: 7, // Increased from 5
 			baseSize: 5,
 			minSize: 1,
 			dataToConnectionSize: .4,
 			sizeMultiplier: .7,
-			allowedDist: 40,
+			allowedDist: 35, // Decreased from 40
 			baseDist: 40,
 			addedDist: 30,
-			connectionAttempts: 100,
+			connectionAttempts: 150, // Increased from 100
 			
 			dataToConnections: 1,
 			baseSpeed: .04,
@@ -34,10 +34,10 @@ var w = c.width = window.innerWidth,
 			wireframeWidth: .1,
 			wireframeColor: '#88f',
 			
-			depth: 250,
-			focalLength: 250,
+			depth: 187.5, // Increased from 125
+			focalLength: 187.5, // Increased from 125
 			vanishPoint: {
-				x: w / 2,
+				x: w / 5, // Moved to the left from w / 2
 				y: h / 2
 			}
 		},
@@ -341,11 +341,24 @@ function anim(){
 	ctx.strokeStyle = 'red';
 	ctx.arc( opts.vanishPoint.x, opts.vanishPoint.y, opts.range * opts.focalLength / opts.depth, 0, Tau );
 	ctx.stroke();*/
+
+	// --- HERO AI4Space TEXT ---
+	ctx.save();
+	ctx.textAlign = 'center';
+	ctx.shadowColor = 'rgba(0,255,255,0.7)';
+	ctx.shadowBlur = 32 + 16 * Math.sin(tick * 0.04);
+	ctx.font = '900 40px Montserrat, Arial, sans-serif';
+	ctx.lineWidth = 4;
+	ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+	ctx.fillStyle = '#fff';
+	ctx.strokeText('AI4Space', opts.vanishPoint.x, opts.vanishPoint.y);
+	ctx.fillText('AI4Space', opts.vanishPoint.x, opts.vanishPoint.y);
+	ctx.restore();
 }
 
 window.addEventListener( 'resize', function(){
 	
-	opts.vanishPoint.x = ( w = c.width = window.innerWidth ) / 2;
+	opts.vanishPoint.x = ( w = c.width = window.innerWidth ) / 4; // Adjusted for new position
 	opts.vanishPoint.y = ( h = c.height = window.innerHeight ) / 2;
 	ctx.fillRect( 0, 0, w, h );
 });
