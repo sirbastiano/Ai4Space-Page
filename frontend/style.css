@@ -769,13 +769,12 @@ header {
 
 nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* Align items to the start (left) */
     align-items: center;
-    padding: 20px 40px;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 1em 2%; /* Adjust padding as needed */
     position: relative;
-    z-index: 20;
+    z-index: 1000;
+    background: transparent; /* Set background to transparent */
 }
 
 nav .logo {
@@ -786,8 +785,9 @@ nav .logo {
 
 nav ul {
     list-style: none;
-    padding: 0;
     display: flex;
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
 }
 
 nav ul li {
