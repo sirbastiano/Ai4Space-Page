@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🚀 AI4Space @ NeurIPS </title> <!-- Catchier Title -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="countdown-style.css"> <!-- Added countdown CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet"> <!-- Added Montserrat font -->
 </head>
@@ -49,6 +50,50 @@
                     <h2 class="text-center smaller-heading">Charting the Cosmos with AI</h2>
                     <p style="margin-top: 10px;">Blast off with us at NeurIPS2025! Discover AI's new frontiers in space, conquer stellar challenges, and co-pilot the future of space exploration.</p>
                 </div>
+
+                <!-- New Countdown Timer -->
+                <div class="countdown-container">
+                    <h2 class="countdown-caption">Submission Deadline</h2>
+                    <section class="countdown">
+                        <div class="time-wrapper">
+                            <div class="time-content">
+                                <div class="time">
+                                    <span class="days">00</span>
+                                    <div class="rings"></div>
+                                </div>
+                            </div>
+                            <p class="metric">Days</p>
+                        </div>
+                        <div class="time-wrapper">
+                            <div class="time-content">
+                                <div class="time">
+                                    <span class="hours">00</span>
+                                    <div class="rings"></div>
+                                </div>
+                            </div>
+                            <p class="metric">Hours</p>
+                        </div>
+                        <div class="time-wrapper">
+                            <div class="time-content">
+                                <div class="time">
+                                    <span class="minutes">00</span>
+                                    <div class="rings"></div>
+                                </div>
+                            </div>
+                            <p class="metric">Minutes</p>
+                        </div>
+                        <div class="time-wrapper">
+                            <div class="time-content">
+                                <div class="time">
+                                    <span class="seconds">00</span>
+                                    <div class="rings"></div>
+                                </div>
+                            </div>
+                            <p class="metric">Seconds</p>
+                        </div>
+                    </section>
+                </div>
+                <!-- End New Countdown Timer -->
                 
                 <div class="solar-syst">
                     <div class="sun"></div>
@@ -193,5 +238,6 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="app.js"></script>
     <script src="animation.js"></script>
+    <script src="countdown.js"></script> <!-- Added countdown JS -->
 </body>
 </html>
