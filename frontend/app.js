@@ -91,3 +91,31 @@ createApp({
     this.fetchInvitedSpeakers();
   }
 }).mount('#app')
+
+document.addEventListener('DOMContentLoaded', function() {
+  var fadeEls = document.querySelectorAll('.fade-in-section');
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    fadeEls.forEach(function(el) { observer.observe(el); });
+  } else {
+    // Fallback for old browsers
+    function checkFadeIn() {
+      fadeEls.forEach(function(el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 40) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', checkFadeIn);
+    window.addEventListener('resize', checkFadeIn);
+    checkFadeIn();
+  }
+});
