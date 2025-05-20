@@ -51,13 +51,13 @@ canvas {
 
 /* Top left description box */
 .hero-description-top-left.description {
-    top: 90px;
-    left: 4vw;
+    top: 80px;
+    left: 2vw;
     right: auto;
     bottom: auto;
     text-align: left;
     width: auto;
-    max-width: 550px;
+    max-width: 850px;
     background: none;
     box-shadow: none;
     opacity: 1;
@@ -75,7 +75,7 @@ canvas {
     font-weight: 300;
     font-size: 2em; /* Reduced font size from 2.5em */
     text-transform: uppercase;
-    font-family: Lato, 'Montserrat', sans-serif;
+    font-family: Lato, 'Arial', sans-serif;
     line-height: 1.6em;
     letter-spacing: .1em;
     color: #fff;
@@ -83,6 +83,7 @@ canvas {
 }
 
 .description p {
+    font-family: Lato, 'Arial', sans-serif;
     font-size: .9em;
     color: #eee;
     margin-bottom: 20px;
@@ -545,6 +546,7 @@ body #c {
     text-align: left;
     list-style: none;
     animation: change 10s infinite;
+    color: #23a6d5; /* Changed color */
 }
 .animated-headline .content__container__list__item {
     line-height: 1.2em;
