@@ -340,30 +340,34 @@ function anim(){
 	
 }
 
-// Countdown timer for hero section (deadline: May 30, 2025)
+// Dynamic countdown timer function
 function updateCountdown() {
-    const countdown = document.getElementById('hero-countdown');
-    if (!countdown) return;
-    const deadline = new Date('2025-05-30T23:59:59Z');
-    const now = new Date();
-    let diff = Math.max(0, deadline - now);
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    diff -= days * (1000 * 60 * 60 * 24);
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    diff -= hours * (1000 * 60 * 60);
-    const minutes = Math.floor(diff / (1000 * 60));
-    diff -= minutes * (1000 * 60);
-    const seconds = Math.floor(diff / 1000);
-    countdown.innerHTML = `
-        <span style="font-size:1.2em; color:#fff; letter-spacing:0.1em;">Countdown to Submission</span><br>
-        <span style="display:inline-block; margin:0 10px;"><span style="font-size:1.3em; color:#ffe082; font-weight:900;">${days}</span><br><span style="font-size:0.5em; color:#ffe082; font-weight:700;">DAYS</span></span>
-        <span style="display:inline-block; margin:0 10px;"><span style="font-size:1.3em; color:#ffe082; font-weight:900;">${hours}</span><br><span style="font-size:0.5em; color:#ffe082; font-weight:700;">HRS</span></span>
-        <span style="display:inline-block; margin:0 10px;"><span style="font-size:1.3em; color:#ffe082; font-weight:900;">${minutes}</span><br><span style="font-size:0.5em; color:#ffe082; font-weight:700;">MIN</span></span>
-        <span style="display:inline-block; margin:0 10px;"><span style="font-size:1.3em; color:#ffe082; font-weight:900;">${seconds}</span><br><span style="font-size:0.5em; color:#ffe082; font-weight:700;">SEC</span></span>
-    `;
+    const deadlineDate = new Date("May 30, 2025 23:59:59").getTime();
+    const now = new Date().getTime();
+    const timeLeft = deadlineDate - now;
+    
+    // Calculate time components
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    
+    // Display the countdown in plain text format
+    const countdownElement = document.getElementById("countdown-timer");
+    if (countdownElement) {
+        if (timeLeft > 0) {
+            countdownElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+        } else {
+            countdownElement.innerHTML = "EXPIRED";
+        }
+    }
 }
+
+// Update the countdown every second
 setInterval(updateCountdown, 1000);
-updateCountdown();
+
+// Initialize countdown on page load
+document.addEventListener("DOMContentLoaded", updateCountdown);
 
 window.addEventListener( 'resize', function(){
 	
