@@ -1,0 +1,34 @@
+{
+  "overview": "The space sector is characterized by significant growth due to substantial investment and technology advancements. Areas like Earth Observation (EO), space situational awareness, telecommunication, space exploration have witnessed a remarkable expansion. In this scenario, Artificial Intelligence (AI) is playing a pivotal role in unlocking novel commercial and operational mission paradigms thanks to its unprecedented capabilities to enhance spacecraft and satellites' automation, process vast amount of space-borne data and extract actionable information. Examples of applications enabled by AI include autonomous and intelligent rovers for planetary explorations, onboard payload data processing for low-latency deliverable of actionable information from EO satellites, detection of exoplanets from scientific mission data, among others.",
+  "objectives": "This workshop aims to explore Artificial Intelligence and computer vision algorithms for space applications (primary subject area). More specifically, the workshop focuses on these specific secondary subject areas (SSA) relevant to space applications: SSA1: ML for onboard spacecraft payload data processing; SSA2: Autonomous and reliable space systems; SSA3: Novel sensors and computing devices for AI-powered space systems; SSA4: Novel datasets, learning and domain adaptation techniques for space applications; SSA5: ML for astronomy.",
+  "topics_list": [
+    {
+      "title": "Onboard AI for payload data processing for EO and other scientific missions (SSA1)",
+      "details": "(e.g., near-real-time disaster monitoring and latency-constrained applications, distributed learning on satellites, tip and cue systems for satellite missions or telescopes, etc.)"
+    },
+    {
+      "title": "Vision and learning for spacecraft navigation, space robotics, space-situational-awareness, and operations (SSA2)",
+      "details": "(e.g., rendezvous, proximity operations, docking, space maneuvers, entry descent landingrovers, UAVs, UGVs, UUWs, space debris and space object monitoring)"
+    },
+    {
+      "title": "Fault tolerant vision and learning systems and reliability",
+      "details": "(e.g., mitigation to challenges of the space environment, AI for Fault Detection Isolation and Recovery)"
+    },
+    {
+      "title": "Sensors for space applications (SSA3)",
+      "details": "(e.g., optical, multispectral, lidar, radar, neuromorphic)"
+    },
+    {
+      "title": "Onboard computing hardware for vision and learning (SSA3)",
+      "details": "(e.g., neural network accelerators, neuromorphic processors)"
+    },
+    {
+      "title": "Datasets for space applications, Domain-gap problems, domain adaptation techniques for space applications (SSA4)",
+      "details": "(e.g., foundation models for space applications, transfer-learning, including training techniques for unlabeled/partially labeled datasets)"
+    },
+    {
+      "title": "ML for astronomy (SSA5)",
+      "details": "(e.g., planetary bodies mapping and global positioning, ML for Astronomical Image Processing and Analysis, ML-based Monocular Depth Estimation, Anomaly and Outlier Detection, Differentiable and physics-informed methods)"
+    }
+  ]
+}

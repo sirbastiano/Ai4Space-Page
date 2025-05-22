@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ challenge.title || 'Challenge Details' }} - AI4Space @ NeurIPS</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="challenge-detail-app">
+        <header>
+            <nav>
+                <div class="logo">🌌 AI4Space</div>
+                <ul>
+                    <li><a href="/">Overview</a></li>
+                    <li><a href="/#tracks">Tracks</a></li>
+                    <li><a href="/#challenges">Challenges</a></li>
+                    <li><a href="/committee">Organizing Committee</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hero">
+                <h1>{{ challenge.title || 'Loading Challenge Details...' }}</h1>
+            </div>
+        </header>
+
+        <main class="challenge-detail-main">
+            <section v-if="challenge.id" class="challenge-content-section">
+                <div class="challenge-image-container">
+                    <img :src="challenge.imageUrl" :alt="challenge.title" v-if="challenge.imageUrl">
+                </div>
+                <h2>Challenge Overview</h2>
+                <p class="description">{{ challenge.description }}</p>
+                
+                <div v-if="challenge.keywords && challenge.keywords.length" class="keywords-container">
+                    <h3>Keywords</h3>
+                    <ul class="keywords-list">
+                        <li v-for="keyword in challenge.keywords" :key="keyword">{{ keyword }}</li>
+                    </ul>
+                </div>
+
+                <!-- Placeholder for more detailed content -->
+                <div class="more-details-placeholder">
+                    <h3>Further Information</h3>
+                    <p>More detailed information about this challenge, including dataset, submission guidelines, and evaluation criteria, will be available here soon.</p>
+                </div>
+            </section>
+            <section v-else-if="loadingError">
+                <h2>Error</h2>
+                <p>Could not load challenge details. Please try again later or navigate back to the <a href="/">main page</a>.</p>
+            </section>
+            <section v-else>
+                <p>Loading...</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/challenge_detail_app.js"></script>
+</body>
+</html>
