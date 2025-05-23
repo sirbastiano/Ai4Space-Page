@@ -444,7 +444,7 @@ body #c {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 500px;
+    min-height: 350px; /* Decreased min-height */
     flex-grow: 1;
     width: 100%;
 }
@@ -746,7 +746,6 @@ main .committee-info .affiliation {
 }
 
 header {
-    text-align: center;
     position: relative;
     height: 100vh;
     color: white;
@@ -843,6 +842,40 @@ nav ul li a:hover::after {
         padding: 14px;
         top: 30px;
     }
+}
+
+/* Styling for committee page hero */
+#committee-app header {
+    height: auto; /* Override global header height to be content-based */
+    /* The background and other properties from the global header will still apply */
+}
+
+#committee-app .hero {
+    position: relative;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 250px; /* Set a fixed height for the banner content area */
+    min-height: unset; /* Ensure min-height doesn't interfere */
+    padding: 20px; /* Add some padding */
+    /* background: none; Re-evaluate if a background is needed or if it should be transparent */
+}
+
+#committee-app .hero h1 {
+    font-size: 2.5em; /* Adjust as needed */
+    margin-bottom: 10px; /* Reduced margin */
+    color: #fff; /* Ensure text is visible if background changes */
+    text-shadow: 0 0 8px rgba(0,0,0,0.7);
+}
+
+#committee-app .hero p {
+    font-size: 1.2em; /* Adjust as needed */
+    margin-top: 0; /* Reduced margin */
+    color: #fff; /* Ensure text is visible */
+    text-shadow: 0 0 8px rgba(0,0,0,0.7);
 }
 
 footer {

@@ -8,19 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="committee-app">
+    <div id="committee-app"> <!-- ID can remain, not harmful -->
         <header>
             <nav>
-                <div class="logo">🌌 AI4Space</div>
+                <!-- Removed div.logo as it's not in the main page's nav structure -->
                 <ul>
-                    <li><a href="/">Overview</a></li>
-                    <li><a href="/#tracks">Tracks</a></li>
-                    <li><a href="/#challenges">Challenges</a></li>
-                    <li><a href="/committee">Organizing Committee</a></li>
-                    <li><a href="/#contact">Contact</a></li>
+                    <li><a href="index.html">Overview</a></li>
+                    <li><a href="index.html#tracks">Tracks</a></li>
+                    <li><a href="index.html#program">Program</a></li> <!-- Added Program Link -->
+                    <li><a href="index.html#challenges">Challenges</a></li>
+                    <li><a href="committee.html">Organizing Committee</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
                 </ul>
             </nav>
-            <div class="hero">
+            <div class="hero"> <!-- Reusing hero style for consistency, content adjusted -->
                 <h1>Meet the Workshop Architects</h1>
                 <p>The dedicated team bringing AI4Space to NeurIPS.</p>
             </div>
@@ -30,25 +31,148 @@
             <section id="committee-members" class="committee-section">
                 <h2>Organizing Committee</h2>
                 <div class="committee-grid">
-                    <!-- Updated structure for each committee card -->
-                    <div class="committee-card" v-for="member in committeeMembers" :key="member.name">
+                    <div class="committee-card">
                         <div class="flipper">
                             <div class="card-front">
-                                <img :src="member.imageUrl" :alt="member.name" class="committee-img">
-                                <h3>{{ member.name }}</h3>
-                                <p class="affiliation">{{ member.affiliation }}</p>
+                                <img src="https://0.academia-photos.com/42414807/11430474/34762757/s200_gabriele.meoni.jpg" alt="Gabriele Meoni" class="committee-img">
+                                <h3>Gabriele Meoni</h3>
+                                <p class="affiliation">ESRIN, European Space Agency</p>
                             </div>
                             <div class="card-back">
-                                <h4>{{ member.name }}</h4>
-                                <p class="affiliation">{{ member.affiliation }}</p>
-                                <p class="bio-detail">{{ member.bio }}</p>
+                                <h4>Gabriele Meoni</h4>
+                                <p class="affiliation">ESRIN, European Space Agency</p>
+                                <p class="bio-detail">Gabriele Meoni is an Innovation Officer at the European Centre for Earth Observation (ESRIN), European Space Agency. He is part of the Advanced Concepts and Studies Office and the Φ-lab divisions. Gabriele received his Master\'s degree in Electronic Engineering and his PhD in information engineering from University of Pisa. His research interests include satellite onboard processing, orbital edge computing, AI for EO, and neuromorphic computing. He is currently Associate Editor of Astrodynamics (Springer) and was part of the program and scientific committees of various international conferences, including the 1st, 2nd, 3rd Workshop in AI for space -- of which he was also co-organizer for the 3rd edition-- FOSS4G 2022, Living Planet Symposium 2022, and Living Planet Symposium 2025. Gabriele received the ESA Corporate Team Award for his contribution to the Φ-Sat-1 mission, the PRIME 2018 Bronze Leaf paper Award, and DATE 2019 - University Booth - Best Demonstrator Award. He is also organized an ESA Workshop on Cognitive Cloud Computing in Space.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-card">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img src="https://dtb.solutions/wp-content/uploads/2025/02/AIML_TJ_Chin-480x480.jpg" alt="Tat-Jun Chin" class="committee-img">
+                                <h3>Tat-Jun Chin</h3>
+                                <p class="affiliation">The University of Adelaide</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Tat-Jun Chin</h4>
+                                <p class="affiliation">The University of Adelaide</p>
+                                <p class="bio-detail">Tat-Jun Chin is SmartSat CRC Professorial Chair of Sentient Satellites at The University of Adelaide. His research interests include optimization for vision and learning, robotic vision and AI for space. His team won the Kelvins Satellite Pose Estimation Challenge twice (2019, 2021), and also placed 3rd in the NASA Space Robotics Challenge 2021 (autonomous rovers for space mining). Tat-Jun has significant experience in professional activities; major roles include Program Chair (ACCV\'22), Special Sessions Chair (ICIP\'23) and Tutorial Chair (CVPR\'21, ACCV\'18). He has also organized workshops/tutorials at CVPR (2021, 2020, 2018), RSS (2020, 2023), ICCV 2019, and ICRA 2020. Tat-Jun also pioneered the AI4Space workshop series, having led the event in 2021, 2022, and 2024.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-card">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img src="https://hitlaml.uni.lu/img/speakers/3_.jpg" alt="Djamila Aouada" class="committee-img">
+                                <h3>Djamila Aouada</h3>
+                                <p class="affiliation">University of Luxembourg</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Djamila Aouada</h4>
+                                <p class="affiliation">University of Luxembourg</p>
+                                <p class="bio-detail">Djamila Aouada is Senior Research Scientist and Assistant Professor at the Interdisciplinary Centre for Security, Reliability, and Trust (SnT) of the University of Luxembourg. She is Head of the Computer Vision, Imaging and Machine Intelligence (CVI2) research group, and co-head of the Zero-G Space Lab. Her research interests include 3D vision (shape modelling, RGB-D data) and multi-sensor fusion. Djamila served as Chair of SHARP Workshops (ECCV\'20, CVPR\'21, CVPR\'22, ICCV\'23), Chair of SPARK at ICIP\'21, Area Chair at 3DV\'20 and 3DV\'22, Program Chair at 3DV\'21, General Chair at RTIP2R\'22, Co-organizer of AI4Space at ECCV\'22, and Program Chair at EUVIP\'23.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-card">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img src="https://media.licdn.com/dms/image/v2/D4E03AQE21FbA8trgAw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1699225243205?e=2147483647&v=beta&t=H9Y3yQtMJkhzgD0R_DGG31yjgKHsd659-wqaYof6sno" alt="Rajat Talak" class="committee-img">
+                                <h3>Rajat Talak</h3>
+                                <p class="affiliation">Massachusetts Institute of Technology</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Rajat Talak</h4>
+                                <p class="affiliation">Massachusetts Institute of Technology</p>
+                                <p class="bio-detail">Rajat Talak is a Research Scientist in the Department of Aeronautics and Astronautics at the Massachusetts Institute of Technology. Prior to this, he was a Postdoctoral Associate in the Department of Aeronautics and Astronautics, at the Massachusetts Institute Technology. He received his PhD from the Laboratory of Information and Decision Systems at the Massachusetts Institute Technology in 2020. His research interests are spatial robot perception, certifiable models, domain adaptation, and networked autonomy. He is the recipient of ACM MobiHoc 2018 Best Paper award, Gold medal for his master\'s thesis, and also co-authored a monograph on the topic of information freshness. He is actively engaged on the topic of safe autonomy and has recently organized a workshop on the topic (Towards Safe Autonomy: New Challenges and Trends in Robot Perception) at the Robotics: Science and Systems Conference in 2023.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-card">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img src="https://www.sydney.edu.au/AcademicProfiles/profile/resource?urlid=viorela.ila" alt="Viorela Ila" class="committee-img">
+                                <h3>Viorela Ila</h3>
+                                <p class="affiliation">The University of Sydney</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Viorela Ila</h4>
+                                <p class="affiliation">The University of Sydney</p>
+                                <p class="bio-detail">Viorela Ila is a senior lecturer with The University of Sydney, School of Aerospace, Mechanical and Mechatronic Engineering. Her research interests span from robot vision to advanced techniques for simultaneous localization and mapping (SLAM) and 3D reconstruction based on cutting-edge computational tools such as graphical models, modern optimization methods and information theory. Viorela has substantial experience in organising workshops and tutorials in field of robotics and computer vision: IROS 2010 - GraphBot2010 - Workshop on Probabilistic Graphical Models in Robotics, ICRA2020 - Sensing, Estimating and Understanding the Dynamic World, ECCV 2022 - AI4Space, Robotic vision Summer school (2016-2018).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-card">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img src="https://avatars.githubusercontent.com/u/71963566?v=4" alt="Roberto Del Prete" class="committee-img">
+                                <h3>Roberto Del Prete</h3>
+                                <p class="affiliation">University of Napoli Federico II</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Roberto Del Prete</h4>
+                                <p class="affiliation">University of Napoli Federico II</p>
+                                <p class="bio-detail">Roberto Del Prete is Ph.D. candidate specializing in TinyML and edge computing. He focuses on enhancing time-critical decision-making through cutting-edge AI solutions for both space missions and Earth monitoring. Currently pursuing a Ph.D. at the University of Naples Federico II, his work focuses on developing innovative systems such as vision-based navigation and onboard AI solutions for analyzing Synthetic Aperture Radar (SAR) raw data. Del Prete\'s professional journey includes roles as a Visiting Researcher at both the European Space Agency\'s Φ-Lab and SmartSat CRC in Australia. Recognized for his contributions, he received the 2022 NATO STO Early Career Scientist Award and participated in the 2021 NASA-ESA Trans-Atlantic Training. Notably, he won the best presentation award at the AI4Space@CVPR workshop in 2024, and he has been a key contributor to high-impact projects like the Kanyini Mission. With more than 30 scientific publications, Del Prete\'s dedication to leveraging AI and remote sensing technologies aims to address global challenges in EO and space exploration.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-card">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img src="https://media.gettyimages.com/id/165847424/it/foto/capra.jpg?s=612x612&w=gi&k=20&c=jtbGJY37rJcW2jY6MLSI4zQjKF0nmNs8rnAarJDAUOY=" alt="Gianluca Furano" class="committee-img">
+                                <h3>Gianluca Furano</h3>
+                                <p class="affiliation">ESTEC, European Space Agency</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Gianluca Furano</h4>
+                                <p class="affiliation">ESTEC, European Space Agency</p>
+                                <p class="bio-detail">Gianluca Furano received the Ph.D. in microelectronics engineering from University of Rome and since 2003 works for the European Space Agency’s Data System Division, Noordwijk, The Netherlands. He is in charge of research and development activities and he coordinates European Space Agency (ESA) activities on on-board artificial intelligence. He has authored or coauthored more than 100 publications. Among his interests in ESA are on-board data handling systems and their major components, such as space grade microprocessors and support electronics, meeting very stringent requirements in terms of radiation tolerance, reliability, availability, and safety; key avionics building blocks such as platform mass memories, remote terminal units, on-board buses, and data networks; and on-board and space to ground data communication protocols including protocol security aspects. He also provides support to European Standardization [Consultative Committee for Space Data Systems (CCSDS), European Cooperation for Space Standardization (ECSS)] in areas such as telemetry, telecommand and on-board data, and wireless and monitoring control interfaces.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-card">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9EN_CCkAkCSlgpSFYC-jllZtT9nLOEkLAgA&s" alt="Alberto Candela" class="committee-img">
+                                <h3>Alberto Candela</h3>
+                                <p class="affiliation">JPL, NASA</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Alberto Candela</h4>
+                                <p class="affiliation">JPL, NASA</p>
+                                <p class="bio-detail">Alberto Candela is a Data Scientist in the Artificial Intelligence Group at the Jet Propulsion Laboratory, California Institute of Technology. He is a researcher who works at the intersection of perception, learning and planning to create new methods for onboard science data analysis and autonomous decision-making; applications include planetary rovers, satellites and remote sensing instruments. At JPL, Alberto has worked on developing deep learning models for image and spectral analysis on board the ISS and spacecraft such as CogniSat-6 and YAM-6, improving the AEGIS AI software for science autonomy on NASA Mars rovers, increasing the autonomy capabilities of the Mars Helicopter, and onboard planning for the Endurance lunar rover concept. He received his Ph.D. and M.S. in Robotics from Carnegie Mellon University, and his B.S. in Mechatronics Engineering from Instituto Tecnológico Autónomo de México. Alberto received the NASA Group Achievement Award, the JPL Voyager Award, and was finalist for the IEEE/RSJ IROS Best Paper Award on Cognitive Robotics. He has served as program committee member of the International Workshop of Planning and Scheduling for Space (IWPSS) since 2021.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-card">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img src="https://media.licdn.com/dms/image/v2/C4E03AQFKIocgRlS3lQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1660475809846?e=2147483647&v=beta&t=uT8IPpErdb5nyl1HEpW9BhOGAHLuPt4l7Z7tawp-njs" alt="Pablo Gómez" class="committee-img">
+                                <h3>Pablo Gómez</h3>
+                                <p class="affiliation">ESAC, European Space Agency</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Pablo Gómez</h4>
+                                <p class="affiliation">ESAC, European Space Agency</p>
+                                <p class="bio-detail">Pablo Gómez is a Data Scientist in the Data Science Section at the European Space Agency (ESA), based at the European Space Astronomy Center (ESAC) near Madrid. His work focuses on leveraging ML methods to maximise the scientific return from missions such as Gaia, XMM-Newton, Euclid, and Ariel, alongside building and improving the ESA Datalabs platform for enhanced science data analysis. Previously, Pablo was a Research Fellow in ESA’s Advanced Concepts Team (ACT), where he worked on various projects involving remote sensing, semi-supervised learning, astrophysics, and differentiable methods. He completed a secondment to AI Sweden in Stockholm on distributed onboard ML. He holds an M.Sc. in Computer Science from the Technical University of Munich (TUM) and a Ph.D. in Electrical Engineering from the Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU), where he developed deep learning techniques for high-speed video endoscopy and numerical models of the human voice. Pablo has extensive experience in organising events, including the AI for Space workshop at CVPR 2021, the Space Optimisation Competition at GECCO 2022, the Accessibility in Human Spaceflight webinar in 2023, and the forthcoming ESA Datalabs Ariel Hackathon in 2025.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-card">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img src="https://media.licdn.com/dms/image/v2/C5603AQEXyHGZAwZlhw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1521003185275?e=2147483647&v=beta&t=uEfZeNiWqmPxghrvoQQfP1tInk1VN_eEEKBMLx6IAuk" alt="Arunkumar Rathinam" class="committee-img">
+                                <h3>Arunkumar Rathinam</h3>
+                                <p class="affiliation">University of Luxembourg</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Arunkumar Rathinam</h4>
+                                <p class="affiliation">University of Luxembourg</p>
+                                <p class="bio-detail">Arunkumar Rathinam is a Research Scientist at the Interdisciplinary Centre for Security, Reliability, and Trust (SnT) at the University of Luxembourg. He is a member of the Computer Vision, Imaging and Machine Intelligence (CVI2) research group within SnT. Before joining SnT, he was a Postdoctoral Associate at the Surrey Space Center, University of Surrey, UK. He earned his PhD from the University of New South Wales, Sydney, Australia, in 2019. His research focuses on developing machine learning algorithms for vision-based navigation for proximity operations in space. He has also created several open-source benchmark datasets, including SPARK 2022, SPARK 2024, and SPADES, aimed at advancing data driven approaches for space applications. He has also served as a co-organizer of the previous edition of AI4Space/SPARK challenge at ECCV 2022 and CVPR 2024.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div v-if="committeeMembers.length === 0" class="no-content">
-                    <p>Committee details are being assembled. Check back soon!</p>
-                </div>
+                <!-- Removed v-if for committeeMembers.length === 0 as content is now static -->
             </section>
         </main>
 
@@ -57,7 +181,6 @@
         </footer>
     </div>
 
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="committee_app.js"></script> <!-- Separate JS for this page -->
+    <!-- Removed Vue and committee_app.js script tags as they are no longer needed for static content -->
 </body>
 </html>
