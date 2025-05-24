@@ -1,26 +1,20 @@
-const { createApp } = Vue
+const { createApp } = Vue;
 
 createApp({
   data() {
     return {
-      committeeMembers: []
-    }
-  },
-  methods: {
-    async fetchCommitteeData() {
-      try {
-        const response = await fetch('/api/committee');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        this.committeeMembers = await response.json();
-      } catch (error) {
-        console.error("Could not fetch committee data:", error);
-        this.committeeMembers = [];
-      }
-    }
+      committeeMembers: [],
+      loading: true,
+    };
   },
   mounted() {
-    this.fetchCommitteeData();
-  }
-}).mount('#committee-app')
+    // Use the static data embedded in committee.html
+    if (typeof staticCommitteeData !== 'undefined') {
+      this.committeeMembers = staticCommitteeData;
+      this.loading = false;
+    } else {
+      console.error("staticCommitteeData is not defined. Make sure it's correctly embedded in committee.html");
+      this.loading = false; // Stop loading even if data is not found
+    }
+  },
+}).mount('#committee-app');
