@@ -17,9 +17,8 @@
             <nav>
                 <ul>
                     <li><a href="index.html">Overview</a></li> <!-- Changed to root path -->
-                    <li><a href="index.html#tracks">Tracks</a></li> <!-- Link to section on main page -->
                     <li><a href="program.html">Program</a></li> <!-- New Link -->
-                    <li><a href="index.html#challenges">Challenges</a></li> <!-- Link to section on main page -->
+                    <li><a href="index.html#challenge">Challenge</a></li> <!-- Link to section on main page -->
                     <li><a href="committee.html">Organizing Committee</a></li> <!-- New Link -->
                     <li><a href="index.html#contact">Contact</a></li>
                 </ul>
@@ -392,37 +391,36 @@
                 </div>
             </section>
 
-            <section id="tracks" class="content-section">
-                <h2>Tracks: Chart Your Course</h2>
-                <div class="content-grid">
-                    <!-- Static content for tracks will be inserted here if/when tracks.json has data -->
-                </div>
-                <div class="no-content">
-                    <p>Our groundbreaking tracks are being finalized. Stay tuned!</p>
-                </div>
-            </section>
+            
 
             <section id="program" class="content-section">
                 <h2>Program</h2>
                 <div class="no-content">
                     <p>The workshop program is being meticulously planned. Please check back soon for exciting updates on sessions, talks, and scheduling!</p>
+                    <div class="program-preview"></div>
+                        <p>The preliminary program will feature keynote talks, invited presentations, contributed papers, and interactive panel discussions.</p>
+                        <div class="program-button-container">
+                            <a href="program.html" class="cta-button">View Full Program</a>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <section id="challenges" class="content-section">
-                <h2>Challenges: Dare to Innovate</h2>
+            <section id="challenge" class="content-section" style="margin-left: 15em; margin-right: 15em;">
+                <h2 style="color: #ddd;">Challenge: Dare to Innovate</h2>
+                
                 <div class="content-grid">
                     <div class="content-card">
-                        <img src="https://ai4space.org/assets/spark_logo.png" alt="SPARK2025" style="background:#fff;object-fit:contain;height:180px;width:100%;border-bottom:1px solid #eee;">
+                        <img src="https://s3.amazonaws.com/msoe/files/callouts/wide_sml_computer-science-landing-page.jpg" alt="SPARK2025" style="background:#fff;object-fit:contain;height:380px;width:100%;border-bottom:1px solid #eee;">
                         <div class="content-info">
                             <h3>SPARK2025</h3>
-                            <p>We are excited to co-host an AI for space challenge, SPARK 2025, which follows from the successful previous editions of the event at AI4Space @ ECCV 2022. The latest edition of SPARK (SPAcecraft Recognition leveraging Knowledge of Space Environment) aims to design data-driven approaches for spacecraft detection and trajectory estimation. SPARK will utilise data synthetically simulated with a game-based engine in addition to data collected from the Zero-G lab at the University of Luxembourg.</p>
-                            <ul style="margin-bottom:10px;">
+                            <p style="margin-left: 2em; margin-right: 2em;">We are excited to co-host an AI for space challenge, SPARK 2025, which follows from the successful previous editions of the event at AI4Space @ ECCV 2022. The latest edition of SPARK (SPAcecraft Recognition leveraging Knowledge of Space Environment) aims to design data-driven approaches for spacecraft detection and trajectory estimation. SPARK will utilise data synthetically simulated with a game-based engine in addition to data collected from the Zero-G lab at the University of Luxembourg.</p>
+                            <ul style="margin-bottom:10px; margin-left: 2em; margin-right: 2em;">
                                 <li><strong>Stream-1:</strong> Detecting space objects in RGB images.</li>
                                 <li><strong>Stream-2:</strong> Spacecraft trajectory estimation in a rendezvous scenario.</li>
                             </ul>
-                            <p>The datasets involved are larger and more diverse than that used in previous editions. For more information on the competition, including timelines, datasets, and submission details, please visit the <a href="https://spark-zero-g.org/" target="_blank">SPARK 2025 website</a>.</p>
-                            <p>Final results and awards will be announced at AI4Space at NeurIPS 2025. Challenge winners may also be invited to present their methods at the workshop (subject to time availability in the finalised workshop program).</p>
+                            <p style="margin-left: 2em; margin-right: 2em;">The datasets involved are larger and more diverse than that used in previous editions. For more information on the competition, including timelines, datasets, and submission details, please visit the <a href="https://spark-zero-g.org/" target="_blank">SPARK 2025 website</a>.</p>
+                            <p style="margin-left: 2em; margin-right: 2em;">Final results and awards will be announced at AI4Space at NeurIPS 2025. Challenge winners may also be invited to present their methods at the workshop (subject to time availability in the finalised workshop program).</p>
                         </div>
                     </div>
                     <!-- Static content for challenges will be inserted here if/when challenges.json has data -->
@@ -433,20 +431,19 @@
             </section>
 
             <section id="about" class="about-section"> <!-- Added fade-in-section for consistency -->
-                <h2>About Us</h2>
-                <p>We are passionate about providing high-quality, engaging workshops to help individuals and teams grow their skills and knowledge. Our instructors are industry experts dedicated to your learning success. The AI4Space workshop is spearheaded by a dedicated group of researchers and practitioners in AI and space exploration.</p>
+                <h2 style="color: white;">About Us</h2>
+                <p style="color: white;">We are passionate about providing high-quality, engaging workshops to help individuals and teams grow their skills and knowledge. Our instructors are industry experts dedicated to your learning success. The AI4Space workshop is spearheaded by a dedicated group of researchers and practitioners in AI and space exploration.</p>
                 <div class="about-button-container">
-                    <a href="committee.html" class="cta-button">Meet the Organizing Committee</a>
+                    <a style="color: white;" href="committee.html" class="cta-button">Meet the Organizing Committee</a>
                 </div>
             </section>
 
             <section id="contact" class="contact-section">
-                <h2>Get In Touch</h2>
-                <p>Questions? Ideas? Want to collaborate? Reach out to the AI4Space mission control!</p>
+                <h2 style="color: white;">Get In Touch</h2>
+                <p style="color: white;">Questions? Ideas? Want to collaborate? Reach out to the AI4Space mission control!</p>
                 <!-- Static contact information -->
                 <div class="static-contact-info" style="text-align: center; margin-top: 20px;">
-                    <p>For inquiries, please email us at: <a href="mailto:ai4space-organizers@example.com" style="color: #00bcd4;">ai4space-organizers@example.com</a></p>
-                    <p>(Please note: The interactive form is not available in this standalone version.)</p>
+                    <p style="color: white;">For inquiries, please email us at: <a href="mailto:gabriele.meoni@esa.int" style="color: #ffffff;">ai4space-organizers@example.com</a></p>
                 </div>
                 <!-- Original form commented out or removed -->
                 <!-- 
@@ -461,7 +458,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved. Charting new territories in AI.</p> <!-- Catchier Footer -->
+            <p style="color: white;">&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved. Charting new territories in AI.</p> <!-- Catchier Footer -->
         </footer>
     </div>
 
