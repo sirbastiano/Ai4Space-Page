@@ -1013,7 +1013,7 @@ footer p {
     background-color: #ffffff; /* White background, consistent with .content-card */
     color: #333;
     border: 1px solid #e0e0e0; /* Slightly lighter border */
-    border-left: 5px solid #e67e22; /* Accent color from .cta-button */
+    border-left: 5px solid #2c3e50; /* Accent color from .cta-button */
     border-radius: 8px;
     padding: 25px; /* Increased padding */
     box-shadow: 0 4px 10px rgba(0,0,0,0.07); /* Softer shadow */
@@ -1034,7 +1034,7 @@ footer p {
 .card h4 {
     margin-top: 0;
     margin-bottom: 15px; /* More space after heading */
-    color: #e67e22; 
+    color: #2c3e50; 
     font-size: 1.2em; /* Slightly larger heading */
     font-weight: 600;
 }
