@@ -55,16 +55,27 @@
             font-size: 14px;
             line-height: 1.6;
         }
+        /* Fade-in animation styles */
+        .fade-in-on-scroll {
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.6s, transform 0.6s;
+        }
+        .fade-in-on-scroll.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
     </style>
 </head>
 <body>
     <div id="committee-app"> <!-- Ensure this ID matches the Vue mount point -->
         <header>
-            <nav>
+v            <nav>
                 <ul>
                     <li><a href="index.html">Overview</a></li>
                     <!-- Updated Program link to program.html -->
                     <li><a href="program.html">Program</a></li> 
+                    <li><a href="call4paper.html">Call for Paper</a></li> 
                     <li><a href="index.html#challenge">Challenge</a></li>
                     <li><a href="committee.html">Organizing Committee</a></li>
                     <li><a href="index.html#contact">Contact</a></li>
@@ -118,7 +129,7 @@
                     <li>Informal networking with peers and mentors</li>
                     <li>Participating in round table sessions connecting junior and senior researchers</li>
                 </ul>
-                <p>Interested participants can <a href="#" class="signup-link">sign up through this form</a>. We actively invite senior researchers in the space-AI community to volunteer as mentors.</p>
+                <p style="margin-top: 1em;">We actively invite senior researchers in the space-AI community to volunteer as mentors.</p>
             </div>
 
             <h2 style="margin-top: 3em;">Program Committee</h2>
@@ -255,5 +266,24 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- committee_app.js will now use staticCommitteeData -->
     <script src="committee_app.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const fadeInElements = document.querySelectorAll("body > *"); // Apply to direct children of body
+        fadeInElements.forEach(el => el.classList.add("fade-in-on-scroll"));
+
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target); // Optional: stop observing after animation
+            }
+          });
+        }, { threshold: 0.1 }); // Adjust threshold as needed
+
+        fadeInElements.forEach(el => {
+          observer.observe(el);
+        });
+      });
+    </script>
 </body>
 </html>

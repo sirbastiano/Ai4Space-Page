@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizing Committee - AI4Space @ NeurIPS</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .committee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .committee-card {
+            perspective: 1000px;
+            height: 400px;
+        }
+        .flipper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .committee-card:hover .flipper {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            background-color: #fff;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+        .committee-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: block;
+        }
+        .bio-detail {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        /* Fade-in animation styles */
+        .fade-in-on-scroll {
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div id="committee-app"> <!-- Removed data-scroll-container -->
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Overview</a></li>
+                    <!-- Updated Program link to program.html -->
+                    <li><a href="program.html">Program</a></li> 
+                    <li><a href="call4paper.html">Call for Paper</a></li> 
+                    <li><a href="index.html#challenge">Challenge</a></li>
+                    <li><a href="committee.html">Organizing Committee</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hero">
+                <h1>Call for Papers <i class="fas fa-file-alt"></i></h1>
+                <p>Your gateway to AI4Space Workshop <i class="fas fa-rocket"></i> <i class="fas fa-satellite"></i> <i class="fas fa-globe-americas"></i></p>
+            </div>
+        </header>
+
+        
+        
+        
+        <main>
+            <section class="content-section">
+            
+            <h2>We invite submissions of three types:</h2>
+            
+            <div class="paper-track">
+                <h3><span class="track-marker blue">🔵</span> Position or Opinions Papers</h3>
+                <p>Papers discussing perspectives on the topic of the workshop.</p>
+                <p>Submissions must be anonymized and limited to 4 pages (excluding references and appendices).</p>
+            </div>
+
+            <div class="paper-track">
+                <h3><span class="track-marker green">🟢</span> Extended Abstracts</h3>
+                <p>Ongoing and unpublished work as extended abstracts. Under-review NeurIPS submissions are allowed in this track.</p>
+                <p>Submissions must be anonymized and limited to 4 pages (excluding references and appendices).</p>
+            </div>
+
+            <div class="paper-track">
+                <h3><span class="track-marker red">🔴</span> Long Papers (Archival)</h3>
+                <p>Novel research focusing on the various aspects of responsible design of modality-specific and multimodal systems.</p>
+                <p>Submissions must be anonymized and limited to 9 pages (excluding references and appendices).</p>
+            </div>
+
+            <div class="presentation-info">
+                <p>All accepted submissions will be presented in a poster session. Selected papers from all tracks will also be invited for spotlight presentations during the workshop.</p>
+                <p>Please use the <a href="#">official NeurIPS LaTeX template</a> for all submissions.</p>
+            </div>
+
+            <div class="awards-info">
+                <p>Best Paper and Honorable Mention awards will be given. Recipients will receive free student full registrations to NeurIPS 2024.</p>
+            </div>
+            </section>
+        </main>
+
+
+
+
+        <footer></footer>
+            <p>&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved.</p>
+        </footer>
+    </div>
+
+    
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- committee_app.js will now use staticCommitteeData -->
+    <script src="committee_app.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const fadeInElements = document.querySelectorAll("body > *"); // Apply to direct children of body
+        fadeInElements.forEach(el => el.classList.add("fade-in-on-scroll"));
+
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target); // Optional: stop observing after animation
+            }
+          });
+        }, { threshold: 0.1 }); // Adjust threshold as needed
+
+        fadeInElements.forEach(el => {
+          observer.observe(el);
+        });
+      });
+    </script>
+</body>
+</html>

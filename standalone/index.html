@@ -40,7 +40,7 @@
 
                 <!-- New Countdown Timer -->
                 <div class="countdown-container" style="margin-top: 15em;">
-                    <h1 class="main-hero-title" style="text-align: center; font-size: 3em; color: white; margin-bottom: 1em; text-shadow: 0 0 10px rgba(0,0,0,0.7);">🚀 AI4Space @ NeurIPSp (tentative)</h1>
+                    <h1 class="main-hero-title" style="text-align: center; font-size: 3em; color: white; margin-bottom: 1em; text-shadow: 0 0 10px rgba(0,0,0,0.7);">🚀 AI4Space @ NeurIPS (tentative)</h1>
                     <h2 class="countdown-caption">Submission Deadline</h2>
                     <section class="countdown">
                         <div class="time-wrapper">
@@ -98,7 +98,7 @@
                 </div>
                 <div class="hero-cta-countdown" style="display:flex;flex-direction:column;align-items:center;width:100%;position:relative;z-index:20;">
                     <div class="text-center" style="margin-bottom:166px;">
-                        <a href="index.html#overview" class="cta-button">Call for Papers</a>
+                        <a href="call4paper.html" class="cta-button">Call for Papers</a>
                     </div>
                     <div class="hero-countdown center-countdown" id="hero-countdown"></div>
                 </div>
@@ -183,6 +183,7 @@
                                 <td><i class="fas fa-check-circle"></i> Policies</td>
                                 <td>AI4Space follows the submission policies of NeurIPS 2025. Submissions should be sufficiently original works not under consideration or review in other venues.
                                     Reviewing is double blind - remember to remove your names and affiliations in the submitted version (selecting the reviewing option in the LaTeX template will take care of that)
+                                    For style and formatting, please use the official NeurIPS 2025 LaTeX template.
                                 </td>
                             </tr>
                             <tr>
@@ -346,5 +347,24 @@
     <!-- <script src="app.js"></script> -->
     <script src="animation.js"></script>
     <script src="countdown.js"></script> <!-- Added countdown JS -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const fadeInElements = document.querySelectorAll("body > *"); // Apply to direct children of body
+        fadeInElements.forEach(el => el.classList.add("fade-in-on-scroll"));
+
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target); // Optional: stop observing after animation
+            }
+          });
+        }, { threshold: 0.1 }); // Adjust threshold as needed
+
+        fadeInElements.forEach(el => {
+          observer.observe(el);
+        });
+      });
+    </script>
 </body>
 </html>
