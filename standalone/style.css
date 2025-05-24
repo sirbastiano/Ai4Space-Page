@@ -1002,11 +1002,13 @@ footer p {
 /* Workshop Objectives Cards */
 .objectives-cards {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-wrap: nowrap; /* Prevent wrapping to new lines */
+    gap: 15px; /* Reduced gap from 20px */
     justify-content: center;
     margin-top: 20px;
-    padding: 0 15px; /* Add some padding to the container itself */
+    max-width: 100%; /* Allow container to take full width */
+    padding: 0 12px; /* Reduced padding from 15px */
+    overflow-x: auto; /* Add horizontal scrolling if needed */
 }
 
 .card {
