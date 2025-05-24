@@ -6,6 +6,7 @@
     <title>🚀 AI4Space @ NeurIPS </title> <!-- Catchier Title -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="countdown-style.css"> <!-- Added countdown CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet"> <!-- Added Montserrat font -->
 </head>
@@ -22,7 +23,7 @@
                 <ul>
                     <li><a href="index.html">Overview</a></li> <!-- Changed to root path -->
                     <li><a href="index.html#tracks">Tracks</a></li> <!-- Link to section on main page -->
-                    <li><a href="index.html#program">Program</a></li> <!-- New Link -->
+                    <li><a href="program.html">Program</a></li> <!-- New Link -->
                     <li><a href="index.html#challenges">Challenges</a></li> <!-- Link to section on main page -->
                     <li><a href="committee.html">Organizing Committee</a></li> <!-- New Link -->
                     <li><a href="index.html#contact">Contact</a></li>
@@ -44,7 +45,7 @@
                 </div>
 
                 <!-- New Countdown Timer -->
-                <div class="countdown-container">
+                <div class="countdown-container" style="margin-top: 5em;">
                     <h1 class="main-hero-title" style="text-align: center; font-size: 3em; color: white; margin-bottom: 1em; text-shadow: 0 0 10px rgba(0,0,0,0.7);">AI4Space Workshop</h1>
                     <h2 class="countdown-caption">Submission Deadline</h2>
                     <section class="countdown">
@@ -111,29 +112,39 @@
         </header>
 
         <main>
-          </ul>  <section id="overview" class="overview-section">
-                <h2 style="color: #00008B;">AI Beyond Earth</h2>
-                <p>
-                    Artificial Intelligence is revolutionizing our understanding and exploration of the cosmos. The AI4Space workshop at NeurIPS 2025 brings together researchers, engineers, and visionaries to push the boundaries of AI for space science, exploration, and technology. Our vision is to foster interdisciplinary collaboration, inspire innovative solutions, and accelerate the integration of AI into all aspects of space missions—from autonomous spacecraft and planetary science to satellite data analysis and interstellar communication.
-                </p>
-                <h3>Workshop Objectives</h3>
-                <ul>
-                    <li>Highlight cutting-edge AI research and applications in space science and engineering.</li>
-                    <li>Foster collaboration between AI experts, astronomers, planetary scientists, and aerospace engineers.</li>
-                    <li>Identify open challenges and future directions for AI in space exploration and technology.</li>
-                    <li>Promote the responsible and ethical use of AI in space missions and data analysis.</li>
-                </ul>
-                <section class="things-to-note" style="max-width:600px;margin:32px auto 0 auto;padding:24px 20px 18px 20px;background:rgba(0,0,0,0.18);border-radius:12px;box-shadow:0 2px 12px #0002;">
-                    <h3 style="color:hsl(38, 98%, 47%);text-align:center;margin-bottom:18px;">Things to note:</h3>
-                    <ul style="color:#fff;font-size:1.08em;line-height:1.7;list-style:disc inside;">
-                        <li>Papers will be fully peer reviewed and accepted papers will be published in the proceedings of NeurIPS 2024 Workshops.</li>
-                        <li>AI4Space follows the submission policies of NeurIPS 2024. An implication is that submissions to AI4Space should be sufficiently original works not under consideration/reviewing in other venues.</li>
-                        <li>Consistent with the submission policy, we highly encourage submission of papers relevant to AI4Space but are rejected from the main NeurIPS conference (decisions on Feb 27---before the AI4Space submission deadline on March 1).</li>
-                        <li>Accepted AI4Space papers are also expected to be presented in person at the workshop, which will be co-located with NeurIPS 2024.</li>
-                        <li>If you require a formal invitation letter to facilitate your travel to NeurIPS 2024 in Seattle, please visit the main conference page.</li>
-                        <li>All papers published via this workshop must be aimed towards the peaceful usage of AI for space.</li>
-                    </ul>
-                </section>
+          <section id="overview" class="overview-section">
+                <h2>AI Beyond Earth</h2>
+                <p>Artificial Intelligence is revolutionizing our understanding and exploration of the cosmos. The AI4Space workshop at NeurIPS 2025 brings together researchers, engineers, and visionaries to push the boundaries of AI for space science, exploration, and technology. Our vision is to foster interdisciplinary collaboration, inspire innovative solutions, and accelerate the integration of AI into all aspects of space missions—from autonomous spacecraft and planetary science to satellite data analysis and interstellar communication.</p>
+
+                <h2 style="font-size: x-large;">Workshop Objectives</h2>
+                <!-- Replacing $SELECTION_PLACEHOLDER$ with a cards layout -->
+                <div class="objectives-cards">
+                    <div class="card">
+                        <h4><i class="fas fa-rocket"></i> Cutting-Edge Research</h4>
+                        <p><strong>Highlight cutting-edge AI research and applications in space science and engineering.</strong></p>
+                    </div>
+                    <div class="card">
+                        <h4><i class="fas fa-users"></i> Foster Collaboration</h4>
+                        <p><strong>Foster collaboration between AI experts, astronomers, planetary scientists, and aerospace engineers.</strong></p>
+                    </div>
+                    <div class="card">
+                        <h4><i class="fas fa-lightbulb"></i> Future Directions</h4>
+                        <p><strong>Identify open challenges and future directions for AI in space exploration and technology.</strong></p>
+                    </div>
+                    <div class="card">
+                        <h4><i class="fas fa-shield-alt"></i> Responsible AI</h4>
+                        <p><strong>Promote the responsible and ethical use of AI in space missions and data analysis.</strong></p>
+                    </div>
+                </div>
+                <h2 style="font-size: x-large; margin-top: 2em;">Submission Information</h2>
+                <p>Papers will be fully peer reviewed and accepted papers will be published in the proceedings of NeurIPS 2024 Workshops.</p>
+                <p>AI4Space follows the submission policies of NeurIPS 2024. Submissions should be sufficiently original works not under consideration or review in other venues.</p>
+                <p>We highly encourage submission of papers relevant to AI4Space that were rejected from the main NeurIPS conference (decisions on Feb 27 — before the AI4Space submission deadline on March 1).</p>
+                <p>Accepted AI4Space papers are expected to be presented in person at the workshop, which will be co-located with NeurIPS 2024.</p>
+                <p>If you require a formal invitation letter to facilitate your travel to NeurIPS 2024 in Seattle, please visit the main conference page.</p>
+                <p>All papers published via this workshop must be aimed towards the peaceful usage of AI for space.</p>
+
+
             </section>
 
             <section id="topics" class="content-section">

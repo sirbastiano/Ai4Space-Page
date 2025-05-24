@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program - AI4Space @ NeurIPS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="countdown-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <style>
+        /* Basic table styling */
+        .schedule-table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-family: 'Roboto', sans-serif;
+        }
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .schedule-table th {
+            background-color: #f2f2f2; /* Light grey for headers */
+            color: #333;
+            text-align: center;
+        }
+        .schedule-table caption {
+            caption-side: bottom;
+            padding: 10px;
+            font-style: italic;
+            color: #555;
+            text-align: center;
+        }
+        .activity-details {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .activity-details li {
+            margin-bottom: 5px;
+        }
+        .gray-row {
+            background-color: #C0C0C0 !important; /* Light gray from LaTeX */
+        }
+        .gray-cell {
+            background-color: #C0C0C0 !important; /* Light gray from LaTeX */
+        }
+         /* Ensure main content area has some padding */
+        main .content-section {
+            padding: 20px;
+        }
+        main h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Overview</a></li>
+                    <li><a href="index.html#tracks">Tracks</a></li>
+                    <li><a href="program.html">Program</a></li> <!-- Corrected Program Link -->
+                    <li><a href="index.html#challenges">Challenges</a></li>
+                    <li><a href="committee.html">Organizing Committee</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hero"> <!-- Reusing hero style for consistency, content adjusted -->
+                <h1>Workshop Program</h1>
+                <p>Preliminary schedule for AI4Space @ NeurIPS 2025.</p>
+            </div>
+        </header>
+
+        <main>
+            <section id="program-schedule" class="content-section">
+                <h2>Workshop Program Schedule</h2>
+                <table class="schedule-table">
+                    <caption>Preliminary schedule for AI4Space @ NeurIPS 2025.</caption>
+                    <thead>
+                        <tr>
+                            <th colspan="2">Morning session</th>
+                            <th colspan="2">Afternoon session</th>
+                        </tr>
+                        <tr>
+                            <th>Planned<br>time (PST)</th>
+                            <th>Activity</th>
+                            <th>Planned<br>time (PST)</th>
+                            <th>Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>7:55</td>
+                            <td>
+                                Welcome and introduction<br>
+                                Includes:<br>
+                                - Sponsor recognition<br>
+                                - Workshop outline<br>
+                                - Submission and acceptance statistics<br>
+                                - Unconferences presentation
+                            </td>
+                            <td>14:00</td>
+                            <td>
+                                Welcome to afternoon session<br>
+                                - Reminder of workshop outline<br>
+                                - Unconferences announcement
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>8:00</td>
+                            <td>
+                                Invited Speaker 1's talk<br>
+                                Presentation (25 mins)<br>
+                                Q & A (5 min)
+                            </td>
+                            <td>14:05</td>
+                            <td>
+                                Spotlight presentations<br>
+                                (~6 mins each)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>8:30</td>
+                            <td>
+                                Spotlight presentations<br>
+                                (~6 mins each)
+                            </td>
+                            <td>14:35</td>
+                            <td>
+                                Invited Speaker's 3 talk<br>
+                                Presentation (25 min)<br>
+                                Q & A (5 min)
+                            </td>
+                        </tr>
+                        <tr class="gray-row">
+                            <td>9:30</td>
+                            <td>
+                                Poster session (all accepted papers)<br>
+                                Coffee break (in parallel)
+                            </td>
+                            <td>15:05</td>
+                            <td>Coffee break</td>
+                        </tr>
+                        <tr>
+                            <td>10:30</td>
+                            <td>
+                                Invited Speaker 2's talk<br>
+                                Presentation (25 mins)<br>
+                                Q & A (5 min)
+                            </td>
+                            <td class="gray-cell">16:00</td>
+                            <td class="gray-cell">
+                                Unconference sessions<br>
+                                - Voting results<br>
+                                - Session 1 (~30 min)<br>
+                                - Session 2 (~30 min)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>11:00</td>
+                            <td>Spotlight presentations (~6 mins each)</td>
+                            <td>17:00</td>
+                            <td>Panel discussion</td>
+                        </tr>
+                        <tr>
+                            <td>12:00</td>
+                            <td>
+                                Top-2 competition presenters<br>
+                                (10 min each + 5 min questions)
+                            </td>
+                            <td>17:30</td>
+                            <td>Award cerimony</td>
+                        </tr>
+                        <tr>
+                            <td>12:30</td>
+                            <td>Wrap-ups of the morning session</td>
+                            <td>17:40</td>
+                            <td>Conclusions and wrap-ups</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved. Charting new territories in AI.</p>
+        </footer>
+    </div>
+
+    <script src="animation.js"></script>
+    <script src="countdown.js"></script>
+</body>
+</html>

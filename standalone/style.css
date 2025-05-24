@@ -999,283 +999,65 @@ footer p {
     flex-grow: 1;
 }
 
-/* Committee Page Specific Styles */
-.committee-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-}
-
-.committee-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    color: #333;
-    perspective: 1000px;
-}
-.committee-card:hover .flipper {
-    transform: rotateY(180deg);
-}
-
-.committee-card .flipper {
-    transition: 0.6s;
-    transform-style: preserve-3d;
-    position: relative;
-    min-height: 380px; 
-}
-
-.committee-card .card-front,
-.committee-card .card-back {
-    backface-visibility: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.committee-card .card-front {
-    z-index: 2;
-    transform: rotateY(0deg);
-}
-
-.committee-card .card-back {
-    transform: rotateY(180deg);
-    background-color: #f8f9fa;
-    justify-content: flex-start;
-    overflow-y: auto;
-}
-
-.committee-card .committee-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
-    border: 3px solid #3498db;
-}
-
-.committee-card h3 { /* Name on front */
-    font-size: 1.4em;
-    margin-bottom: 5px;
-}
-.committee-card .card-back h4 { /* Name on back */
-    font-size: 1.3em;
-    color: #333d48;
-    margin-bottom: 10px;
-}
-
-.committee-card .affiliation {
-    font-size: 0.95em;
-    margin-bottom: 10px;
-}
-.committee-card .card-back .affiliation {
-    margin-bottom: 15px;
-}
-
-.committee-card .bio-detail {
-    font-size: 0.9em;
-    color: #444;
-    line-height: 1.6;
-    text-align: left;
-}
-
-/* Styles for detail pages (track_detail.html, challenge_detail.html) */
-.track-detail-main, .challenge-detail-main {
-    padding: 20px;
-    background-color: #fff; 
-    color: #333; 
-    border-radius: 8px;
-    margin: 20px auto; 
-    max-width: 900px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.track-content-section, .challenge-content-section {
-    padding: 20px 0;
-}
-.track-content-section h2, .challenge-content-section h2 {
-    font-size: 2em;
-    color: #2c3e50;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
-}
-.track-content-section h3, .challenge-content-section h3 {
-    font-size: 1.5em;
-    color: #333d48;
-    margin-top: 30px;
-    margin-bottom: 15px;
-
-}
-
-.track-image-container, .challenge-image-container {
-    width: 100%;
-    max-height: 400px;
-    overflow: hidden;
-    margin-bottom: 25px;
-    border-radius: 8px;
-}
-.track-image-container img, .challenge-image-container img {
-    width: 100%;
-    height: auto; /* Changed from fixed height to auto for responsiveness */
-    object-fit: cover;
-}
-
-.track-detail-main .description, .challenge-detail-main .description, /* For p tags with class description */
-.track-detail-main .long-description, .challenge-detail-main .long-description {
-    font-size: 1.1em;
-    line-height: 1.7;
-    color: #555;
-    margin-bottom: 20px;
-}
-
-.keywords-list {
-    list-style: none;
-    padding: 0;
+/* Workshop Objectives Cards */
+.objectives-cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-}
-.keywords-list li {
-    background-color: #e9ecef;
-    color: #495057;
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 0.9em;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 0 15px; /* Add some padding to the container itself */
 }
 
-.more-details-placeholder p, .no-content p {
-    font-style: italic;
-    color: #777;
+.card {
+    background-color: #ffffff; /* White background, consistent with .content-card */
+    color: #333;
+    border: 1px solid #e0e0e0; /* Slightly lighter border */
+    border-left: 5px solid #e67e22; /* Accent color from .cta-button */
+    border-radius: 8px;
+    padding: 25px; /* Increased padding */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.07); /* Softer shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex-grow: 1; /* Allow cards to grow */
+    flex-basis: calc(33.333% - 40px); /* Adjust basis considering gap and container padding */
+    min-width: 280px; 
+    max-width: 450px; /* Max width for larger screens */
+    box-sizing: border-box;
+    margin-bottom: 20px; /* Ensure space when wrapping */
 }
 
-/* Hero section override for sub-pages (non-index pages) */
-body:not(:has(> #app > header > .hero > .solar-syst)) .hero {
-    height: auto; /* Not 100vh */
-    padding: 60px 20px;
-    background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%); 
-    text-align: center;
-    color: white;
-    margin-bottom: 30px; 
-}
-body:not(:has(> #app > header > .hero > .solar-syst)) .hero h1 {
-    font-size: 2.8em; 
-    color: white;
-}
-body:not(:has(> #app > header > .hero > .solar-syst)) .hero p {
-    font-size: 1.2em;
-    color: #f0f0f0;
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 7px 15px rgba(0,0,0,0.1);
 }
 
-/* Hide the old .main div if present on sub-pages */
-body:not(:has(> #app > header > .hero > .solar-syst)) > .main {
-    display: none;
+.card h4 {
+    margin-top: 0;
+    margin-bottom: 15px; /* More space after heading */
+    color: #e67e22; 
+    font-size: 1.2em; /* Slightly larger heading */
+    font-weight: 600;
 }
 
-/* Ensure nav links on sub-page heroes are visible */
-body:not(:has(> #app > header > .hero > .solar-syst)) nav .logo,
-body:not(:has(> #app > header > .hero > .solar-syst)) nav ul li a {
-    color: white;
+.card p {
+    font-size: 1em; /* Standard paragraph size */
+    line-height: 1.65;
+    margin-bottom: 0;
 }
 
-/* Ensure main page card buttons are styled correctly */
-main .content-card .btn-details-inline {
-    background-color: #3498db;
-    color: white !important; 
-    border: none; 
-    padding: 10px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    text-align: center;
-    margin-top: auto; 
-    transition: background-color 0.3s ease;
-}
-main .content-card .btn-details-inline:hover {
-    background-color: #2980b9;
-    color: white !important;
-}
-
-main .content-card .btn-details { /* For challenge cards */
-    background-color: #e67e22; 
-    color: white !important;
-    padding: 10px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 15px; 
-    transition: background-color 0.3s ease;
-}
-main .content-card .btn-details:hover {
-    background-color: #d35400;
-    color: white !important;
-}
-
-/* Key Dates Banner Styles */
-.key-dates-banner {
-    width: 100%;
-    background: linear-gradient(90deg, #2c3e50 0%, #4ca1af 100%);
-    color: #fff;
-    padding: 10px 0 7px 0;
-    text-align: center;
-    font-size: 0.98em;
-    font-family: 'Montserrat', Arial, sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-    z-index: 100;
-    position: relative;
-}
-.key-dates-title, .program-title {
-    margin-right: 12px;
-    color: #ffe082;
-    font-size: 1em;
-}
-.key-date-item, .program-item {
-    margin: 0 8px;
-    color: #fff;
-    font-weight: 500;
-    font-size: 0.98em;
-}
-@media (max-width: 900px) {
-    .key-dates-banner {
-        font-size: 0.92em;
-        padding: 7px 0 5px 0;
-    }
-    .key-date-item, .program-item {
-        display: block;
-        margin: 3px 0;
-    }
-    .program-title {
-        display: block;
-        margin: 8px 0 0 0;
+/* Responsive adjustments for cards */
+@media (max-width: 992px) {
+    .card {
+        flex-basis: calc(50% - 30px); /* 2 cards per row */
     }
 }
 
-/* Fade-in animation for elements as they scroll into view */
-.fade-in-section {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-  will-change: opacity, transform;
-}
-.fade-in-section.visible {
-  opacity: 1;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .fade-in-section,
-  .fade-in-section.visible {
-    transition: none;
-    transform: none;
-  }
+@media (max-width: 768px) {
+    .objectives-cards {
+        padding: 0 10px;
+    }
+    .card {
+        flex-basis: calc(100% - 20px); /* 1 card per row */
+        max-width: none; /* Allow full width on small screens */
+    }
 }
