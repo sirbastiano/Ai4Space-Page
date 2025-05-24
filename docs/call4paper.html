@@ -3,12 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organizing Committee - AI4Space @ NeurIPS</title>
+    <title>Call for Papers</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        /* Basic table styling */
+        .schedule-table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-family: 'Roboto', sans-serif;
+        }
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .schedule-table th {
+            background-color: #f2f2f2; /* Light grey for headers */
+            color: #333;
+            text-align: center;
+        }
+        .schedule-table caption {
+            caption-side: bottom;
+            padding: 10px;
+            font-style: italic;
+            color: #555;
+            text-align: center;
+        }
+        .activity-details {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .activity-details li {
+            margin-bottom: 5px;
+        }
+        .gray-row {
+            background-color: #C0C0C0 !important; /* Light gray from LaTeX */
+        }
+        .gray-cell {
+            background-color: #C0C0C0 !important; /* Light gray from LaTeX */
+        }
+         /* Ensure main content area has some padding */
+        main .content-section {
+            padding: 20px;
+        }
+        main h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
         .committee-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -66,62 +112,350 @@
           opacity: 1;
           transform: translateY(0);
         }
-    </style>
-</head>
-<body>
-    <div id="committee-app"> <!-- Removed data-scroll-container -->
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Overview</a></li>
-                    <!-- Updated Program link to program.html -->
-                    <li><a href="program.html">Program</a></li> 
-                    <li><a href="call4paper.html">Call for Paper</a></li> 
-                    <li><a href="index.html#challenge">Challenge</a></li>
-                    <li><a href="committee.html">Organizing Committee</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
-                </ul>
-            </nav>
-            <div class="hero">
-                <h1>Call for Papers <i class="fas fa-file-alt"></i></h1>
-                <p>Your gateway to AI4Space Workshop <i class="fas fa-rocket"></i> <i class="fas fa-satellite"></i> <i class="fas fa-globe-americas"></i></p>
-            </div>
-        </header>
-
         
+        /* Submission cards styles */
+        .submission-types-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 2em 0;
+        }
         
+        .submission-card {
+            flex: 1;
+            max-width: 32%;
+            min-height: 350px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.18);
+            display: flex;
+            flex-direction: column;
+        }
         
-        <main>
-            <section class="content-section">
+        .submission-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            padding: 15px;
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s ease;
+        }
+        
+        .submission-card:hover .card-header:before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .card-body {
+            padding: 15px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .track-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-size: 1.3em;
+            transition: all 0.3s ease;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .blue-track .track-icon {
+            background: linear-gradient(135deg, #4e73df, #224abe);
+            box-shadow: 0 3px 10px rgba(78, 115, 223, 0.4);
+        }
+        
+            .green-track .track-icon {
+                background: linear-gradient(135deg, #36b9cc, #1a8a9e);
+                box-shadow: 0 3px 10px rgba(54, 185, 204, 0.4);
+            }
             
-            <h2>We invite submissions of three types:</h2>
+            .red-track .track-icon {
+                background: linear-gradient(135deg, #e74a3b, #be3c2f);
+                box-shadow: 0 3px 10px rgba(231, 74, 59, 0.4);
+            }
             
-            <div class="paper-track">
-                <h3><span class="track-marker blue">🔵</span> Position or Opinions Papers</h3>
-                <p>Papers discussing perspectives on the topic of the workshop.</p>
-                <p>Submissions must be anonymized and limited to 4 pages (excluding references and appendices).</p>
+            .blue-track {
+                border-top: 4px solid #4e73df;
+            }
+            
+            .green-track {
+                border-top: 4px solid #36b9cc;
+            }
+            
+            .red-track {
+                border-top: 4px solid #e74a3b;
+            }
+            
+            .requirements {
+                margin-top: 15px;
+                padding: 12px;
+                background: rgba(248, 249, 250, 0.7);
+                border-radius: 8px;
+                border-left: 3px solid #2c3e50;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                transition: all 0.3s ease;
+                font-size: 0.9em;
+            }
+            
+            .submission-card:hover .requirements {
+                background: rgba(248, 249, 250, 0.9);
+                transform: translateY(-3px);
+                box-shadow: 0 5px 10px rgba(0,0,0,0.08);
+            }
+            
+            .requirement-label {
+                font-weight: bold;
+                color: #2c3e50;
+                margin-right: 5px;
+                position: relative;
+            }
+            
+            .requirement-label:after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 2px;
+                background: #2c3e50;
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                transform: scaleX(0);
+                transform-origin: left;
+                transition: transform 0.3s ease;
+            }
+            
+            .submission-card:hover .requirement-label:after {
+                transform: scaleX(1);
+            }
+            
+            .submission-card h3 {
+                margin: 0;
+                font-size: 1.2em;
+                color: #2c3e50;
+                font-weight: 700;
+                letter-spacing: 0.3px;
+            }
+            
+            .card-footer {
+                padding: 12px 15px;
+                display: flex;
+                justify-content: flex-end;
+                border-top: 1px solid #f0f0f0;
+            }
+            
+            .track-badge {
+                font-size: 0.75em;
+                font-weight: 600;
+                padding: 5px 10px;
+                border-radius: 50px;
+                color: white;
+                letter-spacing: 0.5px;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            }
+            
+            .track-badge.blue {
+                background: linear-gradient(135deg, #4e73df, #224abe);
+            }
+            
+            .track-badge.green {
+                background: linear-gradient(135deg, #36b9cc, #1a8a9e);
+            }
+            
+            .track-badge.red {
+                background: linear-gradient(135deg, #e74a3b, #be3c2f);
+            }
+            
+            @media (max-width: 992px) {
+                .submission-types-container {
+                flex-wrap: wrap;
+                }
+                
+                .submission-card {
+                flex: 1 1 48%;
+                max-width: 48%;
+                margin-bottom: 20px;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .submission-types-container {
+                flex-direction: column;
+                }
+                
+                .submission-card {
+                flex: 1 1 100%;
+                max-width: 100%;
+                }
+            }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                <header style="max-height: 5em;">
+           
+                        <nav>
+                            <ul>
+                                <li><a href="index.html">Overview</a></li> <!-- Changed to root path -->
+                                <li><a href="program.html">Program</a></li> <!-- New Link -->
+                                <li><a href="call4paper.html">Call for Paper</a></li> 
+                                <li><a href="index.html#challenge">Challenge</a></li> <!-- Link to section on main page -->
+                                <li><a href="committee.html">Organizing Committee</a></li> <!-- New Link -->
+                                <li><a href="index.html#contact">Contact</a></li>
+                            </ul>
+                        </nav>
+                        <div class="hero">
+                            <div class="hero-content">
+                                <!-- <h1 class="main-hero-title">🚀 AI4Space @ NeurIPS (tentative)</h1> -->
+                                <p class="hero-subtitle animated-text" style="text-align: center; font-size: 1.2em; color: white; margin-top: 0.5em; text-shadow: 0 0 8px rgba(0,0,0,0.5);">Charting new territories in AI</p> <!-- Subtitle -->
+                            </div>
+                        </div>
+                </header>
+                    <main>
+                        <section style="margin: 2em;">
+                            <p style="margin-top: 2em;">We invite submissions for the AI4Space workshop at NeurIPS 2025, focusing on the intersection of artificial intelligence and space science. We welcome contributions that explore innovative AI applications in space science, Earth observation, and space exploration.</p>
+                            <p>Submissions should be original and not under consideration elsewhere. All accepted papers will be presented at the workshop, and selected papers will be invited for publication in a special issue of a peer-reviewed journal.</p>
+                            <p>We encourage submissions from researchers, practitioners, and students working on AI applications in space. The workshop aims to foster collaboration and discussion on the latest advancements and challenges in this field.</p>
+                            <p>Submissions should be made through the <a href="https://openreview.net/group?id=NeurIPS.cc/2025/Workshop/AI4Space">OpenReview platform</a>.</p>
+                            <p>For more information, please refer to the <a href="https://neurips.cc/Conferences/2025/CallForPapers">NeurIPS 2025 Call for Papers</a>.</p>
+                            
+                            <section id="key-dates" class="content-section">
+
+                                <strong>Workshop venue:</strong>
+                                San Diego Convention Center, Tuesday Dec 2nd through Sunday Dec 7th
+                                <table class="schedule-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Event</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Paper Submission Deadline</td>
+                                            <td>September 15, 2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Notification of Acceptance</td>
+                                            <td>October 20, 2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Camera-Ready Deadline</td>
+                                            <td>November 5, 2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Challenge Submission Deadline</td>
+                                            <td>November 10, 2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Workshop Date</td>
+                                            <td>December 15, 2025</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+
+                        </section>
+                            
+            <div class="submission-types-container">
+                    <div class="submission-card blue-track">
+                        <div class="card-header">
+                        <div class="track-icon"><i class="fas fa-laptop-code"></i></div>
+                        <h3>Research Papers</h3>
+                        </div>
+                        <div class="card-body">
+                        <p>Original research papers on AI applications for space science, Earth observation, and space exploration.</p>
+                        <div class="requirements">
+                            <p><span class="requirement-label">Page Limit:</span> 8 pages (excluding references)</p>
+                            <p><span class="requirement-label">Format:</span> NeurIPS 2024 template</p>
+                            <p><span class="requirement-label">Review:</span> Double-blind</p>
+                        </div>
+                        </div>
+                        <div class="card-footer">
+                        <span class="track-badge blue">Full Paper</span>
+                        </div>
+                    </div>
+                    
+                    <div class="submission-card green-track">
+                        <div class="card-header">
+                        <div class="track-icon"><i class="fas fa-rocket"></i></div>
+                        <h3>Extended Abstracts</h3>
+                        </div>
+                        <div class="card-body">
+                        <p>Preliminary work, work in progress, or smaller technical contributions related to AI for space.</p>
+                        <div class="requirements">
+                            <p><span class="requirement-label">Page Limit:</span> 4 pages (excluding references)</p>
+                            <p><span class="requirement-label">Format:</span> NeurIPS 2024 template</p>
+                            <p><span class="requirement-label">Review:</span> Double-blind</p>
+                        </div>
+                        </div>
+                        <div class="card-footer">
+                        <span class="track-badge green">Short Paper</span>
+                        </div>
+                    </div>
+                    
+                    <div class="submission-card red-track">
+                        <div class="card-header">
+                        <div class="track-icon"><i class="fas fa-project-diagram"></i></div>
+                        <h3>Positions & Challenges</h3>
+                        </div>
+                        <div class="card-body">
+                        <p>Position papers and descriptions of open challenges for AI in space applications.</p>
+                        <div class="requirements">
+                            <p><span class="requirement-label">Page Limit:</span> 4 pages (excluding references)</p>
+                            <p><span class="requirement-label">Format:</span> NeurIPS 2024 template</p>
+                            <p><span class="requirement-label">Review:</span> Single-blind</p>
+                        </div>
+                        </div>
+                        <div class="card-footer">
+                        <span class="track-badge red">Short Paper</span>
+                        </div>
+                    </div>
             </div>
 
-            <div class="paper-track">
-                <h3><span class="track-marker green">🟢</span> Extended Abstracts</h3>
-                <p>Ongoing and unpublished work as extended abstracts. Under-review NeurIPS submissions are allowed in this track.</p>
-                <p>Submissions must be anonymized and limited to 4 pages (excluding references and appendices).</p>
-            </div>
+        </main>
 
-            <div class="paper-track">
-                <h3><span class="track-marker red">🔴</span> Long Papers (Archival)</h3>
-                <p>Novel research focusing on the various aspects of responsible design of modality-specific and multimodal systems.</p>
-                <p>Submissions must be anonymized and limited to 9 pages (excluding references and appendices).</p>
-            </div>
-
-            <div class="presentation-info">
-                <p>All accepted submissions will be presented in a poster session. Selected papers from all tracks will also be invited for spotlight presentations during the workshop.</p>
-                <p>Please use the <a href="#">official NeurIPS LaTeX template</a> for all submissions.</p>
-            </div>
-
-            <div class="awards-info">
-                <p>Best Paper and Honorable Mention awards will be given. Recipients will receive free student full registrations to NeurIPS 2024.</p>
-            </div>
+        <footer>
+            <p>&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved.</p>
+        </footer>
+    </div>
             </section>
         </main>
 
