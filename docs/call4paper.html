@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
     <style>
         /* Basic table styling */
         .schedule-table {
@@ -328,18 +328,23 @@
             </head>
             <body>
                 <div class="container">
-                <header style="max-height: 5em;">
-           
-                        <nav>
-                            <ul>
-                                <li><a href="index.html">Overview</a></li> <!-- Changed to root path -->
-                                <li><a href="program.html">Program</a></li> <!-- New Link -->
-                                <li><a href="call4paper.html">Call for Paper</a></li> 
-                                <li><a href="index.html#challenge">Challenge</a></li> <!-- Link to section on main page -->
-                                <li><a href="committee.html">Organizing Committee</a></li> <!-- New Link -->
-                                <li><a href="index.html#contact">Contact</a></li>
+                <header style="max-height: 10em;"> <!-- Adjusted max-height -->
+                    <nav class="navbar">
+                        <div class="navbar-container">
+                            <a href="index.html" class="navbar-logo">AI4Space</a>
+                            <div class="menu-icon">
+                                <i class="fas fa-bars"></i>
+                            </div>
+                            <ul class="nav-menu">
+                                <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                                <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                                <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Paper</a></li>
+                                <li class="nav-item"><a href="index.html#challenge" class="nav-links">Challenge</a></li>
+                                <li class="nav-item"><a href="committee.html" class="nav-links">Organizing Committee</a></li>
+                                <li class="nav-item"><a href="index.html#contact" class="nav-links">Contact</a></li>
                             </ul>
-                        </nav>
+                        </div>
+                    </nav>
                         <div class="hero">
                             <div class="hero-content">
                                 <!-- <h1 class="main-hero-title">🚀 AI4Space @ NeurIPS (tentative)</h1> -->
@@ -355,41 +360,41 @@
                             <p>Submissions should be made through the <a href="https://openreview.net/group?id=NeurIPS.cc/2025/Workshop/AI4Space">OpenReview platform</a>.</p>
                             <p>For more information, please refer to the <a href="https://neurips.cc/Conferences/2025/CallForPapers">NeurIPS 2025 Call for Papers</a>.</p>
                             
-                            <section id="key-dates" class="content-section">
+                            <section id="key-dates" class="content-section" align="left">
 
                                 <strong>Workshop venue:</strong>
                                 San Diego Convention Center, Tuesday Dec 2nd through Sunday Dec 7th
-                                <table class="schedule-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Event</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </thead>
+                                <table class="schedule-table" style="margin-top: 1em; width: 700px; max-width: 100%;">
+                                    <caption style="caption-side: top; font-weight: bold; font-size: 1.1em;">
+                                        🚀 Key Dates
+                                    </caption>
                                     <tbody>
                                         <tr>
-                                            <td>Paper Submission Deadline</td>
-                                            <td>September 15, 2025</td>
+                                            <th>Paper submission (start)</th>
+                                            <td>Jul 7, 2025</td>
                                         </tr>
                                         <tr>
-                                            <td>Notification of Acceptance</td>
-                                            <td>October 20, 2025</td>
+                                            <th>Paper submission deadline</th>
+                                            <td>Aug 24, 2025</td>
                                         </tr>
                                         <tr>
-                                            <td>Camera-Ready Deadline</td>
-                                            <td>November 5, 2025</td>
+                                            <th>Reviewing starts</th>
+                                            <td>Aug 25, 2025</td>
                                         </tr>
                                         <tr>
-                                            <td>Challenge Submission Deadline</td>
-                                            <td>November 10, 2025</td>
+                                            <th>Reviews due</th>
+                                            <td>Sep 27, 2025</td>
                                         </tr>
                                         <tr>
-                                            <td>Workshop Date</td>
-                                            <td>December 15, 2025</td>
+                                            <th>Paper decisions</th>
+                                            <td>Sep 22, 2025</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Camera-ready submission</th>
+                                            <td>Oct 23, 2025</td>
                                         </tr>
                                     </tbody>
                                 </table>
-                            </section>
 
 
                         </section>
@@ -451,45 +456,11 @@
             </div>
 
         </main>
-
         <footer>
             <p>&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved.</p>
         </footer>
-    </div>
-            </section>
-        </main>
-
-
-
-
-        <footer></footer>
-            <p>&copy; 2025 AI4Space Workshop @ NeurIPS. All rights reserved.</p>
-        </footer>
-    </div>
-
-    
-
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- committee_app.js will now use staticCommitteeData -->
-    <script src="committee_app.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const fadeInElements = document.querySelectorAll("body > *"); // Apply to direct children of body
-        fadeInElements.forEach(el => el.classList.add("fade-in-on-scroll"));
-
-        const observer = new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              observer.unobserve(entry.target); // Optional: stop observing after animation
-            }
-          });
-        }, { threshold: 0.1 }); // Adjust threshold as needed
-
-        fadeInElements.forEach(el => {
-          observer.observe(el);
-        });
-      });
-    </script>
+    </div> <!-- Closing .container div -->
+    <script src="animation.js"></script> <!-- Assuming animation.js is still needed -->
+    <script src="app.js"></script> <!-- Added app.js -->
 </body>
 </html>

@@ -102,20 +102,61 @@ document.addEventListener('DOMContentLoaded', function() {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.15 });
-    fadeEls.forEach(function(el) { observer.observe(el); });
+    }, { threshold: 0.1 });
+
+    fadeEls.forEach(function(el) {
+      observer.observe(el);
+    });
   } else {
-    // Fallback for old browsers
-    function checkFadeIn() {
+    // Fallback for browsers that don't support IntersectionObserver
+    function checkVisibility() {
       fadeEls.forEach(function(el) {
         var rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 40) {
+        if (rect.top <= (window.innerHeight || document.documentElement.clientHeight) && rect.bottom >= 0) {
           el.classList.add('visible');
         }
       });
     }
-    window.addEventListener('scroll', checkFadeIn);
-    window.addEventListener('resize', checkFadeIn);
-    checkFadeIn();
+    window.addEventListener('scroll', checkVisibility);
+    window.addEventListener('resize', checkVisibility);
+    checkVisibility(); // Initial check
   }
 });
+
+// Navbar toggle functionality
+const menuIcon = document.querySelector('.menu-icon');
+const navMenu = document.querySelector('.nav-menu');
+const navLinks = document.querySelectorAll('.nav-links');
+
+if (menuIcon && navMenu) {
+    menuIcon.addEventListener('click', () => {
+        // Toggle Nav
+        navMenu.classList.toggle('active');
+
+        // Toggle Icon
+        menuIcon.classList.toggle('active');
+        const icon = menuIcon.querySelector('i');
+        if (icon.classList.contains('fa-bars')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    });
+}
+
+// Close mobile menu when a link is clicked
+if (navLinks && navMenu && menuIcon) {
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                menuIcon.classList.remove('active');
+                const icon = menuIcon.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+    });
+}

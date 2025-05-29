@@ -779,7 +779,6 @@ nav {
     position: relative;
     z-index: 1000;
     background: transparent; /* Set background to transparent */
-    width: 100%;
 }
 
 nav .logo {
@@ -845,96 +844,124 @@ nav ul li a:hover::after {
     }
 }
 
-/* Styling for committee page hero */
-#committee-app header {
-    height: auto; /* Override global header height to be content-based */
-    /* The background and other properties from the global header will still apply */
+/* Custom Responsive Navbar Styles */
+.navbar {
+  /* background: transparent; /* nav tag already has this */
+  height: 80px; /* Adjust as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky; /* Makes the navbar stick to the top on scroll */
+  top: 0;
+  z-index: 999; /* Ensures navbar is above most other content */
 }
 
-#committee-app .hero {
-    position: relative;
-    color: #fff;
-    text-align: center;
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically align items in the container */
+  height: 80px;
+  z-index: 1; /* z-index context for children */
+  width: 100%;
+  max-width: 1300px; /* Adjust for desired max width of navbar content */
+  padding: 0 24px; /* Horizontal padding */
+}
+
+.navbar-logo {
+  color: #fff;
+  justify-self: start;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  text-align: center;
+}
+
+.nav-item {
+  height: 80px; /* Matches navbar height for consistent clickable area */
+}
+
+.nav-links {
+  color: #fff; /* White link text */
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+}
+
+.nav-links:hover {
+  border-bottom: 3px solid #00bcd4; /* Accent color for hover */
+  transition: all 0.2s ease-out;
+}
+
+.menu-icon {
+  display: none; /* Hidden on desktop, shown on mobile via media query */
+}
+
+.menu-icon .fas { /* Targets both fa-bars and fa-times */
+  color: #fff; /* Ensures icon is white */
+  font-size: 1.8rem; /* Icon size */
+}
+
+/* Responsive Styles for Mobile/Tablet */
+@media screen and (max-width: 960px) {
+  .nav-menu {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 250px; /* Set a fixed height for the banner content area */
-    min-height: unset; /* Ensure min-height doesn't interfere */
-    padding: 20px; /* Add some padding */
-    /* background: none; Re-evaluate if a background is needed or if it should be transparent */
-}
+    flex-direction: column; /* Stack items vertically */
+    width: 100%;
+    /* height: 90vh; /* Or specific height, e.g., calc(100vh - 80px) */
+    position: absolute;
+    top: 80px; /* Position below the navbar (assuming navbar height is 80px) */
+    left: -100%; /* Start off-screen to the left */
+    opacity: 1; /* Start fully opaque but off-screen */
+    transition: all 0.5s ease;
+    background: #101522; /* Background for the mobile menu panel */
+    z-index: 998; /* Below navbar sticky z-index but above page content */
+  }
 
-#committee-app .hero h1 {
-    font-size: 2.5em; /* Adjust as needed */
-    margin-bottom: 10px; /* Reduced margin */
-    color: #fff; /* Ensure text is visible if background changes */
-    text-shadow: 0 0 8px rgba(0,0,0,0.7);
-}
+  .nav-menu.active {
+    left: 0; /* Slide into view */
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
 
-#committee-app .hero p {
-    font-size: 1.2em; /* Adjust as needed */
-    margin-top: 0; /* Reduced margin */
-    color: #fff; /* Ensure text is visible */
-    text-shadow: 0 0 8px rgba(0,0,0,0.7);
-}
-
-footer {
+  .nav-links {
     text-align: center;
-    padding: 30px 20px;
-    background-color: #343a40;
-    color: white;
-    margin-top: 0;
-    position: relative;
-    z-index: 1;
-}
+    padding: 1.5rem; /* Adjust padding for touch targets */
+    width: 100%;
+    display: table; /* Ensure links take full width for easier clicking */
+  }
 
-footer p {
-    margin: 0;
-    font-size: 0.9em;
-}
+  .nav-links:hover {
+    background-color: #00bcd4; /* Hover background color for mobile links */
+    color: #fff; /* Text color on hover */
+    border-bottom: none; /* Remove desktop hover border */
+    transition: all 0.2s ease-out;
+  }
 
-.overview-section, .content-section, .committee-section, .about-section, .contact-section {
-    padding: 40px 20px;
-    margin-bottom: 30px;
-}
+  .navbar-logo {
+    /* Adjust logo if needed for mobile, e.g., reduce size or adjust margin */
+    font-size: 1.8rem; /* Slightly smaller logo on mobile */
+  }
 
-.overview-section h2, .content-section h2, .committee-section h2, .about-section h2, .contact-section h2 {
-    text-align: center;
-    font-size: 2.5em;
-    margin-bottom: 40px;
-    color: #333;
-    font-weight: 700;
-}
-
-.overview-section p, .about-section p, .contact-section p {
-    font-size: 1.1em;
-    max-width: 800px;
-    margin: 0 auto 20px auto;
-    color: #555;
-}
-
-.about-section {
-    text-align: center;
-}
-
-.contact-section form input, .contact-section form textarea {
-    border: 1px solid #ddd;
-}
-
-.btn-submit {
-    background-color: #007bff;
-    color: white;
-}
-
-.btn-submit:hover {
-    background-color: #0056b3;
-}
-
-@keyframes fadeInDescription {
-    to {
-        opacity: 1;
-    }
+  .menu-icon {
+    display: block; /* Show the hamburger icon */
+    /* position: absolute; /* Already positioned by .navbar-container flex */
+    /* top: 0; */
+    /* right: 0; */
+    /* transform: translate(-100%, 60%); /* Fine-tune position if needed */
+    cursor: pointer;
+  }
 }
 
 /* === Added/Restored Card, Grid, and Detail Page Styles === */
@@ -1318,4 +1345,132 @@ footer p {
 .fade-in-on-scroll.is-visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Navbar styles */
+.navbar {
+    background: transparent; /* Make navbar transparent */
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    z-index: 1;
+    width: 100%;
+    max-width: 1500px;
+    padding: 0 24px;
+}
+
+.navbar-logo {
+    color: #fff; /* White logo text */
+    justify-self: start;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif; /* Use Montserrat for logo */
+    font-weight: 900; /* Black weight for logo */
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+}
+
+.nav-item {
+    height: 80px;
+}
+
+.nav-links {
+    color: #fff; /* White link text */
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    cursor: pointer;
+}
+
+.nav-links:hover {
+    border-bottom: 4px solid #fff; /* Optional: highlight on hover */
+    transition: all 0.2s ease-out;
+}
+
+.menu-icon {
+    display: none; /* Hidden on desktop */
+}
+
+/* Responsive styles */
+@media screen and (max-width: 960px) {
+    .navbar-container {
+        padding: 0 20px; /* Adjust padding for smaller screens */
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto; /* Changed from 90vh to auto for dynamic height */
+        position: absolute;
+        top: 80px; /* Position below the navbar */
+        left: -100%;
+        opacity: 1;
+        transition: all 0.5s ease;
+        background: rgba(28, 40, 55, 0.95); /* Semi-transparent background for dropdown */
+        padding-top: 20px; /* Add some padding at the top */
+        padding-bottom: 20px; /* Add some padding at the bottom */
+    }
+
+    .nav-menu.active {
+        left: 0;
+        opacity: 1;
+        transition: all 0.5s ease;
+        z-index: 1;
+    }
+
+    .nav-links {
+        text-align: center;
+        padding: 1.5rem; /* Increased padding for touch targets */
+        width: 100%;
+        display: table;
+    }
+
+    .nav-links:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Lighter background on hover */
+        border-bottom: none; /* Remove bottom border on mobile */
+        border-radius: 0; /* Ensure no border radius if previously set */
+    }
+
+    .navbar-logo {
+        font-size: 1.8rem; /* Slightly smaller logo on mobile */
+    }
+
+    .menu-icon {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(-100%, 60%);
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #fff; /* White menu icon */
+    }
+
+    .fa-times {
+        color: #fff; /* White close icon */
+        font-size: 2rem;
+    }
 }

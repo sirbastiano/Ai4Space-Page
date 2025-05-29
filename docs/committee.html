@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
     <style>
         .committee-grid {
             display: grid;
@@ -59,17 +59,22 @@
 </head>
 <body>
     <div id="committee-app"> <!-- Ensure this ID matches the Vue mount point -->
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Overview</a></li>
-                    <!-- Updated Program link to program.html -->
-                    <li><a href="program.html">Program</a></li> 
-                    <li><a href="call4paper.html">Call for Paper</a></li> 
-                    <li><a href="index.html#challenge">Challenge</a></li>
-                    <li><a href="committee.html">Organizing Committee</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
-                </ul>
+        <header style="max-height: 10em;"> <!-- Adjusted max-height -->
+            <nav class="navbar">
+                <div class="navbar-container">
+                    <a href="index.html" class="navbar-logo">AI4Space</a>
+                    <div class="menu-icon">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <ul class="nav-menu">
+                        <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                        <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                        <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Paper</a></li>
+                        <li class="nav-item"><a href="index.html#challenge" class="nav-links">Challenge</a></li>
+                        <li class="nav-item"><a href="committee.html" class="nav-links">Organizing Committee</a></li>
+                        <li class="nav-item"><a href="index.html#contact" class="nav-links">Contact</a></li>
+                    </ul>
+                </div>
             </nav>
             <div class="hero">
                 <h1>Meet the Workshop Architects</h1>
@@ -256,5 +261,6 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- committee_app.js will now use staticCommitteeData -->
     <script src="committee_app.js"></script>
+    <script src="app.js"></script> <!-- Added app.js -->
 </body>
 </html>

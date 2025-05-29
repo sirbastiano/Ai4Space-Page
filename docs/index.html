@@ -35,16 +35,21 @@
 <body>
     <div id="app">
         <header style="max-height: 85em;">
-           
-            <nav>
-                <ul>
-                    <li><a href="index.html">Overview</a></li> <!-- Changed to root path -->
-                    <li><a href="program.html">Program</a></li> <!-- New Link -->
-                    <li><a href="call4paper.html">Call for Paper</a></li> 
-                    <li><a href="index.html#challenge">Challenge</a></li> <!-- Link to section on main page -->
-                    <li><a href="committee.html">Organizing Committee</a></li> <!-- New Link -->
-                    <li><a href="index.html#contact">Contact</a></li>
-                </ul>
+            <nav class="navbar">
+                <div class="navbar-container">
+                    <a href="index.html" class="navbar-logo">AI4Space</a>
+                    <div class="menu-icon">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <ul class="nav-menu">
+                        <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                        <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                        <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Paper</a></li>
+                        <li class="nav-item"><a href="index.html#challenge" class="nav-links">Challenge</a></li>
+                        <li class="nav-item"><a href="committee.html" class="nav-links">Organizing Committee</a></li>
+                        <li class="nav-item"><a href="index.html#contact" class="nav-links">Contact</a></li>
+                    </ul>
+                </div>
             </nav>
             <div class="hero">
 
@@ -123,9 +128,12 @@
             </div>
             <div class="key-dates-banner" style="margin: 0.5em; ">
                     <span class="key-dates-title">🚀 Key Dates:</span>
-                    <span class="key-date-item"><strong>Submission Deadline:</strong> July 15, 2025</span>
-                    <span class="key-date-item"><strong>Notification:</strong> August 10, 2025</span>
-                    <span class="key-date-item"><strong>Workshop:</strong> December 8, 2025</span>
+                    <span class="key-date-item"><strong>Paper submission (start):</strong> Jul 7, 2025</span>
+                    <span class="key-date-item"><strong>Paper submission deadline:</strong> Aug 24, 2025</span>
+                    <span class="key-date-item"><strong>Reviewing starts:</strong> Aug 25, 2025</span>
+                    <span class="key-date-item"><strong>Reviews due:</strong> Sep 27, 2025</span>
+                    <span class="key-date-item"><strong>Paper decisions:</strong> Sep 22, 2025</span>
+                    <span class="key-date-item"><strong>Camera-ready submission:</strong> Oct 23, 2025</span>
                 </div>
         </header>
 
@@ -359,9 +367,8 @@
         </footer>
     </div>
 
-    <!-- Vue and app.js scripts removed as they are not needed for a static site -->
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
-    <!-- <script src="app.js"></script> -->
+    <script src="app.js"></script>
     <script src="animation.js"></script>
     <script src="countdown.js"></script> <!-- Added countdown JS -->
 </body>
