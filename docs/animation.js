@@ -342,7 +342,7 @@ function anim(){
 
 // Dynamic countdown timer function
 function updateCountdown() {
-    const deadlineDate = new Date("May 30, 2025 23:59:59").getTime();
+    const deadlineDate = new Date("Jul 7, 2025 23:59:59").getTime();
     const now = new Date().getTime();
     const timeLeft = deadlineDate - now;
     
