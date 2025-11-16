@@ -1,4 +1,4 @@
-const launchDate = new Date('Jul 7, 2025 23:59:59').getTime();
+const launchDate = new Date('Apr 18, 2026 23:59:59').getTime();
 
 const countdown = function () {
   const presentDate = new Date().getTime();
