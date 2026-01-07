@@ -140,32 +140,32 @@ for org_item in raw_organizers:
 
 # --- Data from src/list_speakers.txt ---
 invited_speakers_data = [
-    {
-        "name": "Victoria Ashley Villar",
-        "bio": (
-            "Victoria Ashley Villar received her B.S. in Physics from MIT in 2014 and her Ph.D. in Astronomy "
-            "and Astrophysics from Harvard University in 2020. She was formerly a Simons Junior Postdoctoral "
-            "Fellow at Columbia University (2020–2021) and a faculty member at Penn State University (2021–2023), "
-            "before joining the Harvard Astronomy faculty in 2023. Prof. Villar’s research interests include "
-            "theoretical and observational studies of extragalactic transients, including core-collapse supernovae "
-            "and kilonovae, development of statistical and deep learning methodologies for wide-field surveys, such as "
-            "the Vera C. Rubin Observatory's Legacy Survey of Space and Time and Nancy Grace Roman Observatory. "
-            "Prof. Ashley Villar is a Packard Fellow, RCSA Scialog Fellow and Harvard Aramont Fellow."
-        ),
-        "relevance": (
-            "Prof. Villar is a prominent researcher from Harvard University in the use of data-driven methods in astronomy. "
-            "She has made significant contributions to the field by developing statistical and deep learning methodologies "
-            "to study chemical compositions of supernovae, stellar phenomena such as eruptions, mergers, and explosions, "
-            "and detect celestial bodies in astronomical data. The invited talk will provide insight into novel applications "
-            "in the field of astronomy enabled by ML and deep learning, showcasing the potential of AI for astronomical data processing."
-        ),
-        "status": (
-            "Confirmed/Final (In person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
-        ),
-        "homepage": "http://ashleyvillar.com/",
-        "imageUrl": "https://ecos-appdev-production.s3.amazonaws.com/science_site/s3fs-public/2021-09/HispanicHeritageMonthAshleyVillar300_300.png",
-        "talkType": "Academic Talk"
-    },
+    # {
+    #     "name": "Victoria Ashley Villar",
+    #     "bio": (
+    #         "Victoria Ashley Villar received her B.S. in Physics from MIT in 2014 and her Ph.D. in Astronomy "
+    #         "and Astrophysics from Harvard University in 2020. She was formerly a Simons Junior Postdoctoral "
+    #         "Fellow at Columbia University (2020–2021) and a faculty member at Penn State University (2021–2023), "
+    #         "before joining the Harvard Astronomy faculty in 2023. Prof. Villar’s research interests include "
+    #         "theoretical and observational studies of extragalactic transients, including core-collapse supernovae "
+    #         "and kilonovae, development of statistical and deep learning methodologies for wide-field surveys, such as "
+    #         "the Vera C. Rubin Observatory's Legacy Survey of Space and Time and Nancy Grace Roman Observatory. "
+    #         "Prof. Ashley Villar is a Packard Fellow, RCSA Scialog Fellow and Harvard Aramont Fellow."
+    #     ),
+    #     "relevance": (
+    #         "Prof. Villar is a prominent researcher from Harvard University in the use of data-driven methods in astronomy. "
+    #         "She has made significant contributions to the field by developing statistical and deep learning methodologies "
+    #         "to study chemical compositions of supernovae, stellar phenomena such as eruptions, mergers, and explosions, "
+    #         "and detect celestial bodies in astronomical data. The invited talk will provide insight into novel applications "
+    #         "in the field of astronomy enabled by ML and deep learning, showcasing the potential of AI for astronomical data processing."
+    #     ),
+    #     "status": (
+    #         "Confirmed/Final (In person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
+    #     ),
+    #     "homepage": "http://ashleyvillar.com/",
+    #     "imageUrl": "https://ecos-appdev-production.s3.amazonaws.com/science_site/s3fs-public/2021-09/HispanicHeritageMonthAshleyVillar300_300.png",
+    #     "talkType": "Academic Talk"
+    # },
     {
         "name": "David Rijlaarsdam",
         "bio": (
@@ -189,30 +189,30 @@ invited_speakers_data = [
         "imageUrl": "https://media.licdn.com/dms/image/v2/C4E03AQHDbVMMnf6F4A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1550244386287?e=2147483647&v=beta&t=9OweAVjd6m7RawvvYgZOwuAGbDoyw3RwSJHGJsiTANY",
         "talkType": "Industrial Talk"
     },
-    {
-        "name": "James Parr",
-        "bio": (
-            "James is the founder and Chief Executive Officer (CEO) of Trillium Technologies - a global technology contractor "
-            "that specialises in the application of AI and systems approaches to grand challenges, such as climate change, violent "
-            "extremism, prevention strategies for cancer and obesity, deforestation mitigation, climate resilience and planetary defence. "
-            "He is founder of FDL, an AI research lab partnership with ESA in Europe (ESLab.ai) and NASA in the USA. FDL has over 50 "
-            "applied AI firsts and was awarded the best AI accelerator at the 2023 Cog X awards in London. He lives in London with his wife "
-            "and twin daughters."
-        ),
-        "relevance": (
-            "James Parr is the CEO of Trillium Technologies, which oversees the Frontiers Development Lab (FDL) Europe project. This initiative, "
-            "in partnership with ESA’s Φ-Lab, ESA ESRIN, and the University of Oxford, focuses on advancing AI and high-performance computing "
-            "for EO applications. Through numerous research sprints, Trillium Technologies fosters collaboration to develop AI-based solutions "
-            "to complex research problems, such as: the design of a Deep Learning model for onboard satellite detection of floods or the use of "
-            "AI to support the design of ESA VIGIL mission."
-        ),
-        "status": (
-            "Confirmed/Final (in person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
-        ),
-        "homepage": "https://trillium.tech/",
-        "imageUrl": "https://i1.rgstatic.net/ii/profile.image/682472295636996-1539725483467_Q512/James-Parr-3.jpg",
-        "talkType": "Academic Talk"
-    }
+    # {
+    #     "name": "James Parr",
+    #     "bio": (
+    #         "James is the founder and Chief Executive Officer (CEO) of Trillium Technologies - a global technology contractor "
+    #         "that specialises in the application of AI and systems approaches to grand challenges, such as climate change, violent "
+    #         "extremism, prevention strategies for cancer and obesity, deforestation mitigation, climate resilience and planetary defence. "
+    #         "He is founder of FDL, an AI research lab partnership with ESA in Europe (ESLab.ai) and NASA in the USA. FDL has over 50 "
+    #         "applied AI firsts and was awarded the best AI accelerator at the 2023 Cog X awards in London. He lives in London with his wife "
+    #         "and twin daughters."
+    #     ),
+    #     "relevance": (
+    #         "James Parr is the CEO of Trillium Technologies, which oversees the Frontiers Development Lab (FDL) Europe project. This initiative, "
+    #         "in partnership with ESA’s Φ-Lab, ESA ESRIN, and the University of Oxford, focuses on advancing AI and high-performance computing "
+    #         "for EO applications. Through numerous research sprints, Trillium Technologies fosters collaboration to develop AI-based solutions "
+    #         "to complex research problems, such as: the design of a Deep Learning model for onboard satellite detection of floods or the use of "
+    #         "AI to support the design of ESA VIGIL mission."
+    #     ),
+    #     "status": (
+    #         "Confirmed/Final (in person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
+    #     ),
+    #     "homepage": "https://trillium.tech/",
+    #     "imageUrl": "https://i1.rgstatic.net/ii/profile.image/682472295636996-1539725483467_Q512/James-Parr-3.jpg",
+    #     "talkType": "Academic Talk"
+    # }
 ]
 
 # --- Data from src/topics.txt ---
