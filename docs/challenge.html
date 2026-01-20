@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARK 2026 Challenge - AI4Space @ CVPR</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="countdown-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <style>
+        main .content-section {
+            padding: 20px;
+        }
+        main h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header style="max-height: 10em;">
+            <nav class="navbar">
+                <div class="navbar-container">
+                    <a href="index.html" class="navbar-logo">AI4Space</a>
+                    <div class="menu-icon">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <ul class="nav-menu">
+                        <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                        <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                        <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Papers</a></li>
+                        <li class="nav-item"><a href="challenge.html" class="nav-links">Challenge</a></li>
+                        <li class="nav-item"><a href="committee.html" class="nav-links">Organizing Committee</a></li>
+                        <li class="nav-item"><a href="index.html#contact" class="nav-links">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="hero">
+                <h1>SPARK 2026 Challenge</h1>
+                <p>SPAcecraft Recognition leveraging Knowledge of Space Environment</p>
+            </div>
+        </header>
+
+        <main>
+            <section id="challenge" class="content-section" style="max-width: 70em; margin-left: auto; margin-right: auto;">
+
+                <div class="challenge-card" style="text-align: left;">
+                    
+                    <div class="challenge-content">
+                        <!-- Overview -->
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2em; border-radius: 10px; margin-bottom: 2em; color: white;">
+                            <h3 style="color: white; margin-top: 0;"><i class="fas fa-rocket"></i> Overview</h3>
+                            <p style="font-size: 1.05em; line-height: 1.8; color: white;">
+                                <strong>SPARK 2026</strong> (SPAcecraft Recognition leveraging Knowledge of Space Environment) is organized as part of the AI4Space 2026 workshop, 
+                                in conjunction with the IEEE/CVF Conference on Computer Vision and Pattern Recognition 2026 (CVPR 2026).
+                            </p>
+                            <p style="font-size: 1.05em; line-height: 1.8; color: white;">
+                                SPARK 2026 pushes the boundaries of space perception by introducing two exciting and forward-looking challenge streams, 
+                                each targeting critical capabilities for next-generation autonomous space systems.
+                            </p>
+                        </div>
+
+                        <!-- Challenge Streams -->
+                        <h3 style="text-align: center; margin: 2em 0 1.5em 0; font-size: 1.8em;"><i class="fas fa-tasks"></i> Challenge Streams</h3>
+                        
+                        <div class="challenge-streams" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2em; margin-bottom: 3em;">
+                            <!-- Stream 1 -->
+                            <div class="stream" style="background: white; padding: 2em; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #4e73df;">
+                                <div class="stream-icon" style="background: linear-gradient(135deg, #4e73df, #224abe); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1em; color: white; font-size: 1.8em;">
+                                    <i class="fas fa-satellite"></i>
+                                </div>
+                                <h4 style="text-align: center; color: #4e73df; font-size: 1.3em; margin-bottom: 1em;">🚀 Stream 1: Multi-Task Spacecraft Perception</h4>
+                                <p style="line-height: 1.8; text-align: justify;">
+                                    This stream challenges participants to design a <strong>single, powerful model</strong> capable of performing:
+                                </p>
+                                <ul style="line-height: 1.8; margin-left: 1.5em; text-align: left;">
+                                    <li>Spacecraft classification</li>
+                                    <li>Spacecraft detection</li>
+                                    <li>Fine-grained segmentation of spacecraft components</li>
+                                </ul>
+                                <p style="line-height: 1.8; text-align: justify; margin-top: 1em;">
+                                    The focus is on <strong>efficiency and performance</strong>, encouraging the development of compact, high-performing models 
+                                    suitable for deployment on resource-constrained space platforms, regardless of spacecraft type.
+                                </p>
+                            </div>
+
+                            <!-- Stream 2 -->
+                            <div class="stream" style="background: white; padding: 2em; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #36b9cc;">
+                                <div class="stream-icon" style="background: linear-gradient(135deg, #36b9cc, #1a8a9e); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1em; color: white; font-size: 1.8em;">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <h4 style="text-align: center; color: #36b9cc; font-size: 1.3em; margin-bottom: 1em;">⚡ Stream 2: Event-Based Pose Estimation</h4>
+                                <p style="line-height: 1.8; text-align: justify;">
+                                    Dive into the world of <strong>event-based vision</strong> with Stream 2, which focuses on pose estimation using the <strong>SPADES dataset</strong>.
+                                </p>
+                                <p style="line-height: 1.8; text-align: justify; margin-top: 1em;">
+                                    Participants will train their models on high-quality synthetic event data and validate their approaches on real event data, 
+                                    addressing one of the most challenging perception problems in space.
+                                </p>
+                                <p style="line-height: 1.8; text-align: justify; margin-top: 1em; font-style: italic; color: #666;">
+                                    Whether you are pushing model efficiency to its limits or exploring cutting-edge event-driven perception, 
+                                    SPARK 2026 offers a competitive platform to showcase innovation, performance, and real-world impact in space autonomy.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- SPADES Dataset -->
+                        <div style="background: #f8f9fa; padding: 2em; border-radius: 10px; border-left: 4px solid #ffc107; margin: 2em 0;">
+                            <h3 style="color: #333; margin-top: 0;"><i class="fas fa-database"></i> SPADES Dataset</h3>
+                            <p style="line-height: 1.8; margin-bottom: 1.5em;">
+                                <strong>SPADES</strong> (SPAcecraft Pose Estimation Dataset using Event Sensing) is a unique and new space dataset designed to advance 
+                                spacecraft pose estimation research. The dataset contains two categories of data: <strong>Synthetic</strong> and <strong>Real</strong>.
+                            </p>
+                            
+                            <h4 style="color: #667eea; margin-top: 1.5em;"><i class="fas fa-cube"></i> Synthetic Dataset</h4>
+                            <p style="line-height: 1.8;">
+                                The synthetic dataset focuses on simulating RGB images of a satellite target—in this case, <strong>Proba-2</strong>—by moving a spacecraft 
+                                model along predefined trajectories within the simulator's camera field of view.
+                            </p>
+                            <ul style="line-height: 1.8; margin: 1em 0 1em 1.5em;">
+                                <li><strong>Simulation Environment:</strong> Unreal Engine (UE) with various camera orientations and distances</li>
+                                <li><strong>Dynamic Background:</strong> Animated Sun and Earth rotating around their respective axes</li>
+                                <li><strong>Event Data:</strong> Generated by the ICNS event simulator using Blender to model neuromorphic sensor behavior</li>
+                                <li><strong>Scale:</strong> 300 trajectories with ~600 RGB images each</li>
+                                <li><strong>Total Pose Labels:</strong> 179,400</li>
+                            </ul>
+                            
+                            <h4 style="color: #667eea; margin-top: 1.5em;"><i class="fas fa-camera"></i> Real Dataset</h4>
+                            <p style="line-height: 1.8;">
+                                Real data was collected at the <strong>Zero-G Laboratory</strong> at the SnT, University of Luxembourg, using a scaled mockup of the Proba-2 satellite.
+                            </p>
+                            <ul style="line-height: 1.8; margin: 1em 0 1em 1.5em;">
+                                <li><strong>Sensor:</strong> Prophesee Metavision EVK4-HD equipped with SONY IMX636ES (HD) event vision sensor</li>
+                                <li><strong>Scale:</strong> 32 trajectories with ~530 pose labels each</li>
+                                <li><strong>Total Pose Labels:</strong> 16,900</li>
+                                <li><strong>Note:</strong> A subset of this data will be used as the test dataset for the challenge</li>
+                            </ul>
+                        </div>
+
+                        <!-- Challenge Footer -->
+                        <div class="challenge-footer" style="text-align: center; margin-top: 3em; padding: 2em; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 10px; color: white;">
+                            <p style="font-size: 1.1em; margin-bottom: 1.5em; color: white;">
+                                <strong>Final results and awards will be announced at AI4Space @ CVPR 2026.</strong><br>
+                                Challenge winners may also be invited to present their methods at the workshop.
+                            </p>
+                            <a href="https://cvi2.uni.lu/spark2026/" target="_blank" class="challenge-button" style="display: inline-block; background: white; color: #f5576c; padding: 1em 2.5em; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1em; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease;">
+                                <i class="fas fa-external-link-alt"></i> Visit SPARK 2026 Website
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 AI4Space Workshop @ CVPR. All rights reserved. Charting new territories in AI.</p>
+        </footer>
+    </div>
+
+    <script src="animation.js"></script>
+    <script src="countdown.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
