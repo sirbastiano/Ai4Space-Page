@@ -302,6 +302,26 @@
                 background: linear-gradient(135deg, #e74a3b, #be3c2f);
             }
             
+            .nice-list {
+                list-style: none;
+                padding-left: 0;
+                margin-left: 0;
+            }
+
+            .nice-list li {
+                position: relative;
+                padding-left: 1.6em;
+                margin-bottom: 0.35em; /* ↓ reduced from 0.6em */
+                line-height: 1.45;     /* keeps long lines readable */
+            }
+
+            .nice-list li::before {
+                content: "▸";
+                position: absolute;
+                left: 0;
+                color: #555;
+                font-weight: bold;
+            }
             @media (max-width: 992px) {
                 .submission-types-container {
                 flex-wrap: wrap;
@@ -325,6 +345,7 @@
                 }
             }
                 </style>
+
             </head>
             <body>
                 <div class="container">
@@ -354,16 +375,127 @@
                 </header>
                     <main>
                         <section style="margin: 2em;">
-                            <p style="margin-top: 2em;">We invite submissions for the AI4Space workshop at CVPR 2026, focusing on the intersection of artificial intelligence and space science. We welcome contributions that explore innovative AI applications in space science, Earth observation, and space exploration.</p>
-                            <p>Submissions should be original and not under consideration elsewhere. All accepted papers will be presented at the workshop, and selected papers will be invited for publication in a special issue of a peer-reviewed journal.</p>
-                            <p>We encourage submissions from researchers, practitioners, and students working on AI applications in space. The workshop aims to foster collaboration and discussion on the latest advancements and challenges in this field.</p>
-                            <p>Submissions should be made through the <a href="https://openreview.net">Open Review</a>.</p>
-                            <p>For more information, please refer to the <a href="https://cvpr.thecvf.com/Conferences/2026/CallForPapers">CVPR 2026 Call for Papers</a>.</p>
+                            <p style="margin-top: 2em; text-align: justify; margin-bottom: 1em;">AI4Space brings together researchers and practitioners working at the intersection of AI, computer vision, and space technologies, with a strong focus on real-world, onboard, and autonomous systems. 
+                                We invite contributions spanning a broad range of topics, including novel algorithmic and hardware solutions for deploying AI in space environments, methodologies and datasets designed to bridge domain gaps, and innovative applications of AI to space tasks such as Earth Observation, planetary science, space robotics, and beyond.
+                            We encourage submissions from researchers, practitioners, and students working on AI applications in space. The workshop aims to foster collaboration and discussion on the latest advancements and challenges in this field.
                             
-                            <section id="key-dates" class="content-section" align="center">
+                            <div style="height: 1em;"></div>
 
-                                <strong>Workshop venue:</strong>
-                                Denver Convention Center, Denver, Colorado, USA
+                            <p>Topics of interest include, but are not limited to:</p>
+                            <ul class="nice-list">
+                            <li>Vision and learning for spacecraft guidance, navigation, and control</li>
+                            <li>Foundation and multimodal models for space data</li>
+                            <li>Space robotics: perception, planning, and control for autonomous operations</li>
+                            <li>ML for astronomy and planetary science</li>
+                            <li>Fault-tolerant and trustworthy perception systems</li>
+                            <li>Datasets for space applications and domain adaptation techniques</li>
+                            <li>Sensors for space applications</li>
+                            <li>Edge AI under tight compute or energy budgets</li>
+                            <li>Onboard computing hardware for vision and learning</li>
+                            </ul>
+                            
+                            <p style="margin-top: 1.5em;">AI4Space welcomes submissions in the following formats:</p>
+                            <div class="submission-types-container">
+                                <div class="submission-card blue-track">
+                                    <div class="card-header">
+                                    <div class="track-icon"><i class="fas fa-laptop-code"></i></div>
+                                    <h3>Long Papers</h3>
+                                    </div>
+                                    <div class="card-body">
+                                    <p style="text-align: justify;">Intended for more mature research contributions presenting substantial technical developments, validated methodologies, or comprehensive experimental studies.</p>
+                                    <div class="requirements">
+                                        <p><span class="requirement-label">Page Limit:</span> 8 pages (excluding references)</p>
+                                        <p><span class="requirement-label">Format:</span> CVPR 2026 template</p>
+                                        <p><span class="requirement-label">Review:</span> Double-blind</p>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="submission-card green-track">
+                                    <div class="card-header">
+                                    <div class="track-icon"><i class="fas fa-rocket"></i></div>
+                                    <h3>Short Papers</h3>
+                                    </div>
+                                    <div class="card-body">
+                                    <p style="text-align: justify;">Technical communications, position papers, and challenge or dataset descriptions. These contributions are intended to foster discussion on emerging challenges, preliminary results, and innovative ideas that can be further explored during the interactive "Unconference" sessions.</p>
+                                    <div class="requirements">
+                                        <p><span class="requirement-label">Page Limit:</span> 4 pages (excluding references)</p>
+                                        <p><span class="requirement-label">Format:</span> CVPR 2026 template</p>
+                                        <p><span class="requirement-label">Review:</span> Double-blind</p>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submission Guidelines Section -->
+                            <section id="submission-guidelines" class="content-section" style="margin: 3em auto; max-width: 1200px;">
+                                <h2 style="text-align: center; margin-bottom: 2em;"><i class="fas fa-clipboard-list"></i> Submission Guidelines</h2>
+                                
+                                <div class="submission-info-container">
+                                    <table class="submission-info-table" style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                        <thead>
+                                            <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                <th colspan="2" style="padding: 1em; color: white; font-size: 1.2em; text-align: center;">Detailed Submission Information</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="background: #f8f9fa;">
+                                                <td style="padding: 1em; font-weight: bold; width: 25%; border: 1px solid #dee2e6;"><i class="fas fa-file-alt"></i> Publication</td>
+                                                <td style="padding: 1em; border: 1px solid #dee2e6; text-align: justify;">
+                                                    Papers will be fully peer reviewed and accepted papers will be published in the proceedings of CVPR 2026 Workshops.
+                                                    See <a href="#key-dates" style="color: #00bcd4; font-weight: 600;">key dates</a> for submission deadlines and notification timelines.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-check-circle"></i> Policies</td>
+                                                <td style="padding: 1em; border: 1px solid #dee2e6; text-align: justify;">
+                                                    AI4Space follows the <a href=" https://cvpr.thecvf.com/Conferences/2026/AuthorGuidelines" style="color: #00bcd4; font-weight: 600;">submission policies</a> of CVPR 2026. Submissions must be original and not under review elsewhere. Reviewing is double blind and authors should not include identifying information in their manuscripts (selecting the reviewing option in the LaTeX template will take care of that). For more details, please refer to the CVPR 2026 submission guidelines.
+                                                </td>
+                                            </tr>
+                                            <tr style="background: #f8f9fa;">
+                                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-sync-alt"></i> Resubmissions</td>
+                                                <td style="padding: 1em; border: 1px solid #dee2e6; text-align: justify;">
+                                                    We encourage submissions rejected from the main CVPR conference to AI4Space, as the workshop provides a more focused venue for space-related research. Authors are welcome to submit revised versions of their work.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-user-friends"></i> Presentation</td>
+                                                <td style="padding: 1em; border: 1px solid #dee2e6; text-align: justify;">
+                                                    <strong>Accepted AI4Space papers are expected to be presented in person</strong> at the workshop, co-located with <a href="https://cvpr.thecvf.com/Conferences/2026" target="_blank" style="color: #00bcd4; font-weight: 600;" rel="noopener noreferrer">CVPR&nbsp;2026</a>
+                                                </td>
+                                            </tr>
+                                            <tr style="background: #f8f9fa;">
+                                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-plane"></i> Travel</td>
+                                                <td style="padding: 1em; border: 1px solid #dee2e6; text-align: justify;">
+                                                    Invitation letters for travel should be requested via the main conference page.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-dove"></i> Ethics</td>
+                                                <td style="padding: 1em; border: 1px solid #dee2e6; text-align: justify;">
+                                                    All papers submitted at this workshop must target peaceful usage of AI for space.
+                                                </td>
+                                            </tr>
+                                            <tr style="background: #f8f9fa;">
+                                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-upload"></i> Submission Portal</td>
+                                                <td style="padding: 1em; border: 1px solid #dee2e6; text-align: justify;">
+                                                    Submissions will be handled through the OpenReview submission system.
+
+                                                    <div style="margin-top: 0.3em;">
+                                                    <a href="https://openreview.net/group?id=thecvf.com/CVPR/2026/Workshop/AI4Space"
+                                                    target="_blank"
+                                                    style="color: #00bcd4; font-weight: bold;">
+                                                    Click here to submit your paper
+                                                    </a>
+                                                </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+
+                            <section id="key-dates" class="content-section" align="center">
                                 <table style="width: 900px; max-width: 100%; border-collapse: collapse; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 1em auto;">
                                     <thead>
                                         <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
@@ -404,157 +536,6 @@
 
 
                         </section>
-
-            <!-- Research Topics Section -->
-            <section id="research-topics" class="content-section" style="margin: 3em auto; max-width: 1200px; text-align: center;">
-                <h2 style="margin-bottom: 1em; color: #333;"><i class="fas fa-lightbulb"></i> Topics of Interest</h2>
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2em; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-                    <p style="color: white; font-size: 1.2em; font-weight: 600; margin-bottom: 1.5em;">We welcome submissions on a broad range of topics, including (but not limited to) the following:</p>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1em; text-align: left;">
-                        <div style="background: rgba(255,255,255,0.1); padding: 1em; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <p style="color: white; font-size: 1em; margin: 0;">🔹 <strong style="color: white;">Vision and learning for spacecraft guidance, navigation, and control</strong></p>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1em; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <p style="color: white; font-size: 1em; margin: 0;">🔹 <strong style="color: white;">Foundation and multimodal models for space data</strong></p>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1em; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <p style="color: white; font-size: 1em; margin: 0;">🔹 <strong style="color: white;">Space robotics: perception, planning, and control for autonomous operations</strong></p>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1em; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <p style="color: white; font-size: 1em; margin: 0;">🔹 <strong style="color: white;">ML for astronomy and planetary science</strong></p>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1em; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <p style="color: white; font-size: 1em; margin: 0;">🔹 <strong style="color: white;">Fault-tolerant and trustworthy perception systems</strong></p>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1em; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <p style="color: white; font-size: 1em; margin: 0;">🔹 <strong style="color: white;">Datasets for space applications and domain adaptation techniques</strong></p>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1em; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <p style="color: white; font-size: 1em; margin: 0;">🔹 <strong style="color: white;">Sensors for space applications</strong></p>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1em; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <p style="color: white; font-size: 1em; margin: 0;">🔹 <strong style="color: white;">Edge AI under tight compute or energy budgets</strong></p>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1em; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <p style="color: white; font-size: 1em; margin: 0;">🔹 <strong style="color: white;">Onboard computing hardware for vision and learning</strong></p>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-                            
-            <div class="submission-types-container">
-                    <div class="submission-card blue-track">
-                        <div class="card-header">
-                        <div class="track-icon"><i class="fas fa-laptop-code"></i></div>
-                        <h3>Long Papers</h3>
-                        </div>
-                        <div class="card-body">
-                        <p>Intended for more mature research contributions presenting substantial technical developments, validated methodologies, or comprehensive experimental studies.</p>
-                        <div class="requirements">
-                            <p><span class="requirement-label">Page Limit:</span> 8 pages (excluding references)</p>
-                            <p><span class="requirement-label">Format:</span> CVPR 2026 template</p>
-                            <p><span class="requirement-label">Review:</span> Double-blind</p>
-                        </div>
-                        </div>
-                    </div>
-                    
-                    <div class="submission-card green-track">
-                        <div class="card-header">
-                        <div class="track-icon"><i class="fas fa-rocket"></i></div>
-                        <h3>Short Papers</h3>
-                        </div>
-                        <div class="card-body">
-                        <p>Technical communications, position papers, and challenge or dataset descriptions. These contributions are intended to foster discussion on emerging challenges, preliminary results, and innovative ideas that can be further explored during the interactive "Unconference" sessions.</p>
-                        <div class="requirements">
-                            <p><span class="requirement-label">Page Limit:</span> 4 pages (excluding references)</p>
-                            <p><span class="requirement-label">Format:</span> CVPR 2026 template</p>
-                            <p><span class="requirement-label">Review:</span> Double-blind</p>
-                        </div>
-                        </div>
-                    </div>
-            </div>
-                    
-                    <!-- <div class="submission-card red-track">
-                        <div class="card-header">
-                        <div class="track-icon"><i class="fas fa-project-diagram"></i></div>
-                        <h3>Positions & Challenges</h3>
-                        </div>
-                        <div class="card-body">
-                        <p>Position papers and descriptions of open challenges for AI in space applications.</p>
-                        <div class="requirements">
-                            <p><span class="requirement-label">Page Limit:</span> 4 pages (excluding references)</p>
-                            <p><span class="requirement-label">Format:</span> CVPR 2024 template</p>
-                            <p><span class="requirement-label">Review:</span> Double-blind</p>
-                        </div>
-                        </div>
-                        <div class="card-footer">
-                        <span class="track-badge red">Short Paper</span>
-                        </div>
-                    </div>
-            </div>
-
-            <!-- Submission Guidelines Section -->
-            <section id="submission-guidelines" class="content-section" style="margin: 3em auto; max-width: 1200px;">
-                <h2 style="text-align: center; margin-bottom: 2em;"><i class="fas fa-clipboard-list"></i> Submission Guidelines</h2>
-                
-                <div class="submission-info-container">
-                    <table class="submission-info-table" style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <thead>
-                            <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                <th colspan="2" style="padding: 1em; color: white; font-size: 1.2em; text-align: center;">Detailed Submission Information</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="background: #f8f9fa;">
-                                <td style="padding: 1em; font-weight: bold; width: 25%; border: 1px solid #dee2e6;"><i class="fas fa-file-alt"></i> Publication</td>
-                                <td style="padding: 1em; border: 1px solid #dee2e6;">
-                                    Papers will be fully peer reviewed and accepted papers will be published in the proceedings of CVPR 2026 Workshops.
-                                    See key dates above for submission deadline and reviewing timeline.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-check-circle"></i> Policies</td>
-                                <td style="padding: 1em; border: 1px solid #dee2e6;">
-                                    AI4Space follows the submission policies of CVPR 2026. Submissions should be sufficiently original works not under consideration or review in other venues.
-                                    Reviewing is double blind - remember to remove your names and affiliations in the submitted version (selecting the reviewing option in the LaTeX template will take care of that).
-                                    For style and formatting, please use the <strong>official CVPR 2026 LaTeX template</strong>.
-                                </td>
-                            </tr>
-                            <tr style="background: #f8f9fa;">
-                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-sync-alt"></i> Resubmissions</td>
-                                <td style="padding: 1em; border: 1px solid #dee2e6;">
-                                    We highly encourage submission of papers relevant to AI4Space that were rejected from the main CVPR conference.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-user-friends"></i> Presentation</td>
-                                <td style="padding: 1em; border: 1px solid #dee2e6;">
-                                    Accepted AI4Space papers are expected to be presented in person at the workshop, which will be co-located with CVPR 2026.
-                                </td>
-                            </tr>
-                            <tr style="background: #f8f9fa;">
-                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-plane"></i> Travel</td>
-                                <td style="padding: 1em; border: 1px solid #dee2e6;">
-                                    If you require a formal invitation letter to facilitate your travel to CVPR 2026 in Denver, please visit the main conference page.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-dove"></i> Ethics</td>
-                                <td style="padding: 1em; border: 1px solid #dee2e6;">
-                                    All papers published via this workshop must be aimed towards the peaceful usage of AI for space.
-                                </td>
-                            </tr>
-                            <tr style="background: #f8f9fa;">
-                                <td style="padding: 1em; font-weight: bold; border: 1px solid #dee2e6;"><i class="fas fa-upload"></i> Submission Portal</td>
-                                <td style="padding: 1em; border: 1px solid #dee2e6;">
-                                    Submissions can be made through <a href="https://openreview.net/forum?id=8GYjyuCRYj " target="_blank" style="color: #00bcd4; font-weight: bold;">OpenReview - Ai4Space</a>. (The submission link is now active.)
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
 
         </main>
         <footer>
