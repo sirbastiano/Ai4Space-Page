@@ -1,0 +1,27 @@
+docs/index.html
+22:        .deadline-extension-banner {
+41:            .deadline-extension-banner {
+86:                    <div class="deadline-extension-banner">DEADLINE EXTENDED 3rd Of March</div>
+163:                        <p style="color: #fff; font-size: 1.3em; font-weight: bold; margin: 0;">March 3, 2026</p>
+
+docs/countdown.js
+const launchDate = new Date('Mar 3, 2026 23:59:59').getTime();
+
+const countdown = function () {
+  const presentDate = new Date().getTime();
+
+  if (presentDate < launchDate) {
+    const diffInSeconds = Math.floor((launchDate - presentDate) / 1000);
+
+    const days = Math.floor(diffInSeconds / 86400);
+
+    let hours, minutes, seconds;
+    let timeValue;
+
+    // Hours
+    timeValue = diffInSeconds % 86400;
+    hours = Math.floor(timeValue / 3600);
+
+    // Minutes
+    timeValue = timeValue % 3600;
+    minutes = Math.floor(timeValue / 60);

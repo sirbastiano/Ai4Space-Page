@@ -1,0 +1,61 @@
+diff --git a/docs/countdown.js b/docs/countdown.js
+index d955916..fe802fc 100644
+--- a/docs/countdown.js
++++ b/docs/countdown.js
+@@ -1,4 +1,4 @@
+-const launchDate = new Date('Feb 28, 2026 23:59:59').getTime();
++const launchDate = new Date('Mar 3, 2026 23:59:59').getTime();
+ 
+ const countdown = function () {
+   const presentDate = new Date().getTime();
+diff --git a/docs/index.html b/docs/index.html
+index d306242..62f9d58 100644
+--- a/docs/index.html
++++ b/docs/index.html
+@@ -19,10 +19,29 @@
+             text-shadow: 0 0 10px rgba(0,0,0,0.7);
+         }
+ 
++        .deadline-extension-banner {
++            margin: 0.75em auto 1.2em;
++            padding: 0.6em 1.2em;
++            width: fit-content;
++            border-radius: 999px;
++            background: linear-gradient(90deg, #f857a6 0%, #ff5858 100%);
++            color: #fff;
++            font-family: 'Montserrat', sans-serif;
++            font-weight: 900;
++            letter-spacing: 0.04em;
++            text-transform: uppercase;
++            box-shadow: 0 10px 24px rgba(248, 87, 166, 0.35);
++        }
++
+         @media (max-width: 768px) {
+             .main-hero-title {
+                 font-size: 2em;
+             }
++
++            .deadline-extension-banner {
++                font-size: 0.85em;
++                padding: 0.55em 1em;
++            }
+         }
+ 
+         @media (max-width: 480px) {
+@@ -64,6 +83,7 @@
+                     <h1 class="main-hero-title">🚀 4th Workshop - AI4Space</h1>
+                     <h3 style="font-size: larger;" class="main-hero-title">(In conjunction with CVPR2026)</h3>
+                     <h2 class="countdown-caption">Submission Deadline</h2>
++                    <div class="deadline-extension-banner">DEADLINE EXTENDED 3rd Of March</div>
+                     <section class="countdown">
+                         <div class="time-wrapper">
+                             <div class="time-content">
+@@ -140,7 +160,7 @@
+                     </div>
+                     <div style="background: rgba(255,255,255,0.15); padding: 1.2em; border-radius: 10px; backdrop-filter: blur(10px); border: 2px solid #ffd700; box-shadow: 0 0 20px rgba(255,215,0,0.3);">
+                         <h3 style="color: #ffd700; margin: 0 0 0.5em 0; font-size: 1.1em;"><i class="fas fa-flag-checkered"></i> Submission Deadline</h3>
+-                        <p style="color: #fff; font-size: 1.3em; font-weight: bold; margin: 0;">February 28, 2026</p>
++                        <p style="color: #fff; font-size: 1.3em; font-weight: bold; margin: 0;">March 3, 2026</p>
+                     </div>
+                     <div style="background: rgba(255,255,255,0.1); padding: 1.2em; border-radius: 10px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+                         <h3 style="color: #fff; margin: 0 0 0.5em 0; font-size: 1.1em;"><i class="fas fa-search"></i> Reviewing Starts</h3>
