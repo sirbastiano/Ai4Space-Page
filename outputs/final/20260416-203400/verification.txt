@@ -1,0 +1,5 @@
+Verification:
+- node --check docs/app.js
+- git diff --check
+- Verified shared nav markup now uses a button with aria-expanded and nav aria-hidden on all static pages
+- Verified mobile nav CSS now anchors to a positioned navbar container and hides inactive menu with visibility/pointer-events rather than off-screen left positioning

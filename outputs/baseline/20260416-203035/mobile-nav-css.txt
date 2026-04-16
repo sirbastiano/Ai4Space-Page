@@ -1,0 +1,66 @@
+}
+
+.menu-icon {
+    display: none; /* Hidden on desktop */
+}
+
+/* Responsive styles */
+@media screen and (max-width: 960px) {
+    .navbar-container {
+        padding: 0 20px; /* Adjust padding for smaller screens */
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto; /* Changed from 90vh to auto for dynamic height */
+        position: absolute;
+        top: 80px; /* Position below the navbar */
+        left: -100%;
+        opacity: 1;
+        transition: all 0.5s ease;
+        background: rgba(28, 40, 55, 0.95); /* Semi-transparent background for dropdown */
+        padding-top: 20px; /* Add some padding at the top */
+        padding-bottom: 20px; /* Add some padding at the bottom */
+    }
+
+    .nav-menu.active {
+        left: 0;
+        opacity: 1;
+        transition: all 0.5s ease;
+        z-index: 1;
+    }
+
+    .nav-links {
+        text-align: center;
+        padding: 1.5rem; /* Increased padding for touch targets */
+        width: 100%;
+        display: table;
+    }
+
+    .nav-links:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Lighter background on hover */
+        border-bottom: none; /* Remove bottom border on mobile */
+        border-radius: 0; /* Ensure no border radius if previously set */
+    }
+
+    .navbar-logo {
+        font-size: 1.8rem; /* Slightly smaller logo on mobile */
+    }
+
+    .menu-icon {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(-100%, 60%);
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #fff; /* White menu icon */
+    }
+
+    .fa-times {
+        color: #fff; /* White close icon */
+        font-size: 2rem;
+    }

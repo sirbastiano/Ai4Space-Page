@@ -1,0 +1,279 @@
+diff --git a/docs/app.js b/docs/app.js
+index f12908d..a3b34a3 100644
+--- a/docs/app.js
++++ b/docs/app.js
+@@ -129,19 +129,31 @@ const navMenu = document.querySelector('.nav-menu');
+ const navLinks = document.querySelectorAll('.nav-links');
+ 
+ if (menuIcon && navMenu) {
++    const icon = menuIcon.querySelector('i');
++
++    const setMobileMenuState = (isOpen) => {
++        navMenu.classList.toggle('active', isOpen);
++        menuIcon.classList.toggle('active', isOpen);
++        menuIcon.setAttribute('aria-expanded', String(isOpen));
++        navMenu.setAttribute('aria-hidden', String(!isOpen));
++
++        if (!icon) {
++            return;
++        }
++
++        icon.classList.toggle('fa-bars', !isOpen);
++        icon.classList.toggle('fa-times', isOpen);
++    };
++
++    setMobileMenuState(false);
++
+     menuIcon.addEventListener('click', () => {
+-        // Toggle Nav
+-        navMenu.classList.toggle('active');
++        setMobileMenuState(!navMenu.classList.contains('active'));
++    });
+ 
+-        // Toggle Icon
+-        menuIcon.classList.toggle('active');
+-        const icon = menuIcon.querySelector('i');
+-        if (icon.classList.contains('fa-bars')) {
+-            icon.classList.remove('fa-bars');
+-            icon.classList.add('fa-times');
+-        } else {
+-            icon.classList.remove('fa-times');
+-            icon.classList.add('fa-bars');
++    window.addEventListener('resize', () => {
++        if (window.innerWidth > 960 && navMenu.classList.contains('active')) {
++            setMobileMenuState(false);
+         }
+     });
+ }
+@@ -153,9 +165,13 @@ if (navLinks && navMenu && menuIcon) {
+             if (navMenu.classList.contains('active')) {
+                 navMenu.classList.remove('active');
+                 menuIcon.classList.remove('active');
++                menuIcon.setAttribute('aria-expanded', 'false');
++                navMenu.setAttribute('aria-hidden', 'true');
+                 const icon = menuIcon.querySelector('i');
+-                icon.classList.remove('fa-times');
+-                icon.classList.add('fa-bars');
++                if (icon) {
++                    icon.classList.remove('fa-times');
++                    icon.classList.add('fa-bars');
++                }
+             }
+         });
+     });
+diff --git a/docs/call4paper.html b/docs/call4paper.html
+index de4a5b0..1997876 100644
+--- a/docs/call4paper.html
++++ b/docs/call4paper.html
+@@ -353,10 +353,10 @@
+                     <nav class="navbar">
+                         <div class="navbar-container">
+                             <a href="index.html" class="navbar-logo">AI4Space</a>
+-                            <div class="menu-icon">
++                            <button class="menu-icon" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+                                 <i class="fas fa-bars"></i>
+-                            </div>
+-                            <ul class="nav-menu">
++                            </button>
++                            <ul class="nav-menu" id="primary-navigation" aria-hidden="true">
+                                 <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                                 <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                                 <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Papers</a></li>
+diff --git a/docs/challenge.html b/docs/challenge.html
+index a00b2ce..f4140d3 100644
+--- a/docs/challenge.html
++++ b/docs/challenge.html
+@@ -25,10 +25,10 @@
+             <nav class="navbar">
+                 <div class="navbar-container">
+                     <a href="index.html" class="navbar-logo">AI4Space</a>
+-                    <div class="menu-icon">
++                    <button class="menu-icon" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+                         <i class="fas fa-bars"></i>
+-                    </div>
+-                    <ul class="nav-menu">
++                    </button>
++                    <ul class="nav-menu" id="primary-navigation" aria-hidden="true">
+                         <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                         <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                         <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Papers</a></li>
+diff --git a/docs/committee.html b/docs/committee.html
+index 5f93f09..f150172 100644
+--- a/docs/committee.html
++++ b/docs/committee.html
+@@ -63,10 +63,10 @@
+             <nav class="navbar">
+                 <div class="navbar-container">
+                     <a href="index.html" class="navbar-logo">AI4Space</a>
+-                    <div class="menu-icon">
++                    <button class="menu-icon" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+                         <i class="fas fa-bars"></i>
+-                    </div>
+-                    <ul class="nav-menu">
++                    </button>
++                    <ul class="nav-menu" id="primary-navigation" aria-hidden="true">
+                         <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                         <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                         <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Papers</a></li>
+diff --git a/docs/index.html b/docs/index.html
+index 9e1fe97..61c64a5 100644
+--- a/docs/index.html
++++ b/docs/index.html
+@@ -57,10 +57,10 @@
+             <nav class="navbar">
+                 <div class="navbar-container">
+                     <a href="index.html" class="navbar-logo">AI4Space</a>
+-                    <div class="menu-icon">
++                    <button class="menu-icon" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+                         <i class="fas fa-bars"></i>
+-                    </div>
+-                    <ul class="nav-menu">
++                    </button>
++                    <ul class="nav-menu" id="primary-navigation" aria-hidden="true">
+                         <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                         <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                         <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Papers</a></li>
+diff --git a/docs/program.html b/docs/program.html
+index d8dcadf..8932b8b 100644
+--- a/docs/program.html
++++ b/docs/program.html
+@@ -64,10 +64,10 @@
+             <nav class="navbar">
+                 <div class="navbar-container">
+                     <a href="index.html" class="navbar-logo">AI4Space</a>
+-                    <div class="menu-icon">
++                    <button class="menu-icon" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+                         <i class="fas fa-bars"></i>
+-                    </div>
+-                    <ul class="nav-menu">
++                    </button>
++                    <ul class="nav-menu" id="primary-navigation" aria-hidden="true">
+                         <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                         <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                         <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Papers</a></li>
+diff --git a/docs/style.css b/docs/style.css
+index 7fc4ad9..d37f185 100644
+--- a/docs/style.css
++++ b/docs/style.css
+@@ -862,6 +862,7 @@ nav ul li a:hover::after {
+   justify-content: space-between;
+   align-items: center; /* Vertically align items in the container */
+   height: 80px;
++  position: relative;
+   z-index: 1; /* z-index context for children */
+   width: 100%;
+   max-width: 1300px; /* Adjust for desired max width of navbar content */
+@@ -906,6 +907,9 @@ nav ul li a:hover::after {
+ 
+ .menu-icon {
+   display: none; /* Hidden on desktop, shown on mobile via media query */
++  background: transparent;
++  border: 0;
++  padding: 0;
+ }
+ 
+ .menu-icon .fas { /* Targets both fa-bars and fa-times */
+@@ -919,20 +923,23 @@ nav ul li a:hover::after {
+     display: flex;
+     flex-direction: column; /* Stack items vertically */
+     width: 100%;
+-    /* height: 90vh; /* Or specific height, e.g., calc(100vh - 80px) */
+     position: absolute;
+     top: 80px; /* Position below the navbar (assuming navbar height is 80px) */
+-    left: -100%; /* Start off-screen to the left */
+-    opacity: 1; /* Start fully opaque but off-screen */
+-    transition: all 0.5s ease;
++    left: 0;
++    opacity: 0;
++    visibility: hidden;
++    pointer-events: none;
++    transform: translateY(-12px);
++    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+     background: #101522; /* Background for the mobile menu panel */
+     z-index: 998; /* Below navbar sticky z-index but above page content */
+   }
+ 
+   .nav-menu.active {
+-    left: 0; /* Slide into view */
+     opacity: 1;
+-    transition: all 0.5s ease;
++    visibility: visible;
++    pointer-events: auto;
++    transform: translateY(0);
+   }
+ 
+   .nav-links {
+@@ -956,10 +963,8 @@ nav ul li a:hover::after {
+ 
+   .menu-icon {
+     display: block; /* Show the hamburger icon */
+-    /* position: absolute; /* Already positioned by .navbar-container flex */
+-    /* top: 0; */
+-    /* right: 0; */
+-    /* transform: translate(-100%, 60%); /* Fine-tune position if needed */
++    position: relative;
++    z-index: 1000;
+     cursor: pointer;
+   }
+ }
+@@ -1364,7 +1369,9 @@ nav ul li a:hover::after {
+ .navbar-container {
+     display: flex;
+     justify-content: space-between;
++    align-items: center;
+     height: 80px;
++    position: relative;
+     z-index: 1;
+     width: 100%;
+     max-width: 1500px;
+@@ -1411,6 +1418,9 @@ nav ul li a:hover::after {
+ 
+ .menu-icon {
+     display: none; /* Hidden on desktop */
++    background: transparent;
++    border: 0;
++    padding: 0;
+ }
+ 
+ /* Responsive styles */
+@@ -1426,18 +1436,22 @@ nav ul li a:hover::after {
+         height: auto; /* Changed from 90vh to auto for dynamic height */
+         position: absolute;
+         top: 80px; /* Position below the navbar */
+-        left: -100%;
+-        opacity: 1;
+-        transition: all 0.5s ease;
++        left: 0;
++        opacity: 0;
++        visibility: hidden;
++        pointer-events: none;
++        transform: translateY(-12px);
++        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+         background: rgba(28, 40, 55, 0.95); /* Semi-transparent background for dropdown */
+         padding-top: 20px; /* Add some padding at the top */
+         padding-bottom: 20px; /* Add some padding at the bottom */
+     }
+ 
+     .nav-menu.active {
+-        left: 0;
+         opacity: 1;
+-        transition: all 0.5s ease;
++        visibility: visible;
++        pointer-events: auto;
++        transform: translateY(0);
+         z-index: 1;
+     }
+ 
+@@ -1460,10 +1474,8 @@ nav ul li a:hover::after {
+ 
+     .menu-icon {
+         display: block;
+-        position: absolute;
+-        top: 0;
+-        right: 0;
+-        transform: translate(-100%, 60%);
++        position: relative;
++        z-index: 1000;
+         font-size: 1.8rem;
+         cursor: pointer;
+         color: #fff; /* White menu icon */

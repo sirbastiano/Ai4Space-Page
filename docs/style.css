@@ -862,6 +862,7 @@ nav ul li a:hover::after {
   justify-content: space-between;
   align-items: center; /* Vertically align items in the container */
   height: 80px;
+  position: relative;
   z-index: 1; /* z-index context for children */
   width: 100%;
   max-width: 1300px; /* Adjust for desired max width of navbar content */
@@ -906,6 +907,9 @@ nav ul li a:hover::after {
 
 .menu-icon {
   display: none; /* Hidden on desktop, shown on mobile via media query */
+  background: transparent;
+  border: 0;
+  padding: 0;
 }
 
 .menu-icon .fas { /* Targets both fa-bars and fa-times */
@@ -919,20 +923,23 @@ nav ul li a:hover::after {
     display: flex;
     flex-direction: column; /* Stack items vertically */
     width: 100%;
-    /* height: 90vh; /* Or specific height, e.g., calc(100vh - 80px) */
     position: absolute;
     top: 80px; /* Position below the navbar (assuming navbar height is 80px) */
-    left: -100%; /* Start off-screen to the left */
-    opacity: 1; /* Start fully opaque but off-screen */
-    transition: all 0.5s ease;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-12px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
     background: #101522; /* Background for the mobile menu panel */
     z-index: 998; /* Below navbar sticky z-index but above page content */
   }
 
   .nav-menu.active {
-    left: 0; /* Slide into view */
     opacity: 1;
-    transition: all 0.5s ease;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   .nav-links {
@@ -956,10 +963,8 @@ nav ul li a:hover::after {
 
   .menu-icon {
     display: block; /* Show the hamburger icon */
-    /* position: absolute; /* Already positioned by .navbar-container flex */
-    /* top: 0; */
-    /* right: 0; */
-    /* transform: translate(-100%, 60%); /* Fine-tune position if needed */
+    position: relative;
+    z-index: 1000;
     cursor: pointer;
   }
 }
@@ -1364,7 +1369,9 @@ nav ul li a:hover::after {
 .navbar-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     height: 80px;
+    position: relative;
     z-index: 1;
     width: 100%;
     max-width: 1500px;
@@ -1411,6 +1418,9 @@ nav ul li a:hover::after {
 
 .menu-icon {
     display: none; /* Hidden on desktop */
+    background: transparent;
+    border: 0;
+    padding: 0;
 }
 
 /* Responsive styles */
@@ -1426,18 +1436,22 @@ nav ul li a:hover::after {
         height: auto; /* Changed from 90vh to auto for dynamic height */
         position: absolute;
         top: 80px; /* Position below the navbar */
-        left: -100%;
-        opacity: 1;
-        transition: all 0.5s ease;
+        left: 0;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-12px);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
         background: rgba(28, 40, 55, 0.95); /* Semi-transparent background for dropdown */
         padding-top: 20px; /* Add some padding at the top */
         padding-bottom: 20px; /* Add some padding at the bottom */
     }
 
     .nav-menu.active {
-        left: 0;
         opacity: 1;
-        transition: all 0.5s ease;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
         z-index: 1;
     }
 
@@ -1460,10 +1474,8 @@ nav ul li a:hover::after {
 
     .menu-icon {
         display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        transform: translate(-100%, 60%);
+        position: relative;
+        z-index: 1000;
         font-size: 1.8rem;
         cursor: pointer;
         color: #fff; /* White menu icon */

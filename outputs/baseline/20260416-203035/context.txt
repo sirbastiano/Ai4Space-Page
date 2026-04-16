@@ -1,0 +1,6 @@
+Task: fix mobile burger menu
+Inputs: docs/index.html docs/style.css docs/app.js and shared nav markup
+Outputs: working mobile nav on static pages
+Success: tapping .menu-icon toggles visible .nav-menu on <=960px and closes on link tap
+Constraints: preserve desktop nav behavior; avoid unrelated visual regressions
+Assumption: docs/ is the deployed site root
