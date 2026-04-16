@@ -1,0 +1,28 @@
+date=2026-04-16T20:26:49+02:00
+cwd=/Users/roberto.delprete/Library/CloudStorage/OneDrive-ESA/Desktop/Repos/Ai4Space-Page
+git_status:
+ M docs/index.html
+ M docs/program.html
+?? docs/logos/
+?? outputs/baseline/20260416-200650/
+?? outputs/baseline/20260416-201135/
+?? outputs/baseline/20260416-202335/
+?? outputs/baseline/20260416-202641/
+?? outputs/final/20260416-200751/
+?? outputs/final/20260416-200807/
+?? outputs/final/20260416-200821/
+?? outputs/final/20260416-202335/
+?? src/Ethan.png
+
+--- Ethan card before image swap ---
+                        </div>
+                    </div>
+                    <div class="content-card speaker-card" style="display: flex; flex-direction: column; height: 100%;">
+                        <div aria-label="Ethan Rublee" style="width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 1em; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #4f8cff 0%, #153a73 100%); color: #fff; font-size: 2.5em; font-weight: 700; letter-spacing: 0.08em;">ER</div>
+                        <div class="content-info" style="flex: 1; display: flex; flex-direction: column;">
+                            <h3>Ethan Rublee</h3>
+                            <p style="font-size: 0.9em; color: #666; font-style: italic; margin-bottom: 1em;">CEO and Co-Founder, Space-ng</p>
+                            <p class="bio-preview" style="flex: 1;">Ethan Rublee is a robotics and computer vision entrepreneur leading Space-ng, where he works on autonomous navigation and machine vision systems for space missions. His background spans applied AI, robotics, and spacecraft perception, making his perspective especially relevant to the workshop’s focus on onboard intelligence and autonomous space systems.</p>
+                            <a href="https://www.space-ng.com/" target="_blank" class="cta-button" style="display: inline-block; margin-top: 1em; padding: 0.5em 1.5em; text-align: center;">Learn More</a>
+                        </div>
+                    </div>

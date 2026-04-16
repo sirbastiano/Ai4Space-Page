@@ -1,0 +1,15 @@
+Baseline: outputs/baseline/20260416-200650
+Environment:
+shell=/bin/zsh
+date=Thu Apr 16 20:08:21 CEST 2026
+
+Verification:
+docs/index.html:289:                        <img src="logos/Space_ng_Logo_V3_White_Square_Center_Aligned_White_Center_Aligned.svg" alt="SpaceNG logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
+docs/index.html:292:                        <img src="logos/ubotica.jpg" alt="Ubotica logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
+docs/program.html:82:                <p>Final schedule for AI4Space @ CVPR 2026.</p>
+docs/program.html:98:                    <caption>Final schedule for AI4Space @ CVPR 2026 &mdash; June 4, 1:00–6:00 PM (PST).</caption>
+docs/program.html:112:                            <td>Keynote 1 (David Rijlaarsdam)</td>
+docs/program.html:120:                            <td>Keynote 2 (Marco Pavone)</td>
+docs/program.html:132:                            <td>Keynote 3 (Ethan Rublee)</td>
+docs/program.html:144:                            <td>Conclusion of the workshop</td>
+docs/program.html:150:                    <caption>Final schedule for AI4Space @ CVPR 2026.</caption>

@@ -1,0 +1,46 @@
+date=2026-04-16T20:23:45+02:00
+cwd=/Users/roberto.delprete/Library/CloudStorage/OneDrive-ESA/Desktop/Repos/Ai4Space-Page
+node=v25.6.1
+git_status:
+ M docs/index.html
+ M docs/program.html
+?? docs/logos/
+?? outputs/baseline/20260416-200650/
+?? outputs/baseline/20260416-201135/
+?? outputs/baseline/20260416-202335/
+?? outputs/final/20260416-200751/
+?? outputs/final/20260416-200807/
+?? outputs/final/20260416-200821/
+
+--- docs/index.html speakers snippet ---
+            <section id="speakers" class="content-section">
+                
+                <h2><i class="fas fa-microphone-alt"></i> Keynote Speakers</h2>
+                <div class="content-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2em; margin-top: 2em;">
+                    <div class="content-card speaker-card" style="display: flex; flex-direction: column; height: 100%;">
+                        <img src="https://media.licdn.com/dms/image/v2/C4E03AQHDbVMMnf6F4A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1550244386287?e=2147483647&v=beta&t=9OweAVjd6m7RawvvYgZOwuAGbDoyw3RwSJHGJsiTANY" alt="David Rijlaarsdam" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin: 0 auto 1em;">
+                        <div class="content-info" style="flex: 1; display: flex; flex-direction: column;">
+                            <h3>David Rijlaarsdam</h3>
+                            <p style="font-size: 0.9em; color: #666; font-style: italic; margin-bottom: 1em;">Director of Space System Engineering, Ubotica Technologies</p>
+                            <p class="bio-preview" style="flex: 1;">David Rijlaarsdam manages the Space System R&D team at Ubotica, where he is responsible for applying systems engineering across the organization and for designing and operating Ubotica's space missions. Previously he worked on applying AI to star identification algorithms at Intel Movidius, and relative visual navigation systems at ESA. His group’s work focuses on autonomy for Earth observation, sensorwebs, navigation, space situational awareness and rover systems. His team has been responsible for the system engineering for onboard processing of ESA’s PhiSat-2, CogniSAT-6, Aries SN-1, and other missions. He was PI for Ubotica for the first single sensor dynamic targeting flight ever performed, in an effort funded by NASA.</p>
+                            <a href="https://ubotica.com/" target="_blank" class="cta-button" style="display: inline-block; margin-top: 1em; padding: 0.5em 1.5em; text-align: center;">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="content-card speaker-card" style="display: flex; flex-direction: column; height: 100%;">
+                        <img src="https://research.nvidia.com/sites/default/files/person/Pavone.jpeg" alt="Marco Pavone" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin: 0 auto 1em;">
+                        <div class="content-info" style="flex: 1; display: flex; flex-direction: column;">
+                            <h3>Marco Pavone</h3>
+                            <p style="font-size: 0.9em; color: #666; font-style: italic; margin-bottom: 1em;">Director of Autonomous Vehicle Research, NVIDIA | Associate Professor, Stanford University</p>
+                            <p class="bio-preview" style="flex: 1;">Marco Pavone's research focuses on the development of methodologies for the analysis, design, and control of autonomous systems, with an emphasis on self-driving cars, autonomous aerospace vehicles, and future mobility systems. He is a recipient of numerous early-career awards and serves as an Associate Editor for the IEEE Control Systems Magazine.</p>
+                            <a href="https://stanford.edu/~pavone/" target="_blank" class="cta-button" style="display: inline-block; margin-top: 1em; padding: 0.5em 1.5em; text-align: center;">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+
+            <section id="challenge" class="content-section" style="max-width: 50em; margin-left: auto; margin-right: auto; text-align: center;">
+
+                <br>
+                <br>

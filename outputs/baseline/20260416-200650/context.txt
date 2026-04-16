@@ -1,0 +1,3 @@
+cwd=/Users/roberto.delprete/Library/CloudStorage/OneDrive-ESA/Desktop/Repos/Ai4Space-Page
+node=v25.6.1
+npm=11.9.0

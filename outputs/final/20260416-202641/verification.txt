@@ -1,0 +1,13 @@
+Verification date=2026-04-16T20:27:13+02:00
+
+Asset check:
+-rw-r--r--  1 roberto.delprete  1276952531  709550 Apr 16 20:26 docs/logos/ethan.png
+
+Markup checks:
+239:                        <img src="logos/ethan.png" alt="Ethan Rublee" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin: 0 auto 1em;">
+241:                            <h3>Ethan Rublee</h3>
+243:                            <p class="bio-preview" style="flex: 1;">Ethan Rublee is a robotics and computer vision entrepreneur leading Space-ng, where he works on autonomous navigation and machine vision systems for space missions. His background spans applied AI, robotics, and spacecraft perception, making his perspective especially relevant to the workshop’s focus on onboard intelligence and autonomous space systems.</p>
+
+Git diff summary:
+ docs/index.html | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)

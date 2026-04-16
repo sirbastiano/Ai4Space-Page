@@ -1,0 +1,83 @@
+diff --git a/docs/index.html b/docs/index.html
+index 7044520..f3a9b7c 100644
+--- a/docs/index.html
++++ b/docs/index.html
+@@ -284,8 +284,13 @@
+ 
+             <section id="sponsors" class="content-section" style="background: #f8f9fa; padding: 3em 1em;">
+                 <h2 style="text-align: center; margin-bottom: 2em;"><i class="fas fa-handshake"></i> Our Sponsors</h2>
+-                <div style="text-align: center; color: #666;">
+-                    <p style="font-size: 1.1em;">Sponsor information coming soon.</p>
++                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 320px)); justify-content: center; align-items: stretch; gap: 2em; max-width: 900px; margin: 0 auto;">
++                    <div style="background: #111827; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);">
++                        <img src="logos/Space_ng_Logo_V3_White_Square_Center_Aligned_White_Center_Aligned.svg" alt="SpaceNG logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
++                    </div>
++                    <div style="background: #ffffff; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15, 23, 42, 0.08);">
++                        <img src="logos/ubotica.jpg" alt="Ubotica logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
++                    </div>
+                 </div>
+             </section>
+ 
+diff --git a/docs/program.html b/docs/program.html
+index b427871..08d656f 100644
+--- a/docs/program.html
++++ b/docs/program.html
+@@ -79,7 +79,7 @@
+             </nav>
+             <div class="hero"> <!-- Reusing hero style for consistency, content adjusted -->
+                 <h1>Workshop Program</h1>
+-                <p>Preliminary schedule for AI4Space @ CVPR 2026.</p>
++                <p>Final schedule for AI4Space @ CVPR 2026.</p>
+             </div>
+         </header>
+ 
+@@ -91,11 +91,11 @@
+ 
+                 <p style="text-align:center; font-size:1.1em; color:#555; margin-bottom: 20px;">
+                     <strong>June 4, 2026 &mdash; 1:00–6:00 PM</strong><br>
+-                    The program may be subject to small variations in the next days. The final program will be issued by the end of this week (April 17).
++                    Final workshop schedule for AI4Space @ CVPR 2026.
+                 </p>
+ 
+                 <table class="schedule-table">
+-                    <caption>Preliminary schedule for AI4Space @ CVPR 2026 &mdash; June 4, 1:00–6:00 PM (PST).</caption>
++                    <caption>Final schedule for AI4Space @ CVPR 2026 &mdash; June 4, 1:00–6:00 PM (PST).</caption>
+                     <thead>
+                         <tr>
+                             <th>Time (PST)</th>
+@@ -109,7 +109,7 @@
+                         </tr>
+                         <tr>
+                             <td>1:10–1:40</td>
+-                            <td>Keynote 1</td>
++                            <td>Keynote 1 (David Rijlaarsdam)</td>
+                         </tr>
+                         <tr>
+                             <td>1:45–2:15</td>
+@@ -117,7 +117,7 @@
+                         </tr>
+                         <tr>
+                             <td>2:20–2:50</td>
+-                            <td>Keynote 2</td>
++                            <td>Keynote 2 (Marco Pavone)</td>
+                         </tr>
+                         <tr class="gray-row">
+                             <td>3:00–4:00</td>
+@@ -129,7 +129,7 @@
+                         </tr>
+                         <tr>
+                             <td>4:30–5:00</td>
+-                            <td>Keynote 3</td>
++                            <td>Keynote 3 (Ethan Rublee)</td>
+                         </tr>
+                         <tr>
+                             <td>5:00–5:30</td>
+@@ -141,7 +141,7 @@
+                         </tr>
+                         <tr>
+                             <td>5:50–6:00</td>
+-                            <td>Conclusion of the Workshop</td>
++                            <td>Conclusion of the workshop</td>
+                         </tr>
+                     </tbody>
+                 </table>

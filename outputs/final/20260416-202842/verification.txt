@@ -1,0 +1,28 @@
+Verification date=2026-04-16T20:29:08+02:00
+
+Checks:
+                <h2 style="text-align: center; margin-bottom: 2em;"><i class="fas fa-handshake"></i> Our Sponsors</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 320px)); justify-content: center; align-items: stretch; gap: 2em; max-width: 900px; margin: 0 auto;">
+                    <div style="background: #ffffff; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15, 23, 42, 0.08); overflow: hidden;">
+                        <img src="logos/Space_ng_Logo_V3_White_Square_Center_Aligned_White_Center_Aligned.svg" alt="SpaceNG logo" style="width: 165%; height: 165px; object-fit: cover; object-position: center;">
+                    </div>
+                    <div style="background: #ffffff; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15, 23, 42, 0.08);">
+                        <img src="logos/ubotica.jpg" alt="Ubotica logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
+                    </div>
+
+Diff:
+diff --git a/docs/index.html b/docs/index.html
+index b7f93b3..9e1fe97 100644
+--- a/docs/index.html
++++ b/docs/index.html
+@@ -294,8 +294,8 @@
+             <section id="sponsors" class="content-section" style="background: #f8f9fa; padding: 3em 1em;">
+                 <h2 style="text-align: center; margin-bottom: 2em;"><i class="fas fa-handshake"></i> Our Sponsors</h2>
+                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 320px)); justify-content: center; align-items: stretch; gap: 2em; max-width: 900px; margin: 0 auto;">
+-                    <div style="background: #ffffff; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15, 23, 42, 0.08);">
+-                        <img src="logos/Space_ng_Logo_V3_White_Square_Center_Aligned_White_Center_Aligned.svg" alt="SpaceNG logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
++                    <div style="background: #ffffff; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15, 23, 42, 0.08); overflow: hidden;">
++                        <img src="logos/Space_ng_Logo_V3_White_Square_Center_Aligned_White_Center_Aligned.svg" alt="SpaceNG logo" style="width: 165%; height: 165px; object-fit: cover; object-position: center;">
+                     </div>
+                     <div style="background: #ffffff; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15, 23, 42, 0.08);">
+                         <img src="logos/ubotica.jpg" alt="Ubotica logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">

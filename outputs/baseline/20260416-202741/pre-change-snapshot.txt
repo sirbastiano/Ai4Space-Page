@@ -1,0 +1,32 @@
+date=2026-04-16T20:27:51+02:00
+cwd=/Users/roberto.delprete/Library/CloudStorage/OneDrive-ESA/Desktop/Repos/Ai4Space-Page
+git_status:
+ M docs/index.html
+ M docs/program.html
+?? docs/logos/
+?? outputs/baseline/20260416-200650/
+?? outputs/baseline/20260416-201135/
+?? outputs/baseline/20260416-202335/
+?? outputs/baseline/20260416-202641/
+?? outputs/baseline/20260416-202741/
+?? outputs/final/20260416-200751/
+?? outputs/final/20260416-200807/
+?? outputs/final/20260416-200821/
+?? outputs/final/20260416-202335/
+?? outputs/final/20260416-202641/
+?? src/Ethan.png
+
+--- sponsors snippet before change ---
+            
+
+            <section id="sponsors" class="content-section" style="background: #f8f9fa; padding: 3em 1em;">
+                <h2 style="text-align: center; margin-bottom: 2em;"><i class="fas fa-handshake"></i> Our Sponsors</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 320px)); justify-content: center; align-items: stretch; gap: 2em; max-width: 900px; margin: 0 auto;">
+                    <div style="background: #111827; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);">
+                        <img src="logos/Space_ng_Logo_V3_White_Square_Center_Aligned_White_Center_Aligned.svg" alt="SpaceNG logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
+                    </div>
+                    <div style="background: #ffffff; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15, 23, 42, 0.08);">
+                        <img src="logos/ubotica.jpg" alt="Ubotica logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
+                    </div>
+                </div>
+            </section>
