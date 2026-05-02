@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet"> <!-- Added Montserrat font -->
     <style>
-        /* ...existing code... */
         .main-hero-title {
             text-align: center;
             font-size: 3em;
@@ -48,6 +47,179 @@
             .main-hero-title {
                 font-size: 1.5em;
             }
+        }
+
+        /* ── Overview ── */
+        .overview-tagline {
+            font-size: 1.18em;
+            font-weight: 500;
+            color: #444;
+            border-left: 4px solid #667eea;
+            padding: 0.8em 1.4em;
+            background: linear-gradient(90deg, rgba(102,126,234,0.07) 0%, transparent 100%);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1.75em;
+            line-height: 1.7;
+        }
+
+        .overview-highlight {
+            background: #f4f7ff;
+            border-radius: 10px;
+            padding: 1.1em 1.4em;
+            margin: 1.5em 0;
+            border-left: 4px solid #23a6d5;
+            line-height: 1.7;
+        }
+
+        /* ── Section divider ── */
+        .section-divider {
+            border: none;
+            height: 1px;
+            width: 100%;
+            opacity: 1;
+            background: linear-gradient(90deg, transparent, #d8dce8, transparent);
+            margin: 3em 0;
+        }
+
+        /* ── Speaker cards ── */
+        .speaker-card {
+            padding: 2em;
+            text-align: center;
+            border-top: 3px solid #667eea;
+        }
+
+        .speaker-card .content-info {
+            padding: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .speaker-photo-wrap {
+            width: 100%;
+            height: 320px;
+            border-radius: 12px;
+            margin: 0 auto 1.25em;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(102,126,234,0.25);
+            flex-shrink: 0;
+        }
+
+        .speaker-card .speaker-photo-wrap img {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            object-fit: cover;
+            object-position: center top;
+            border: none;
+            display: block;
+        }
+
+        .speaker-role {
+            font-size: 0.88em;
+            color: #6c757d;
+            font-style: italic;
+            margin-bottom: 1em;
+            line-height: 1.5;
+        }
+
+        .speaker-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 0.55em 1.6em;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-top: 1.2em;
+            align-self: center;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .speaker-btn:hover {
+            opacity: 0.88;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .speaker-card .bio-preview {
+            flex-grow: 0;
+            max-height: 6.5em;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+            line-height: 1.6;
+            margin-bottom: 0.5em;
+            text-align: justify;
+        }
+
+        .speaker-card .bio-preview.expanded {
+            max-height: 100em;
+        }
+
+        .bio-toggle {
+            background: none;
+            border: none;
+            color: #888;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72em;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 0.2em 0;
+            margin-top: 0.1em;
+            margin-bottom: 0.6em;
+            align-self: center;
+            transition: color 0.2s ease;
+        }
+
+        .bio-toggle:hover {
+            color: #667eea;
+        }
+
+        /* ── Challenge ── */
+        .challenge-section {
+            max-width: 52em;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ── Sponsors ── */
+        .sponsors-section {
+            background: #f8f9fa;
+            padding: 3em 2em;
+            border-radius: 12px;
+        }
+
+        .sponsors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 320px));
+            justify-content: center;
+            align-items: stretch;
+            gap: 2em;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .sponsor-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 2em;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(15,23,42,0.08);
+            border: 1px solid rgba(15,23,42,0.07);
+            text-decoration: none;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            overflow: hidden;
+        }
+
+        .sponsor-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(15,23,42,0.14);
         }
     </style>
 </head>
@@ -183,106 +355,111 @@
         </section>
 
         <main>
-          <section id="overview" class="overview-section">
+
+            <!-- Overview -->
+            <section id="overview" class="overview-section">
                 <h2><i class="fas fa-rocket"></i> AI4Space Workshop Overview</h2>
-                <p style="font-size: 1.2em; font-weight: 500; color: #333; margin-bottom: 1.5em;">
-                    <em>Advancing artificial intelligence for autonomous spacecraft, Earth observation, and next-generation space missions.</em>
-                </p>
-                
+                <br>
+
+
                 <p>
-                    The AI4Space workshop at CVPR 2026 brings together researchers, engineers, and space domain experts to address 
-                    the unique challenges of deploying AI in space environments. As missions demand greater autonomy, resilience, and 
-                    on-board intelligence, this workshop explores how computer vision and machine learning can enable breakthrough capabilities 
+                    The AI4Space workshop at CVPR 2026 brings together researchers, engineers, and space domain experts to address
+                    the unique challenges of deploying AI in space environments. As missions demand greater autonomy, resilience, and
+                    on-board intelligence, this workshop explores how computer vision and machine learning can enable breakthrough capabilities
                     in spacecraft navigation, planetary exploration, satellite data analysis, and orbital operations.
                 </p>
 
-                <p>
-                    <strong>Key challenges we address:</strong> How can AI models generalize to harsh, data-constrained space environments? 
-                    How do we design verifiable, fail-safe systems for mission-critical applications? How do we enable autonomous decision-making 
+                <!-- <div class="overview-highlight">
+                    <strong>Key challenges we address:</strong> How can AI models generalize to harsh, data-constrained space environments?
+                    How do we design verifiable, fail-safe systems for mission-critical applications? How do we enable autonomous decision-making
                     when ground control is hours or days away?
-                </p>
-                
+                </div> -->
+                <br>
                 <p>
-                    AI4Space fosters collaboration between machine learning researchers and space scientists, focusing on topics such as 
-                    vision-based navigation, onboard learning, sim-to-real transfer for robotics, multi-sensor fusion for Earth observation, 
+                    AI4Space fosters collaboration between machine learning researchers and space scientists, focusing on topics such as
+                    vision-based navigation, onboard learning, sim-to-real transfer for robotics, multi-sensor fusion for Earth observation,
                     and AI-driven mission planning—shaping the future of intelligent space exploration.
                 </p>
             </section>
 
+            <hr class="section-divider">
 
-            <br>
-            <br>
-
+            <!-- Speakers -->
             <section id="speakers" class="content-section">
-                
                 <h2><i class="fas fa-microphone-alt"></i> Keynote Speakers</h2>
-                <div class="content-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2em; margin-top: 2em;">
-                    <div class="content-card speaker-card" style="display: flex; flex-direction: column; height: 100%;">
-                        <img src="https://media.licdn.com/dms/image/v2/C4E03AQHDbVMMnf6F4A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1550244386287?e=2147483647&v=beta&t=9OweAVjd6m7RawvvYgZOwuAGbDoyw3RwSJHGJsiTANY" alt="David Rijlaarsdam" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin: 0 auto 1em;">
-                        <div class="content-info" style="flex: 1; display: flex; flex-direction: column;">
+                <div class="content-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 2em;">
+                    <div class="content-card speaker-card">
+                        <div class="speaker-photo-wrap">
+                            <img src="https://media.licdn.com/dms/image/v2/C4E03AQHDbVMMnf6F4A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1550244386287?e=2147483647&v=beta&t=9OweAVjd6m7RawvvYgZOwuAGbDoyw3RwSJHGJsiTANY" alt="David Rijlaarsdam">
+                        </div>
+                        <div class="content-info">
                             <h3>David Rijlaarsdam</h3>
-                            <p style="font-size: 0.9em; color: #666; font-style: italic; margin-bottom: 1em;">Director of Space System Engineering, Ubotica Technologies</p>
-                            <p class="bio-preview" style="flex: 1;">David Rijlaarsdam manages the Space System R&D team at Ubotica, where he is responsible for applying systems engineering across the organization and for designing and operating Ubotica's space missions. Previously he worked on applying AI to star identification algorithms at Intel Movidius, and relative visual navigation systems at ESA. His group’s work focuses on autonomy for Earth observation, sensorwebs, navigation, space situational awareness and rover systems. His team has been responsible for the system engineering for onboard processing of ESA’s PhiSat-2, CogniSAT-6, Aries SN-1, and other missions. He was PI for Ubotica for the first single sensor dynamic targeting flight ever performed, in an effort funded by NASA.</p>
-                            <a href="https://ubotica.com/" target="_blank" class="cta-button" style="display: inline-block; margin-top: 1em; padding: 0.5em 1.5em; text-align: center;">Learn More</a>
+                            <p class="speaker-role">Director of Space System Engineering, Ubotica Technologies</p>
+                            <p class="bio-preview">David Rijlaarsdam manages the Space System R&D team at Ubotica, where he is responsible for applying systems engineering across the organization and for designing and operating Ubotica’s space missions. Previously he worked on applying AI to star identification algorithms at Intel Movidius, and relative visual navigation systems at ESA. His group’s work focuses on autonomy for Earth observation, sensorwebs, navigation, space situational awareness and rover systems. His team has been responsible for the system engineering for onboard processing of ESA’s PhiSat-2, CogniSAT-6, Aries SN-1, and other missions. He was PI for Ubotica for the first single sensor dynamic targeting flight ever performed, in an effort funded by NASA.</p>
+                            <button class="bio-toggle" aria-expanded="false">Expand</button>
+                            <a href="https://ubotica.com/" target="_blank" class="speaker-btn">Visit Website</a>
                         </div>
                     </div>
-                    <div class="content-card speaker-card" style="display: flex; flex-direction: column; height: 100%;">
-                        <img src="https://research.nvidia.com/sites/default/files/person/Pavone.jpeg" alt="Marco Pavone" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin: 0 auto 1em;">
-                        <div class="content-info" style="flex: 1; display: flex; flex-direction: column;">
+                    <div class="content-card speaker-card">
+                        <div class="speaker-photo-wrap">
+                            <img src="https://research.nvidia.com/sites/default/files/person/Pavone.jpeg" alt="Marco Pavone">
+                        </div>
+                        <div class="content-info">
                             <h3>Marco Pavone</h3>
-                            <p style="font-size: 0.9em; color: #666; font-style: italic; margin-bottom: 1em;">Director of Autonomous Vehicle Research, NVIDIA | Associate Professor, Stanford University</p>
-                            <p class="bio-preview" style="flex: 1;">Marco Pavone's research focuses on the development of methodologies for the analysis, design, and control of autonomous systems, with an emphasis on self-driving cars, autonomous aerospace vehicles, and future mobility systems. He is a recipient of numerous early-career awards and serves as an Associate Editor for the IEEE Control Systems Magazine.</p>
-                            <a href="https://stanford.edu/~pavone/" target="_blank" class="cta-button" style="display: inline-block; margin-top: 1em; padding: 0.5em 1.5em; text-align: center;">Learn More</a>
+                            <p class="speaker-role">Associate Professor, Stanford University | Director of Autonomous Vehicle Research, NVIDIA</p>
+                            <p class="bio-preview">Dr. Marco Pavone is an Associate Professor of Aeronautics and Astronautics at Stanford University, where he directs the Autonomous Systems Laboratory and the Center for Automotive Research at Stanford. He is also a Distinguished Research Scientist at NVIDIA where he leads autonomous vehicle research. Before joining Stanford, he was a Research Technologist within the Robotics Section at the NASA Jet Propulsion Laboratory. He received a Ph.D. degree in Aeronautics and Astronautics from the Massachusetts Institute of Technology in 2010. His main research interests are in the development of methodologies for the analysis, design, and control of autonomous systems, with an emphasis on self-driving cars, autonomous aerospace vehicles, and future mobility systems. He is a recipient of a number of awards, including a Presidential Early Career Award for Scientists and Engineers from President Barack Obama, an Office of Naval Research Young Investigator Award, a National Science Foundation Early Career (CAREER) Award, a NASA Early Career Faculty Award, and an Early-Career Spotlight Award from the Robotics Science and Systems Foundation. He was identified by the American Society for Engineering Education (ASEE) as one of America’s 20 most highly promising investigators under the age of 40. His work has been recognized with best paper nominations or awards at a number of venues, including the European Conference on Computer Vision, the IEEE International Conference on Robotics and Automation, the European Control Conference, the IEEE International Conference on Intelligent Transportation Systems, the Field and Service Robotics Conference, the Robotics: Science and Systems Conference, and the INFORMS Annual Meeting.</p>
+                            <button class="bio-toggle" aria-expanded="false">Expand</button>
+                            <a href="https://stanford.edu/~pavone/" target="_blank" class="speaker-btn">Visit Website</a>
                         </div>
                     </div>
-                    <div class="content-card speaker-card" style="display: flex; flex-direction: column; height: 100%;">
-                        <img src="logos/ethan.png" alt="Ethan Rublee" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin: 0 auto 1em;">
-                        <div class="content-info" style="flex: 1; display: flex; flex-direction: column;">
+                    <div class="content-card speaker-card">
+                        <div class="speaker-photo-wrap">
+                            <img src="logos/ethan.png" alt="Ethan Rublee">
+                        </div>
+                        <div class="content-info">
                             <h3>Ethan Rublee</h3>
-                            <p style="font-size: 0.9em; color: #666; font-style: italic; margin-bottom: 1em;">CEO and Co-Founder, Space-ng</p>
-                            <p class="bio-preview" style="flex: 1;">Ethan Rublee is Co-Founder and CEO of Space-ng, developing autonomy systems for spacecraft spanning cameras, vision-based navigation and GPU-enabled AI hardware and software. As Vision Navigation Lead for Firefly Aerospace’s Blue Ghost Mission 1, Rublee and the Space-ng team developed and deployed the real-time vision-based terrain-relative navigation system that enabled the first successful commercial lunar landing in March 2025.
- 
+                            <p class="speaker-role">CEO and Co-Founder, Space-ng</p>
+                            <p class="bio-preview">Ethan Rublee is Co-Founder and CEO of Space-ng, developing autonomy systems for spacecraft spanning cameras, vision-based navigation and GPU-enabled AI hardware and software. As Vision Navigation Lead for Firefly Aerospace’s Blue Ghost Mission 1, Rublee and the Space-ng team developed and deployed the real-time vision-based terrain-relative navigation system that enabled the first successful commercial lunar landing in March 2025.
+
 Rublee has over 16 years of experience in robotics and computer vision, with a focus on taking systems from research to deployed products. He is a recipient of the 2021 ICCV Helmholtz Prize for his 2011 work on ORB, a real-time feature detection and description method. A serial entrepreneur, he has founded companies across multiple domains: industrial robotics for material handling and autonomous truck unloading (Industrial Perception, acquired by Google), AI-driven tools for real-time visual effects and mixed reality (Arraiy), and agricultural robotics systems (farm-ng). He is a co-author of Kornia, an open-source differentiable computer vision library.</p>
-                            <a href="https://www.space-ng.com/" target="_blank" class="cta-button" style="display: inline-block; margin-top: 1em; padding: 0.5em 1.5em; text-align: center;">Learn More</a>
+                            <button class="bio-toggle" aria-expanded="false">Expand</button>
+                            <a href="https://www.space-ng.com/" target="_blank" class="speaker-btn">Visit Website</a>
                         </div>
                     </div>
                 </div>
             </section>
 
-            
+            <hr class="section-divider">
 
-            <section id="challenge" class="content-section" style="max-width: 50em; margin-left: auto; margin-right: auto; text-align: center;">
+            <!-- Challenge -->
+            <section id="challenge" class="content-section challenge-section">
+                <div class="challenge-card" style="background: linear-gradient(135deg, #0f2027 0%, #203a43 55%, #2c5364 100%); padding: 3em 2em; border-radius: 18px; box-shadow: 0 24px 64px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.07);">
+                    <div class="challenge-content" style="color: white; text-align: center;">
+                        <h3 style="color: white; font-size: 2em; margin-bottom: 0.3em; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif; font-weight: 900;">SPARK 2026</h3>
+                        <div style="width: 3em; height: 2px; background: linear-gradient(90deg, #4fc3f7, #81d4fa); margin: 0 auto 1.4em; border-radius: 2px;"></div>
 
-                <br>
-                <br>
-                <br>
-
-                <div class="challenge-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3em 2em; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                    <div class="challenge-content" style="color: white;">
-                        <h3 style="color: white; font-size: 2em; margin-bottom: 1em;">SPARK2026</h3>
-                        
-                        <p style="font-size: 1.2em; line-height: 1.8; margin-bottom: 2em;">
+                        <p style="font-size: 1.1em; line-height: 1.85; margin-bottom: 2em; color: rgba(255,255,255,0.85);">
                             Join us for an exciting AI challenge featuring two cutting-edge streams focused on next-generation space perception!
                         </p>
 
-                        <div class="challenge-streams" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2em; margin: 2em 0;">
-                            <div class="stream" style="background: rgba(255,255,255,0.1); padding: 1.5em; border-radius: 10px; backdrop-filter: blur(10px);">
-                                <div class="stream-icon" style="font-size: 3em; margin-bottom: 0.5em;"><i class="fas fa-satellite"></i></div>
-                                <h4 style="color: #ffd700; font-size: 1.2em; margin-bottom: 0.5em;">Stream 1</h4>
-                                <p style="color: white; font-size: 1.05em;">Multi-Task Spacecraft Perception</p>
+                        <div class="challenge-streams" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5em; margin: 2em 0;">
+                            <div class="stream" style="background: rgba(255,255,255,0.05); padding: 1.75em 1.5em; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                                <div class="stream-icon" style="font-size: 2.4em; margin-bottom: 0.6em; color: #4fc3f7;"><i class="fas fa-satellite"></i></div>
+                                <h4 style="color: #ffd700; font-size: 1.05em; margin-bottom: 0.5em; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85em;">Stream 1</h4>
+                                <p style="color: rgba(255,255,255,0.9); font-size: 1.05em; line-height: 1.5;">Multi-Task Spacecraft Perception</p>
                             </div>
-                            <div class="stream" style="background: rgba(255,255,255,0.1); padding: 1.5em; border-radius: 10px; backdrop-filter: blur(10px);">
-                                <div class="stream-icon" style="font-size: 3em; margin-bottom: 0.5em;"><i class="fas fa-bolt"></i></div>
-                                <h4 style="color: #ffd700; font-size: 1.2em; margin-bottom: 0.5em;">Stream 2</h4>
-                                <p style="color: white; font-size: 1.05em;">Event-Based Pose Estimation</p>
+                            <div class="stream" style="background: rgba(255,255,255,0.05); padding: 1.75em 1.5em; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                                <div class="stream-icon" style="font-size: 2.4em; margin-bottom: 0.6em; color: #4fc3f7;"><i class="fas fa-bolt"></i></div>
+                                <h4 style="color: #ffd700; font-size: 1.05em; margin-bottom: 0.5em; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85em;">Stream 2</h4>
+                                <p style="color: rgba(255,255,255,0.9); font-size: 1.05em; line-height: 1.5;">Event-Based Pose Estimation</p>
                             </div>
                         </div>
 
-                        <div style="margin-top: 2.5em;">
-                            <a href="challenge.html" class="cta-button" style="display: inline-block; background: white; color: #667eea; padding: 1em 2.5em; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.2em; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-right: 1em; transition: all 0.3s ease;">
+                        <div style="margin-top: 2.5em; display: flex; gap: 1em; justify-content: center; flex-wrap: wrap;">
+                            <a href="challenge.html" class="cta-button" style="display: inline-block; background: white; color: #0f2027; padding: 0.9em 2.2em; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.05em; box-shadow: 0 4px 16px rgba(0,0,0,0.3); transition: all 0.3s ease;">
                                 <i class="fas fa-info-circle"></i> Learn More
                             </a>
-                            <a href="https://cvi2.uni.lu/spark2026/" target="_blank" class="cta-button" style="display: inline-block; background: #f5576c; color: white; padding: 1em 2.5em; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.2em; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.3s ease;">
+                            <a href="https://cvi2.uni.lu/spark2026/" target="_blank" class="cta-button" style="display: inline-block; background: #f5a623; color: #0f2027; padding: 0.9em 2.2em; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.05em; box-shadow: 0 4px 16px rgba(245,166,35,0.35); transition: all 0.3s ease;">
                                 <i class="fas fa-external-link-alt"></i> Challenge Website
                             </a>
                         </div>
@@ -290,27 +467,29 @@ Rublee has over 16 years of experience in robotics and computer vision, with a f
                 </div>
             </section>
 
+            <hr class="section-divider">
 
-            
-
-            <section id="sponsors" class="content-section" style="background: #f8f9fa; padding: 3em 1em;">
+            <!-- Sponsors -->
+            <section id="sponsors" class="content-section sponsors-section">
                 <h2 style="text-align: center; margin-bottom: 2em;"><i class="fas fa-handshake"></i> Our Sponsors</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 320px)); justify-content: center; align-items: stretch; gap: 2em; max-width: 900px; margin: 0 auto;">
-                    <div style="background: #ffffff; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15, 23, 42, 0.08); overflow: hidden;">
+                <div class="sponsors-grid">
+                    <a href="https://www.space-ng.com/" target="_blank" rel="noopener noreferrer" class="sponsor-card">
                         <img src="logos/Space_ng_Logo_V3_White_Square_Center_Aligned_White_Center_Aligned.svg" alt="SpaceNG logo" style="width: 165%; height: 165px; object-fit: cover; object-position: center;">
-                    </div>
-                    <div style="background: #ffffff; border-radius: 18px; padding: 2em; min-height: 180px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15, 23, 42, 0.08);">
+                    </a>
+                    <a href="https://ubotica.com/" target="_blank" rel="noopener noreferrer" class="sponsor-card">
                         <img src="logos/ubotica.jpg" alt="Ubotica logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
-                    </div>
+                    </a>
                 </div>
             </section>
 
+            <!-- Contact -->
+             <br>
             <section id="contact" class="contact-section">
                 <h2 style="color: black;"><i class="fas fa-envelope"></i> Get In Touch</h2>
+                <br>
                 <p style="color: black;">Questions? Ideas? Want to collaborate? Reach out to the AI4Space organizing team!</p>
-                <!-- Static contact information -->
                 <div class="static-contact-info" style="text-align: center; margin-top: 20px;">
-                    <p style="color:black; font-size: 1.1em; margin-bottom: 1em;">For general inquiries, please contact: <a href="mailto:ai4space.organizers@gmail.com" style="color: #00bcd4;">ai4space.organizers@gmail.com</a>    </p>
+                    <p style="color:black; font-size: 1.1em; margin-bottom: 1em;">For general inquiries, please contact: <a href="mailto:ai4space.organizers@gmail.com" style="color: #00bcd4;">ai4space.organizers@gmail.com</a></p>
                 </div>
             </section>
         </main>
@@ -325,5 +504,26 @@ Rublee has over 16 years of experience in robotics and computer vision, with a f
     <script src="animation.js"></script>
     <script src="countdown.js"></script> <!-- Added countdown JS -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        document.querySelectorAll('.bio-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const bio = btn.previousElementSibling;
+                const expanded = bio.classList.toggle('expanded');
+                btn.textContent = expanded ? 'Collapse' : 'Expand';
+                btn.setAttribute('aria-expanded', expanded);
+            });
+        });
+
+        // Strike through past dates
+        const today = new Date();
+        document.querySelectorAll('#key-dates p').forEach(p => {
+            const date = new Date(p.textContent.trim());
+            if (!isNaN(date) && date < today) {
+                p.style.textDecoration = 'line-through';
+                p.style.opacity = '0.6';
+                p.parentElement.style.opacity = '0.55';
+            }
+        });
+    </script>
 </body>
 </html>

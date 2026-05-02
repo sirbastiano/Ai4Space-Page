@@ -3,64 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Program - AI4Space @ CVPFR</title>
+    <title>Program - AI4Space @ CVPR 2026</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="countdown-style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
     <style>
-        /* Basic table styling */
-        .schedule-table {
-            width: 90%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            font-family: 'Roboto', sans-serif;
-        }
-        .schedule-table th, .schedule-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-            vertical-align: top;
-        }
-        .schedule-table th {
-            background-color: #f2f2f2; /* Light grey for headers */
-            color: #333;
+        .event-info {
             text-align: center;
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 40px;
+            letter-spacing: 0.02em;
         }
-        .schedule-table caption {
-            caption-side: bottom;
-            padding: 10px;
-            font-style: italic;
+        .event-info span {
+            margin: 0 10px;
+        }
+
+        .schedule {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .sched-row {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 0 24px;
+            padding: 18px 0;
+            border-top: 1px solid #eee;
+        }
+        .sched-row:last-child {
+            border-bottom: 1px solid #eee;
+        }
+
+        .sched-time {
+            font-size: 0.78em;
+            font-weight: 600;
+            color: #999;
+            padding-top: 2px;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
+
+        .sched-label {
+            font-size: 0.68em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #aaa;
+            margin-bottom: 3px;
+        }
+
+        .sched-title {
+            font-size: 0.97em;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 2px 0;
+        }
+
+        .sched-speaker {
+            font-size: 0.85em;
             color: #555;
-            text-align: center;
+            margin-top: 4px;
         }
-        .activity-details {
-            list-style-type: none;
-            padding-left: 0;
+        .sched-speaker strong {
+            color: #333;
         }
-        .activity-details li {
-            margin-bottom: 5px;
+
+        /* Papers */
+        .papers {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .gray-row {
-            background-color: #C0C0C0 !important; /* Light gray from LaTeX */
+
+        .paper {
+            padding: 12px 0 0 0;
+            border-top: 1px solid #f0f0f0;
         }
-        .gray-cell {
-            background-color: #C0C0C0 !important; /* Light gray from LaTeX */
+        .papers .paper:first-child {
+            border-top: none;
+            padding-top: 0;
         }
-         /* Ensure main content area has some padding */
-        main .content-section {
-            padding: 20px;
+
+        .paper-title {
+            font-size: 0.88em;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-decoration: none;
+            line-height: 1.45;
         }
-        main h2 {
-            text-align: center;
-            margin-bottom: 20px;
+        .paper-title:hover {
+            color: #23a6d5;
+        }
+
+        .paper-authors {
+            font-size: 0.78em;
+            color: #888;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        .abstract-toggle {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-top: 5px;
+            font-size: 0.78em;
+            color: #23a6d5;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .abstract-toggle:hover {
+            color: #1a7fa8;
+        }
+        .abstract-toggle i {
+            font-size: 0.8em;
+            transition: transform 0.2s ease;
+        }
+        .abstract-toggle.open i {
+            transform: rotate(180deg);
+        }
+
+        .paper-abstract {
+            display: none;
+            font-size: 0.82em;
+            color: #555;
+            line-height: 1.65;
+            margin-top: 8px;
+        }
+        .paper-abstract.visible {
+            display: block;
+        }
+
+        @media (max-width: 560px) {
+            .sched-row { grid-template-columns: 64px 1fr; gap: 0 14px; }
+            .sched-time { font-size: 0.72em; }
         }
     </style>
 </head>
 <body>
     <div id="app">
-        <header style="max-height: 10em;"> <!-- Adjusted max-height -->
+        <header style="max-height: 10em;">
             <nav class="navbar">
                 <div class="navbar-container">
                     <a href="index.html" class="navbar-logo">AI4Space</a>
@@ -77,180 +165,326 @@
                     </ul>
                 </div>
             </nav>
-            <div class="hero"> <!-- Reusing hero style for consistency, content adjusted -->
+            <div class="hero">
                 <h1>Workshop Program</h1>
-                <p>Final schedule for AI4Space @ CVPR 2026.</p>
             </div>
         </header>
 
         <main>
-            
-
             <section id="program-schedule" class="content-section">
-                <h2>Workshop Program Schedule</h2>
 
-                <p style="text-align:center; font-size:1.1em; color:#555; margin-bottom: 20px;">
-                    <strong>June 4, 2026 &mdash; 1:00–6:00 PM</strong><br>
-                    Final workshop schedule for AI4Space @ CVPR 2026.
-                </p>
+                <div class="event-info">
+                    <span>June 4, 2026</span>&middot;
+                    <span>1:00&ndash;6:00 PM PST</span>&middot;
+                    <span>Room 701</span>
+                </div>
 
-                <table class="schedule-table">
-                    <caption>Final schedule for AI4Space @ CVPR 2026 &mdash; June 4, 1:00–6:00 PM (PST).</caption>
-                    <thead>
-                        <tr>
-                            <th>Time (PST)</th>
-                            <th>Activity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1:00–1:10</td>
-                            <td>Welcome and Opening Remarks</td>
-                        </tr>
-                        <tr>
-                            <td>1:10–1:40</td>
-                            <td>Keynote 1 (David Rijlaarsdam)</td>
-                        </tr>
-                        <tr>
-                            <td>1:45–2:15</td>
-                            <td>Spotlight Talks 1</td>
-                        </tr>
-                        <tr>
-                            <td>2:20–2:50</td>
-                            <td>Keynote 2 (Marco Pavone)</td>
-                        </tr>
-                        <tr class="gray-row">
-                            <td>3:00–4:00</td>
-                            <td>Poster Session &amp; Coffee Break (in parallel)</td>
-                        </tr>
-                        <tr>
-                            <td>4:00–4:30</td>
-                            <td>Spotlight Talks 2</td>
-                        </tr>
-                        <tr>
-                            <td>4:30–5:00</td>
-                            <td>Keynote 3 (Ethan Rublee)</td>
-                        </tr>
-                        <tr>
-                            <td>5:00–5:30</td>
-                            <td>Panel &amp; Unconferences</td>
-                        </tr>
-                        <tr>
-                            <td>5:30–5:50</td>
-                            <td>Challenge and Award Ceremony</td>
-                        </tr>
-                        <tr>
-                            <td>5:50–6:00</td>
-                            <td>Conclusion of the workshop</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="schedule">
 
-                <!-- <table class="schedule-table">
-                    <caption>Final schedule for AI4Space @ CVPR 2026.</caption>
-                    <thead>
-                        <tr>
-                            <th colspan="2">Morning session</th>
-                            <th colspan="2">Afternoon session</th>
-                        </tr>
-                        <tr>
-                            <th>Planned<br>time (PST)</th>
-                            <th>Activity</th>
-                            <th>Planned<br>time (PST)</th>
-                            <th>Activity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>7:55</td>
-                            <td>
-                                Welcome and introduction<br>
-                                Includes:<br>
-                                - Sponsor recognition<br>
-                                - Workshop outline<br>
-                                - Submission and acceptance statistics<br>
-                                - Unconferences presentation
-                            </td>
-                            <td>14:00</td>
-                            <td>
-                                Welcome to afternoon session<br>
-                                - Reminder of workshop outline<br>
-                                - Unconferences announcement
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>8:00</td>
-                            <td>
-                                Invited Speaker 1's talk<br>
-                                Presentation (25 mins)<br>
-                                Q & A (5 min)
-                            </td>
-                            <td>14:05</td>
-                            <td>
-                                Spotlight presentations<br>
-                                (~6 mins each)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>8:30</td>
-                            <td>
-                                Spotlight presentations<br>
-                                (~6 mins each)
-                            </td>
-                            <td>14:35</td>
-                            <td>
-                                Invited Speaker's 3 talk<br>
-                                Presentation (25 min)<br>
-                                Q & A (5 min)
-                            </td>
-                        </tr>
-                        <tr class="gray-row">
-                            <td>9:30</td>
-                            <td>
-                                Poster session (all accepted papers)<br>
-                                Coffee break (in parallel)
-                            </td>
-                            <td>15:05</td>
-                            <td>Coffee break</td>
-                        </tr>
-                        <tr>
-                            <td>10:30</td>
-                            <td>
-                                Invited Speaker 2's talk<br>
-                                Presentation (25 mins)<br>
-                                Q & A (5 min)
-                            </td>
-                            <td class="gray-cell">16:00</td>
-                            <td class="gray-cell">
-                                Unconference sessions<br>
-                                - Voting results<br>
-                                - Session 1 (~30 min)<br>
-                                - Session 2 (~30 min)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>11:00</td>
-                            <td>Spotlight presentations (~6 mins each)</td>
-                            <td>17:00</td>
-                            <td>Panel discussion</td>
-                        </tr>
-                        <tr>
-                            <td>12:00</td>
-                            <td>
-                                Top-2 competition presenters<br>
-                                (10 min each + 5 min questions)
-                            </td>
-                            <td>17:30</td>
-                            <td>Award ceremony</td>
-                        </tr>
-                        <tr>
-                            <td>12:30</td>
-                            <td>Wrap-ups of the morning session</td>
-                            <td>17:40</td>
-                            <td>Conclusions and wrap-ups</td>
-                        </tr>
-                    </tbody>
-                </table> -->
+                    <div class="sched-row">
+                        <div class="sched-time">1:00&ndash;1:10</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Opening</div>
+                            <p class="sched-title">Welcome &amp; Opening Remarks</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">1:10&ndash;1:40</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Keynote 1</div>
+                            <p class="sched-title">Invited Talk</p>
+                            <div class="sched-speaker">
+                                <strong>David Rijlaarsdam</strong> &mdash; Director of Space System Engineering, Ubotica Technologies
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">1:45&ndash;2:15</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Spotlight 1</div>
+                            <p class="sched-title">Paper Presentations</p>
+                            <div class="papers">
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=kmY7apKxqe" target="_blank" rel="noopener">
+                                        Flight Demonstration of On-Orbit Model Adaptation on a Nanosatellite
+                                    </a>
+                                    <div class="paper-authors">
+                                        Zaher Joukhadar, Miguel Ortiz del Castillo, Jonathan Morgan, Lachlan Cowley,
+                                        Robert Mearns, Simon Barraclough, Krista A. Ehinger, Benjamin I. P. Rubinstein,
+                                        Richard Sinnott, Michele Trenti, James Bailey
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        AI models launched on spacecraft are often frozen at deployment, yet sensing
+                                        conditions and operational demands in orbit change. In-orbit updates are hard
+                                        because the standard loop (e.g., downlinking new in-orbit data such as
+                                        full-resolution images, labeling them on Earth, retraining models on Earth,
+                                        and uplinking new weights) is constrained by bandwidth, power, thermal limits,
+                                        and short operations windows. We show that meaningful in-mission adaptation is
+                                        possible under these constraints and introduce Telemetry-First In-orbit
+                                        Fine-Tuning (TFiT), an operations-first framework for fine-tuning AI models
+                                        in space. Telemetry denotes compact kilobyte-scale non-image records downlinked
+                                        from the spacecraft, including logits, timestamps, geolocation, and spacecraft
+                                        status. TFiT avoids routine image downlink: labels are produced on Earth by
+                                        fusing telemetry with Earth-based context sources, while thumbnails are
+                                        downlinked for human review only when label evidence is low-confidence or
+                                        conflicting. Crucially, in-orbit data remains onboard and only approved labels
+                                        are uplinked for bounded on-orbit updates. We demonstrate TFiT on a
+                                        flight-operated 6U nanosatellite by executing an in-orbit update of an onboard
+                                        cloud-detection model (OrbitBaseline to OrbitAdapted) and evaluating pre/post-update
+                                        behavior with a same-image audit protocol. Under the recovered same-image audit,
+                                        OrbitAdapted improves ROC AUC by +0.510 and F1 score by +0.871 over the
+                                        pre-update baseline. These results demonstrate in-mission adaptation without
+                                        routine full image downlink, widening the practical scope of AI in space.
+                                    </div>
+                                </div>
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=oEqe5V65Nm" target="_blank" rel="noopener">
+                                        AstroSplat: Physics-Based Gaussian Splatting for Rendering and Reconstruction of Small Celestial Bodies
+                                    </a>
+                                    <div class="paper-authors">
+                                        Jennifer Nolan, Travis Driver, John A Christian
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        Image-based surface reconstruction and characterization are crucial for missions
+                                        to small celestial bodies (e.g., asteroids), as it informs mission planning,
+                                        navigation, and scientific analysis. Recent advances in Gaussian splatting enable
+                                        high-fidelity neural scene representations but typically rely on a spherical
+                                        harmonic intensity parameterization that is strictly appearance-based and does
+                                        not explicitly model material properties or light-surface interactions. We
+                                        introduce AstroSplat, a physics-based Gaussian splatting framework that
+                                        integrates planetary reflectance models to improve the autonomous reconstruction
+                                        and photometric characterization of small-body surfaces from in-situ imagery.
+                                        The proposed framework is validated on real imagery taken by NASA's Dawn
+                                        mission, where we demonstrate superior rendering performance and surface
+                                        reconstruction accuracy compared to the typical spherical harmonic
+                                        parameterization.
+                                    </div>
+                                </div>
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=Kc91iE7vih" target="_blank" rel="noopener">
+                                        LUMEN: Language-guided Unified Memory for ENcoding Hyperspectral Images for Mars Mineral Identification
+                                    </a>
+                                    <div class="paper-authors">
+                                        Abhiroop Chatterjee, Susmita Ghosh, Ashish Ghosh, Emmett Ientilucci
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        Identifying Martian minerals from sparse hyperspectral observations is
+                                        fundamentally constrained by extreme label scarcity and the absence of
+                                        large-scale hyperspectral pretraining. To this end, we introduce LUMEN
+                                        (Language-guided Unified Memory for ENcoding hyperspectral images), a
+                                        memory-augmented cross-modal framework that formulates hyperspectral
+                                        recognition tasks as structured relational alignment between spectral
+                                        embeddings and language-derived semantic prototypes. LUMEN employs an
+                                        ultralight 3D spectral encoder to distill spatial&ndash;spectral structure
+                                        into a compact latent manifold, which is softly aligned to textual embeddings
+                                        through a learnable bilinear projection. To reconcile linguistic priors with
+                                        spectral evidence, semantic prototypes are refined via learnable offsets and a
+                                        confidence-aware gating mechanism that adaptively regulates the contribution of
+                                        language priors and visual memory. A unified momentum-updated memory bank
+                                        further stabilizes learning by integrating exponentially smoothed visual
+                                        representations with language-anchored prototypes, reducing cross-modal drift.
+                                        Unlike prior language-guided or CLIP-style approaches, LUMEN explicitly
+                                        enforces eigenspace-level cross-modal consistency through a spectral relational
+                                        distillation objective that promotes global manifold alignment beyond pointwise
+                                        embedding matching. Extensive evaluations of three Martian hyperspectral
+                                        datasets show that LUMEN consistently exceeds strong transformer-based
+                                        approaches while requiring fewer parameters and reduced training time.
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">2:20&ndash;2:50</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Keynote 2</div>
+                            <p class="sched-title">Invited Talk</p>
+                            <div class="sched-speaker">
+                                <strong>Prof. Marco Pavone</strong> &mdash; Stanford University &amp; NVIDIA
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">3:00&ndash;4:00</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Break</div>
+                            <p class="sched-title">Poster Session &amp; Coffee Break</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">4:00&ndash;4:30</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Spotlight 2</div>
+                            <p class="sched-title">Paper Presentations</p>
+                            <div class="papers">
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=eHHDzzYt1F" target="_blank" rel="noopener">
+                                        SpaceGym: A Gymnasium-Based Benchmark for Deep Reinforcement Learning in Spacecraft Proximity Operations
+                                    </a>
+                                    <div class="paper-authors">
+                                        Mysore Supreeth, Manish Mehta
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        We present SpaceGym, a suite of three Gymnasium-compatible environments for
+                                        benchmarking deep reinforcement learning in spacecraft proximity operations.
+                                        SpaceGym provides standardized, physically grounded simulation environments
+                                        for three core tasks: docking, rendezvous, and attitude control. The docking
+                                        and rendezvous environments implement Clohessy-Wiltshire-Hill relative motion
+                                        equations for translational dynamics, while the attitude control environment
+                                        implements Euler's rotational equations with quaternion kinematics. All
+                                        environments expose the standard Gymnasium interface, enabling seamless
+                                        integration with existing reinforcement learning libraries. We benchmark four
+                                        deep reinforcement learning algorithms&mdash;Proximal Policy Optimization
+                                        (PPO), Soft Actor-Critic (SAC), Twin Delayed DDPG (TD3), and Deep Q-Network
+                                        (DQN)&mdash;across all three environments, training each configuration for
+                                        500K timesteps over five random seeds (60 total runs). Our results, evaluated
+                                        entirely in simulation, show that SAC achieves the highest success rates
+                                        across all tasks (82% docking, 62% rendezvous, 75% attitude control), while
+                                        DQN consistently underperforms due to the limitations of discretizing
+                                        continuous action spaces. Ablation studies demonstrate that dense reward
+                                        shaping improves docking success rates from 35% to 82% over sparse
+                                        alternatives, and that observation space design significantly influences
+                                        learning efficiency. SpaceGym addresses the absence of standardized
+                                        reinforcement learning benchmarks for spacecraft autonomy and provides a
+                                        reproducible experimental foundation for future research in this domain.
+                                    </div>
+                                </div>
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=DqW0UVn5hy" target="_blank" rel="noopener">
+                                        The Space Edge AI Computer: A Decoupled, Zero-Virtualization Payload for In-Orbit Generative AI under 12W
+                                    </a>
+                                    <div class="paper-authors">
+                                        Yufei Xie, Yizhou Leng, Longbin Wu, Haowei Lee, Jinyang Xu,
+                                        Zhaobo Zhang, Donggang Cao, Bingli Jiao, Xiaohui Duan
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        Deploying advanced cognitive capabilities on nanosatellites faces extreme Size,
+                                        Weight, and Power (SWaP) constraints, cosmic radiation, and software rigidity.
+                                        Current solutions relying on power-hungry data-center GPUs, heavy cloud-native
+                                        virtualization, or rigid monolithic cold-spares are physically and operationally
+                                        unviable for 10W-class nodes. In this paper, we propose the Space Edge AI
+                                        Computer (EAC), a deeply decoupled 12W/703.5g COTS-centric payload engineered
+                                        for the nanosatellite SWaP-C sweet spot. Hardware-wise, its physical M.2
+                                        decoupling allows for agile pre-launch accelerator swaps to resist chip
+                                        obsolescence, while a mixed-reliability, Open-Collector (OC)-driven
+                                        intervention mechanism provides granular intra-module storage switching to
+                                        prevent entire-board failure. Software-wise, we design AIOS, a
+                                        zero-virtualization spaceborne middleware that eschews heavy containers for
+                                        OS-level POSIX process derivation, achieving extreme reconfiguration
+                                        elasticity over weak telemetry links. We report a flawless initial 124-day
+                                        bare-LEO flight validation campaign. Our in-orbit evaluations validated the
+                                        first bare-LEO configurable SLM and RAG architecture for medical consultation
+                                        (achieving a 7.7&times; latency reduction), concurrent heterogeneous vision
+                                        pipelines via a strict isolated-frame protocol, and a pioneering feasibility
+                                        study of an offline Chain-of-Thought (CoT) reasoning model
+                                        (DeepSeek-R1-Distill) under strict power envelopes. This establishes a
+                                        pragmatic, flight-validated foundation for future distributed spaceborne
+                                        autonomous agents.
+                                    </div>
+                                </div>
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=utGw80DCww" target="_blank" rel="noopener">
+                                        A Deep Learning Iterative Framework for Sentinel-1 Stripmap Enhancement Based on Azimuth Doppler Decomposition
+                                    </a>
+                                    <div class="paper-authors">
+                                        Juan Francisco Amieva, Christian Ayala, Roberto Del Prete, Mikel Galar
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        Synthetic Aperture Radar (SAR) imagery enables all-weather, day-and-night
+                                        Earth observation; however, it remains difficult to interpret due to speckle
+                                        noise and other intrinsic imaging artifacts. Sentinel-1 (S1) constitutes one
+                                        of the most widely used spaceborne SAR missions, offering systematic global
+                                        coverage, high temporal resolution, dual-polarization imaging, and free data
+                                        availability. Among S1 modes, Stripmap (SM) provides the highest resolution,
+                                        yet speckle noise and spatial constraints often hinder applications requiring
+                                        finer spatial detail. This motivates the need for effective image enhancement
+                                        strategies. In this work, we propose a self-supervised enhancement framework
+                                        for S1 SM imagery based on azimuth subaperture decomposition. The method
+                                        exploits the physical consistency between subaperture reconstructions and the
+                                        corresponding full-aperture image to generate paired training data without
+                                        external sensors, simulated ground truth, or multi-temporal stacks. The
+                                        proposed framework integrates single- and multi-frame learning and
+                                        incorporates an iterative inference scheme that progressively refines image
+                                        quality. Experiments on real S1 SM data show that the proposed approach
+                                        consistently outperforms the widely adopted self-supervised deep learning
+                                        baseline MERLIN, in terms of PSNR and SSIM, while MERLIN attains higher ENL,
+                                        highlighting a trade-off between structural fidelity and speckle smoothing.
+                                        Overall, the results demonstrate that subaperture-based supervision provides a
+                                        physically grounded, reproducible, and operationally viable approach for SAR
+                                        image enhancement using S1 data.
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">4:30&ndash;5:00</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Keynote 3</div>
+                            <p class="sched-title">Invited Talk</p>
+                            <div class="sched-speaker">
+                                <strong>Ethan Rublee</strong> &mdash; CEO &amp; Co-Founder, Space-ng
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">5:00&ndash;5:30</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Discussion</div>
+                            <p class="sched-title">Panel &amp; Unconferences</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">5:30&ndash;5:50</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Awards</div>
+                            <p class="sched-title">Challenge &amp; Award Ceremony</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">5:50&ndash;6:00</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Closing</div>
+                            <p class="sched-title">Conclusion of the Workshop</p>
+                        </div>
+                    </div>
+
+                </div>
             </section>
         </main>
 
@@ -259,8 +493,18 @@
         </footer>
     </div>
 
+    <script>
+        function toggleAbstract(btn) {
+            var abstract = btn.closest('.paper').querySelector('.paper-abstract');
+            var span = btn.querySelector('span');
+            var isOpen = abstract.classList.contains('visible');
+            abstract.classList.toggle('visible', !isOpen);
+            btn.classList.toggle('open', !isOpen);
+            span.textContent = isOpen ? 'Abstract' : 'Hide abstract';
+        }
+    </script>
     <script src="animation.js"></script>
     <script src="countdown.js"></script>
-    <script src="app.js"></script> <!-- Added app.js -->
+    <script src="app.js"></script>
 </body>
 </html>
