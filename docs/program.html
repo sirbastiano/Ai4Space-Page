@@ -222,9 +222,9 @@
                                     <div class="paper-abstract">
                                         AI models launched on spacecraft are often frozen at deployment, yet sensing
                                         conditions and operational demands in orbit change. In-orbit updates are hard
-                                        because the standard loop (e.g., downlinking new in-orbit data such as
-                                        full-resolution images, labeling them on Earth, retraining models on Earth,
-                                        and uplinking new weights) is constrained by bandwidth, power, thermal limits,
+                                        because the standard loop (e.g., downlinking new in-orbit data, such as
+                                        full-resolution images, labelling them on Earth, retraining models on Earth,
+                                        uplinking new weights) is constrained by bandwidth, power, thermal limits,
                                         and short operations windows. We show that meaningful in-mission adaptation is
                                         possible under these constraints and introduce Telemetry-First In-orbit
                                         Fine-Tuning (TFiT), an operations-first framework for fine-tuning AI models
@@ -234,13 +234,14 @@
                                         fusing telemetry with Earth-based context sources, while thumbnails are
                                         downlinked for human review only when label evidence is low-confidence or
                                         conflicting. Crucially, in-orbit data remains onboard and only approved labels
-                                        are uplinked for bounded on-orbit updates. We demonstrate TFiT on a
-                                        flight-operated 6U nanosatellite by executing an in-orbit update of an onboard
-                                        cloud-detection model (OrbitBaseline to OrbitAdapted) and evaluating pre/post-update
-                                        behavior with a same-image audit protocol. Under the recovered same-image audit,
-                                        OrbitAdapted improves ROC AUC by +0.510 and F1 score by +0.871 over the
-                                        pre-update baseline. These results demonstrate in-mission adaptation without
-                                        routine full image downlink, widening the practical scope of AI in space.
+                                        are uplinked for bounded on-orbit updates. We demonstrate TFiT on the
+                                        flight-operated 6U SpIRIT nanosatellite by executing an in-orbit update of an
+                                        onboard cloud-detection model (OrbitBaseline to OrbitAdapted) and
+                                        evaluating pre/post-update behavior with a same-image audit protocol. Under
+                                        the recovered same-image audit, OrbitAdapted improves ROC AUC by +0.510 and
+                                        F1 score by +0.871 over the pre-update baseline. These results demonstrate
+                                        in-mission adaptation without routine full image downlink, widening the
+                                        practical scope of AI in space.
                                     </div>
                                 </div>
 
