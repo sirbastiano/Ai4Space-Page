@@ -140,6 +140,88 @@
             display: block;
         }
 
+        .accepted-papers {
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        .accepted-papers h2 {
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .accepted-note {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+            max-width: 760px;
+            margin: 0 auto 24px;
+            text-align: center;
+        }
+
+        .accepted-table-wrap {
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .accepted-table {
+            width: 100%;
+            min-width: 920px;
+            border-collapse: collapse;
+            color: #333;
+            font-size: 0.82em;
+        }
+
+        .accepted-table th,
+        .accepted-table td {
+            padding: 11px 12px;
+            border-bottom: 1px solid #eef0f3;
+            vertical-align: top;
+            text-align: left;
+            line-height: 1.45;
+        }
+
+        .accepted-table th {
+            background: #f8f9fa;
+            color: #1a1a1a;
+            font-size: 0.78em;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .accepted-table td:first-child {
+            width: 44px;
+            color: #777;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .accepted-table td:nth-child(2) {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .accepted-table td:last-child {
+            white-space: nowrap;
+        }
+
+        .accepted-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .accepted-table a {
+            color: #23a6d5;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .accepted-table a:hover {
+            color: #1a7fa8;
+        }
+
         @media (max-width: 560px) {
             .sched-row { grid-template-columns: 64px 1fr; gap: 0 14px; }
             .sched-time { font-size: 0.72em; }
@@ -485,6 +567,73 @@
                         </div>
                     </div>
 
+                </div>
+            </section>
+
+            <section id="accepted-papers" class="content-section accepted-papers">
+                <h2>Accepted Papers</h2>
+                <p class="accepted-note">
+                    The full list includes 46 accepted papers from the AI4Space 2026 submissions.
+                </p>
+                <div class="accepted-table-wrap">
+                    <table class="accepted-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Accepted paper</th>
+                                <th>Authors</th>
+                                <th>OpenReview</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td>Efficient Onboard Spacecraft Pose Estimation with Event Cameras and Neuromorphic Hardware</td><td>Arunkumar Rathinam, Jules Lecomte, Jost Reelsen, Gregor Lenz, Axel von Arnim, Djamila Aouada</td><td><a href="https://openreview.net/forum?id=PKxT4xUzcj" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>2</td><td>Autonomous Perception and Onboard Intelligence for Space Missions: A Survey</td><td>Kaveh Safavigerdini, Juan Mogollon, Amirreza Daghighi, Kannappan Palaniappan</td><td><a href="https://openreview.net/forum?id=XEpodVDRUV" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>3</td><td>Towards Event-Based Visual Sensing for Spacecraft Pose Estimation: Baselines and Analysis</td><td>Mysore supreeth</td><td><a href="https://openreview.net/forum?id=7HjNpm74a5" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>4</td><td>Reward Shaping for Safe Spacecraft Proximity Operations: A Comparative Study</td><td>Mysore supreeth</td><td><a href="https://openreview.net/forum?id=yycJBc47Ni" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>5</td><td>Vision-Guided Deep Reinforcement Learning for Autonomous Spacecraft Rendezvous and Docking</td><td>Mysore supreeth</td><td><a href="https://openreview.net/forum?id=ASWnou9kLe" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>6</td><td>SpaceGym: A Gymnasium-Based Benchmark for Deep Reinforcement Learning in Spacecraft Proximity Operations</td><td>Mysore supreeth, Manish Mehta</td><td><a href="https://openreview.net/forum?id=eHHDzzYt1F" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>7</td><td>SwarmSAT Agent: A Tool-Grounded Autonomous Multi-Agent LLM Framework for Rapid Satellite Constellation Retasking of Pop-Up Events</td><td>Adib Bazgir, Yuwen Zhang</td><td><a href="https://openreview.net/forum?id=uxnfFxqcCk" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>8</td><td>ArcticBench and SmartTransfer: Benchmarking and Enabling Continual Learning of Atmosphere Generative Foundation Model</td><td>Fu-Ming Guo, fengwei guo, Yingfang Fan</td><td><a href="https://openreview.net/forum?id=M4Rv8VEi0x" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>9</td><td>Neural 3D Reconstruction of Planetary Surfaces from Descent-Phase Wide-Angle Imagery</td><td>Melonie de Almeida, George Brydon, Divya M Persaud, John H. Williamson, Paul Henderson</td><td><a href="https://openreview.net/forum?id=hW08zgTa8H" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>10</td><td>A Comparative Analysis of Forecasting Foundation Models for Spacecraft Multivariate Time Series Anomaly Detection</td><td>Alexandre Olive, Sundip R. Desai, Richard H. Foster, Moses Chan, Mary Comer, Edward Delp</td><td><a href="https://openreview.net/forum?id=WROJYqwVVp" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>11</td><td>PIKing Neural Networks: Parallel Inference via Kernelizing. A Comparative Study of Tandem-Deployed Space AI Models Across Heterogeneous Hardware</td><td>Muhammad Deedahwar Mazhar Qureshi, James Murphy, Jake O'Brien, Roberto Del Prete</td><td><a href="https://openreview.net/forum?id=gFLAOyyFhD" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>12</td><td>Towards Onboard Multi-View Analysis of Satellite Imagery: Monocular 2D Motion Estimation and 3D Reconstruction</td><td>Alberto Candela, Evan Davis, Andrew Branch, Joseph Russino, Steve Chien, Becca Bonham-Carter, Luis Chavier, Alexis Pascual, Tim Heydrich, Shannon Paul, Saleh Abdelrahman, Andrew J Macdonald, Michele Faragalli</td><td><a href="https://openreview.net/forum?id=CaGna9Lt50" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>13</td><td>SPACE-HOP: Spacecraft 6-DoF Pose Estimation using Embedding-Predictive Pretraining and Hopf Map</td><td>Arnabi Dutta, Arsh Abbas Naqvi, Kavinder Singh, Lavendra Gautam, Anil Singh Parihar, Shakti Bangare, Ravi Kumar Lagisetty</td><td><a href="https://openreview.net/forum?id=t9LTeubtto" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>14</td><td>AstroSplat: Physics-Based Gaussian Splatting for Rendering and Reconstruction of Small Celestial Bodies</td><td>Jennifer Nolan, Travis Driver, John A Christian</td><td><a href="https://openreview.net/forum?id=oEqe5V65Nm" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>15</td><td>GeoSwin: Hierarchical Representation Learning and a Large-Scale Earth Observation Benchmark</td><td>Muhammad Fayaz, Zulfiqar Ahmad Khan, Lien Minh Dang, Hyeonjoon Moon</td><td><a href="https://openreview.net/forum?id=yvDnWfXRsM" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>16</td><td>The Space Edge AI Computer: A Decoupled, Zero-Virtualization Payload for In-Orbit Generative AI under 12W</td><td>Yufei Xie, Yizhou Leng, Longbin Wu, Haowei Lee, Jinyang Xu, Zhaobo Zhang, Donggang Cao, Bingli Jiao, Xiaohui Duan</td><td><a href="https://openreview.net/forum?id=DqW0UVn5hy" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>17</td><td>VAD4Space: Visual Anomaly Detection for Planetary Surface Imagery</td><td>Fabrizio Genilotti, Arianna Stropeni, Francesco Borsatti, Manuel Barusco, Davide Dalle Pezze, Gian Antonio Susto</td><td><a href="https://openreview.net/forum?id=t8k69isQRg" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>18</td><td>LUMEN: Language-guided Unified Memory for ENcoding Hyperspectral Images for Mars Mineral Identification</td><td>Abhiroop Chatterjee, Susmita Ghosh, Ashish Ghosh, Emmett Ientilucci</td><td><a href="https://openreview.net/forum?id=Kc91iE7vih" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>19</td><td>Deployable Neuromorphic AI in Space: Taxonomy and Architecture</td><td>Giannis Panagiotopoulos, Luca Macchiaiolo, Priyadarshini Kannan, Evgenios Tsigkanos, Axel von Arnim</td><td><a href="https://openreview.net/forum?id=VB8cU8a5Hu" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>20</td><td>Thermal Anomaly Detection using Physics Aware Neuromorphic Networks: Comparison between Raw and L1C Sentinel-2 Data</td><td>Stephen Smith, Cormac Purcell, Gabriele Meoni, Roberto Del Prete, Zdenka Kuncic</td><td><a href="https://openreview.net/forum?id=KftvooI3VD" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>21</td><td>YOOLO: You Only Orbit and Look Once</td><td>Vincenzo Mariano Scarrica, Antonio Vanzanella, Antonino Staiano</td><td><a href="https://openreview.net/forum?id=666TQVkWw2" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>22</td><td>Deployment-Aligned Low-Precision Neural Architecture Search for Spaceborne Edge AI</td><td>Parampuneet Kaur Thind, Vaibhav Kumar Katturu, Giacomo Zema, Roberto Del Prete</td><td><a href="https://openreview.net/forum?id=yFVPHTAnX7" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>23</td><td>A Systematic Evaluation of Retrieval-Augmented Generation and Language Models for Space Operations</td><td>Ruben Catarino Belo, Marta Guimaraes, Claudia Soares</td><td><a href="https://openreview.net/forum?id=hLv173CNNk" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>24</td><td>Semantic Constraint Synthesis for Adaptive Trajectory Optimization via Large Language Models</td><td>Eleanor Brosius, Yuji Takubo, Daniele Gammelli, Simone D'Amico, Marco Pavone</td><td><a href="https://openreview.net/forum?id=774K6D5Ttn" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>25</td><td>Post-Launch Capability Expansion of Vision-Language Models via Prompting for On-Orbit Spacecraft Inspection</td><td>Nicholas Welsh, Lennon J. Shikhman, Monty Nehru Attzs, Seemanthini Kusha Putane, Van Minh Nguyen, Ryan T. White</td><td><a href="https://openreview.net/forum?id=w7pVSkgHRa" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>26</td><td>Intent-aligned Autonomous Spacecraft Guidance via Reasoning Models</td><td>Yuji Takubo, Simone D'Amico</td><td><a href="https://openreview.net/forum?id=ijgMoAtE8J" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>27</td><td>GUIDE: Guided Updates for In-context Decision Evolution in LLM-Driven Spacecraft Operations</td><td>Alejandro Carrasco, Mariko Storey-Matsutani, Victor Rodriguez-Fernandez, Richard Linares</td><td><a href="https://openreview.net/forum?id=AsCCctx5gv" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>28</td><td>A Deep Learning Iterative Framework for Sentinel-1 Stripmap Enhancement Based on Azimuth Doppler Decomposition</td><td>Juan Francisco Amieva, Christian Ayala, Roberto Del Prete, Mikel Galar</td><td><a href="https://openreview.net/forum?id=utGw80DCww" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>29</td><td>OWLS: Open-World Language-driven Servoing for Zero-Shot Traversability</td><td>Chahyon Ku, Erica Tevere, Georgios Georgakis, Rudranarayan Mukherjee, Bernadette Bucher</td><td><a href="https://openreview.net/forum?id=sCGgRkBvwc" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>30</td><td>LuMon: A Comprehensive Benchmark and Development Suite with Novel Datasets for Lunar Monocular Depth Estimation</td><td>Aytac Sekmen, Fatih Emre Gunes, Furkan Horoz, Huseyin Umut Isik, Mehmet Alp Ozaydin, Onur Altay Topaloglu, Sahin Umutcan Ustundas, Yurdasen Alp Yeni, Halil Ersin Soken, Erol Sahin, Ramazan Gokberk Cinbis, Sinan Kalkan</td><td><a href="https://openreview.net/forum?id=DdYoK1gc0n" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>31</td><td>Raw-to-Processed in Orbit: Fast Onboard Image Reconstruction for EO</td><td>Gabriele Inzerillo, Lorenzo Papa, Gabriele Meoni, Diego Valsesia, Enrico Magli</td><td><a href="https://openreview.net/forum?id=iZvIp5z3Ty" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>32</td><td>Rethinking Satellite Image Restoration for Onboard AI: A Lightweight Learning-Based Approach</td><td>Adrien Dorise, Marjorie Bellizzi, Omar Hlimi</td><td><a href="https://openreview.net/forum?id=itJGxOewG8" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>33</td><td>LLaVA-LE: Large Language-and-Vision Assistant for Lunar Exploration</td><td>Gokce Inal, Pouyan Navard, Alper Yilmaz</td><td><a href="https://openreview.net/forum?id=xn9g0ysIDv" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>34</td><td>Optimizing Latent Representations for Robust Building Damage Assessment Onboard Earth Observation Satellites</td><td>Thomas Goudemant, Benjamin Francesconi</td><td><a href="https://openreview.net/forum?id=vzN9SpVn4g" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>35</td><td>Onboard-Targeted Segmentation of Broken Pixels, Lines, and Dust on Optics Faults in Space Camera Sensors</td><td>Riccardo Gallon, Alessandra Menicucci, Edoardo Caroselli</td><td><a href="https://openreview.net/forum?id=VStcS1VXxo" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>36</td><td>Flight Demonstration of On-Orbit Model Adaptation on a Nanosatellite</td><td>Zaher Joukhadar, Miguel Ortiz del Castillo, Jonathan Morgan, Lachlan Cowley, Robert Mearns, Simon Barraclough, Krista A. Ehinger, Benjamin I. P. Rubinstein, Richard Sinnott, Michele Trenti, James Bailey</td><td><a href="https://openreview.net/forum?id=kmY7apKxqe" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>37</td><td>Why Not? Solver-Grounded Certificates for Explainable Mission Planning</td><td>Najeeb Khan</td><td><a href="https://openreview.net/forum?id=Zs7hOAsgmh" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>38</td><td>Onboard Latent Kalman Filtering for Robust Spacecraft Pose Estimation</td><td>Junghwan Park, Woojin Cho</td><td><a href="https://openreview.net/forum?id=7yYcqe9l8a" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>39</td><td>Uncertainty-Guided Edge Learning for Deep Image Regression in Remote Sensing</td><td>Anh Vu Nguyen, Dino Sejdinovic, Tat-Jun Chin</td><td><a href="https://openreview.net/forum?id=YEq3szKlc9" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>40</td><td>Retrocausal Influence and Agentic Consensus: Theoretically Grounded Interpretability for Long-Horizon Autonomous Space Systems</td><td>Srikanth Vemula</td><td><a href="https://openreview.net/forum?id=VwvbMEC9Lg" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>41</td><td>MMLSv2: A Multimodal Dataset for Martian Landslide Detection in Remote Sensing Imagery</td><td>Sidike Paheding, Abel Reyes-Angulo, Leo Thomas Ramos, Angel Domingo Sappa, Rajaneesh A., Hiral P. B., Sajin Kumar K. S., Thomas Oommen</td><td><a href="https://openreview.net/forum?id=KVwDhIS1hn" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>42</td><td>Learning Normalcy: Self-Supervised Anomaly Discovery in Spacecraft Sensor Streams</td><td>Mahule Roy, Subhas Roy</td><td><a href="https://openreview.net/forum?id=9f5Y2g4rhx" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>43</td><td>A Cascaded Architecture for Illumination-Robust 6-DoF Spacecraft Pose Estimation Using Event Cameras</td><td>Xiaolei Zhang, Ziyang Xu, Boyuan Teng, Yichen Wang, Yuxuan Liu, Tianhui Zhang, Han Zhang, Jincheng Jia, Peng Han, Chunjiang Bian</td><td>CMT 3</td></tr>
+                            <tr><td>44</td><td>From Spatiotemporal Decoupling to Kinematic Smoothing: A Robust Pipeline for Event-Based Spacecraft Pose Estimation</td><td>Yuteng Zeng, Yuyang Xiong, Xiaoxiong Wang, Xiaoran Zhang, Haoyue Liu, Yi Chang, Luxin Yan</td><td>CMT 4</td></tr>
+                            <tr><td>45</td><td>GABI: Geometry-Aware Boundary Integration for spacecraft segmentation</td><td>Iason Georgios Velentzas, Dhruv Ahuja, Panagiotis Tsiotras</td><td>CMT 11</td></tr>
+                            <tr><td>46</td><td>Segmentation-based Detection for Efficient Multi-Task Spacecraft Perception</td><td>Sivaperuman Muniyasamy, Surendar Devasundaram</td><td>CMT 12</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
         </main>
