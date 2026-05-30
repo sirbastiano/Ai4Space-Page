@@ -194,19 +194,19 @@
 
         .sponsors-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 320px));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             justify-content: center;
             align-items: stretch;
-            gap: 2em;
-            max-width: 900px;
+            gap: 1.2em;
+            max-width: 960px;
             margin: 0 auto;
         }
 
         .sponsor-card {
             background: #fff;
             border-radius: 18px;
-            padding: 2em;
-            min-height: 180px;
+            padding: 1.2em;
+            min-height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -217,9 +217,31 @@
             overflow: hidden;
         }
 
+        .sponsor-card img {
+            max-width: 100%;
+            max-height: 90px;
+            object-fit: contain;
+        }
+
+        .sponsor-card img.logo-space-ng {
+            max-height: 120px;
+        }
+
         .sponsor-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 16px 40px rgba(15,23,42,0.14);
+        }
+
+        @media (max-width: 900px) {
+            .sponsors-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .sponsors-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -474,10 +496,13 @@ Rublee has over 16 years of experience in robotics and computer vision, with a f
                 <h2 style="text-align: center; margin-bottom: 2em;"><i class="fas fa-handshake"></i> Our Sponsors</h2>
                 <div class="sponsors-grid">
                     <a href="https://www.space-ng.com/" target="_blank" rel="noopener noreferrer" class="sponsor-card">
-                        <img src="logos/Space_ng_Logo_V3_White_Square_Center_Aligned_White_Center_Aligned.svg" alt="SpaceNG logo" style="width: 165%; height: 165px; object-fit: cover; object-position: center;">
+                        <img class="logo-space-ng" src="logos/Space_ng_Logo_V3_White_Square_Center_Aligned_White_Center_Aligned.svg" alt="SpaceNG logo">
                     </a>
                     <a href="https://ubotica.com/" target="_blank" rel="noopener noreferrer" class="sponsor-card">
-                        <img src="logos/ubotica.jpg" alt="Ubotica logo" style="max-width: 100%; max-height: 110px; object-fit: contain;">
+                        <img src="logos/ubotica.jpg" alt="Ubotica logo">
+                    </a>
+                    <a href="#" class="sponsor-card">
+                        <img src="logos/starvision.png" alt="Star Vision logo">
                     </a>
                 </div>
             </section>
