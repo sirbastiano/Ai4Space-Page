@@ -846,7 +846,9 @@ nav ul li a:hover::after {
 
 /* Custom Responsive Navbar Styles */
 .navbar {
-  /* background: transparent; /* nav tag already has this */
+  background: rgba(16, 21, 34, 0.94);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
   height: 80px; /* Adjust as needed */
   display: flex;
   justify-content: center;
@@ -1354,7 +1356,9 @@ nav ul li a:hover::after {
 
 /* Navbar styles */
 .navbar {
-    background: transparent; /* Make navbar transparent */
+    background: rgba(16, 21, 34, 0.94);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
     height: 80px;
     display: flex;
     justify-content: center;

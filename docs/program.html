@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Program - AI4Space @ CVPR 2026</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=20260604b">
     <link rel="stylesheet" href="countdown-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
@@ -277,7 +277,7 @@
                 <div class="event-info">
                     <span>June 4, 2026</span>&middot;
                     <span>1:00&ndash;6:00 PM PST</span>&middot;
-                    <span>Room 701</span>
+                    <span>Room 710</span>
                 </div>
 
                 <div class="schedule">
@@ -418,7 +418,8 @@
                             <div class="sched-label">Keynote 2</div>
                             <p class="sched-title">Invited Talk</p>
                             <div class="sched-speaker">
-                                <strong>Prof. Marco Pavone</strong> &mdash; Stanford University &amp; NVIDIA
+                                <strong>Prof. Marco Pavone</strong> &mdash; Stanford University &amp; NVIDIA<br>
+                                <strong>Daniele Gammelli</strong> &mdash; Stanford University
                             </div>
                         </div>
                     </div>
@@ -435,42 +436,13 @@
                         <div class="sched-time">4:00&ndash;4:30</div>
                         <div class="sched-body">
                             <div class="sched-label">Spotlight 2</div>
-                            <p class="sched-title">Paper Presentations</p>
+                            <p class="sched-title">Industry Spotlight &amp; Paper Presentations</p>
                             <div class="papers">
 
                                 <div class="paper">
-                                    <a class="paper-title" href="https://openreview.net/forum?id=eHHDzzYt1F" target="_blank" rel="noopener">
-                                        SpaceGym: A Gymnasium-Based Benchmark for Deep Reinforcement Learning in Spacecraft Proximity Operations
-                                    </a>
+                                    <div class="paper-title">Space AI for Earth and Beyond Earth</div>
                                     <div class="paper-authors">
-                                        Mysore Supreeth, Manish Mehta
-                                    </div>
-                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
-                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
-                                    </button>
-                                    <div class="paper-abstract">
-                                        We present SpaceGym, a suite of three Gymnasium-compatible environments for
-                                        benchmarking deep reinforcement learning in spacecraft proximity operations.
-                                        SpaceGym provides standardized, physically grounded simulation environments
-                                        for three core tasks: docking, rendezvous, and attitude control. The docking
-                                        and rendezvous environments implement Clohessy-Wiltshire-Hill relative motion
-                                        equations for translational dynamics, while the attitude control environment
-                                        implements Euler's rotational equations with quaternion kinematics. All
-                                        environments expose the standard Gymnasium interface, enabling seamless
-                                        integration with existing reinforcement learning libraries. We benchmark four
-                                        deep reinforcement learning algorithms&mdash;Proximal Policy Optimization
-                                        (PPO), Soft Actor-Critic (SAC), Twin Delayed DDPG (TD3), and Deep Q-Network
-                                        (DQN)&mdash;across all three environments, training each configuration for
-                                        500K timesteps over five random seeds (60 total runs). Our results, evaluated
-                                        entirely in simulation, show that SAC achieves the highest success rates
-                                        across all tasks (82% docking, 62% rendezvous, 75% attitude control), while
-                                        DQN consistently underperforms due to the limitations of discretizing
-                                        continuous action spaces. Ablation studies demonstrate that dense reward
-                                        shaping improves docking success rates from 35% to 82% over sparse
-                                        alternatives, and that observation space design significantly influences
-                                        learning efficiency. SpaceGym addresses the absence of standardized
-                                        reinforcement learning benchmarks for spacecraft autonomy and provides a
-                                        reproducible experimental foundation for future research in this domain.
+                                        Presenter: Li Zhuohe (Harry), Solution Manager, STAR.VISION AEROSPACE LIMITED
                                     </div>
                                 </div>
 
@@ -681,6 +653,6 @@
     </script>
     <script src="animation.js"></script>
     <script src="countdown.js"></script>
-    <script src="app.js"></script>
+    <script src="app.js?v=20260604c"></script>
 </body>
 </html>

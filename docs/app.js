@@ -1,3 +1,4 @@
+if (window.Vue) {
 const { createApp } = Vue
 
 createApp({
@@ -91,6 +92,7 @@ createApp({
     this.fetchInvitedSpeakers();
   }
 }).mount('#app')
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   var fadeEls = document.querySelectorAll('.fade-in-section');
@@ -130,12 +132,29 @@ const navLinks = document.querySelectorAll('.nav-links');
 
 if (menuIcon && navMenu) {
     const icon = menuIcon.querySelector('i');
+    const mobileQuery = window.matchMedia('(max-width: 960px)');
+
+    const clearMenuInlineStyles = () => {
+        navMenu.style.opacity = '';
+        navMenu.style.visibility = '';
+        navMenu.style.pointerEvents = '';
+        navMenu.style.transform = '';
+    };
 
     const setMobileMenuState = (isOpen) => {
         navMenu.classList.toggle('active', isOpen);
         menuIcon.classList.toggle('active', isOpen);
         menuIcon.setAttribute('aria-expanded', String(isOpen));
         navMenu.setAttribute('aria-hidden', String(!isOpen));
+
+        if (mobileQuery.matches) {
+            navMenu.style.opacity = isOpen ? '1' : '0';
+            navMenu.style.visibility = isOpen ? 'visible' : 'hidden';
+            navMenu.style.pointerEvents = isOpen ? 'auto' : 'none';
+            navMenu.style.transform = isOpen ? 'translateY(0)' : 'translateY(-12px)';
+        } else {
+            clearMenuInlineStyles();
+        }
 
         if (!icon) {
             return;
@@ -154,6 +173,8 @@ if (menuIcon && navMenu) {
     window.addEventListener('resize', () => {
         if (window.innerWidth > 960 && navMenu.classList.contains('active')) {
             setMobileMenuState(false);
+        } else if (window.innerWidth > 960) {
+            clearMenuInlineStyles();
         }
     });
 }
@@ -167,6 +188,17 @@ if (navLinks && navMenu && menuIcon) {
                 menuIcon.classList.remove('active');
                 menuIcon.setAttribute('aria-expanded', 'false');
                 navMenu.setAttribute('aria-hidden', 'true');
+                if (window.matchMedia('(max-width: 960px)').matches) {
+                    navMenu.style.opacity = '0';
+                    navMenu.style.visibility = 'hidden';
+                    navMenu.style.pointerEvents = 'none';
+                    navMenu.style.transform = 'translateY(-12px)';
+                } else {
+                    navMenu.style.opacity = '';
+                    navMenu.style.visibility = '';
+                    navMenu.style.pointerEvents = '';
+                    navMenu.style.transform = '';
+                }
                 const icon = menuIcon.querySelector('i');
                 if (icon) {
                     icon.classList.remove('fa-times');
