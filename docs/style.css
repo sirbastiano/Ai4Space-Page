@@ -746,6 +746,83 @@ main .committee-info .affiliation {
     color: #5a6878;
 }
 
+.program-committee-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 3em;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dbe7f0;
+}
+
+.program-committee-title span {
+    flex: 0 0 auto;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #e8f7fb;
+    color: #137b91;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.48em;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.committee-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.committee-list li {
+    position: relative;
+    min-height: 58px;
+    padding: 14px 16px 14px 44px;
+    border: 1px solid #dbe7f0;
+    border-radius: 8px;
+    background: #f8fbfd;
+    box-shadow: 0 6px 16px rgba(28, 40, 55, 0.06);
+    line-height: 1.35;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.committee-list li::before {
+    content: "\f007";
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 18px;
+    height: 18px;
+    color: #00a7c5;
+    font-family: "Font Awesome 6 Free";
+    font-size: 0.9em;
+    font-weight: 900;
+    line-height: 18px;
+    text-align: center;
+}
+
+.committee-list li:hover {
+    border-color: #00bcd4;
+    box-shadow: 0 10px 24px rgba(28, 40, 55, 0.12);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+    .program-committee-title {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .committee-list {
+        grid-template-columns: 1fr;
+    }
+}
+
 header {
     position: relative;
     height: 100vh;
