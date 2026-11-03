@@ -42,7 +42,7 @@ const TrackDetailApp = {
                     this.track = null;
                 } else {
                     this.track = data;
-                    document.title = `${this.track.title || 'Track Details'} - AI4Space @ NeurIPS`;
+                    document.title = `${this.track.title || 'Track Details'} - AI4Space @ CVPR 2027`;
                 }
             } catch (error) {
                 console.error('Failed to fetch track details:', error);

@@ -17,69 +17,33 @@ def clean_text(text):
 organizers_text = r"""
 \\subsection{List of organizers}
 \\begin{itemize}
-    \\item Gabriele Meoni (ESRIN, European Space Agency)
-    \\item Tat-Jun Chin (The University of Adelaide)
+    \\item Daniele Gammelli (Stanford University)
+    \\item Gabriele Meoni (European Space Agency)
+    \\item Yuji Takubo (Stanford University)
+    \\item Ana-Maria Pelin (TU Delft / ESA Phi-Lab)
     \\item Djamila Aouada (University of Luxembourg)
-    \\item Rajat Talak (Massachusetts Institute of Technology)
-    \\item Viorela Ila (The University of Sydney)
-    \\item Roberto Del Prete (University of Napoli Federico II)
-    \\item Gianluca Furano (ESTEC, European Space Agency)
-    \\item Alberto Candela (JPL, NASA)
-    \\item Pablo Gòmez (ESAC, European Space Agency)
     \\item Arunkumar Rathinam (University of Luxembourg)
+    \\item Tat-Jun Chin (The University of Adelaide)
 \\end{itemize}
 \\subsection{Primary organizer}
 \\begin{itemize}
-    \\item Gabriele Meoni
+    \\item Daniele Gammelli
 \\end{itemize}
 \\subsection{Organizing team’s experience and background}
+\\paragraph{Daniele Gammelli}
+is a Postdoctoral Scholar at Stanford and Research Fellow at CAESAR and CARS, with a Ph.D. in Machine Learning and Mathematical Optimization from DTU. His research develops algorithmic foundations for safe, reliable AI-powered autonomy, with emphasis on aerospace and large-scale robotic networks. He has been workshop program chair at RSS and CPS-IoT, co-organizer of workshops and tutorials at ITSC, and lead organizer of the CAESAR Annual Meeting (2024, 2025).
 \\paragraph{Gabriele Meoni}
-is an Innovation Officer at the European Centre for Earth Observation (ESRIN), European Space Agency. He is part of the Advanced Concepts and Studies Office and the $\\Phi$-lab divisions. Gabriele received his Master\'s degree in Electronic Engineering and his PhD in information engineering from University of Pisa. His research interests include satellite onboard processing, orbital edge computing,  AI for EO, and neuromorphic computing.
-He is currently Associate Editor of Astrodynamics (Springer) and was part of the program and scientific committees of various international conferences, including the 1$^st$, 2$^nd$, 3$^rd$ Workshop in AI for space -- of which he was also co-organizer for the  $3^rd$ edition-- FOSS4G 2022, Living Planet Symposium 2022, and  Living Planet Symposium 2025.
-Gabriele received the ESA Corporate Team Award for his contribution to the $\\Phi$-Sat-1 mission, the PRIME 2018 Bronze Leaf paper Award, and
-DATE 2019 - University Booth - Best Demonstrator Award.
-He is also organized an ESA Workshop on Cognitive Cloud  Computing in Space.
-\\paragraph{Tat-Jun Chin}
-is SmartSat CRC Professorial Chair of Sentient Satellites at The University of Adelaide. His research interests include optimization for vision and learning, robotic vision and AI for space. His team won the Kelvins Satellite Pose Estimation Challenge twice (2019, 2021), and also placed $3^{rd}$ in the NASA Space Robotics Challenge 2021 (autonomous rovers for space mining).
-Tat-Jun has significant experience in professional activities; major roles include Program Chair (ACCV\'22), Special Sessions Chair (ICIP\'23) and Tutorial Chair (CVPR\'21, ACCV\'18). He has also organized workshops/tutorials at CVPR (2021, 2020, 2018), RSS (2020, 2023), ICCV 2019, and ICRA 2020. Tat-Jun also pioneered the AI4Space workshop series, having led the event in 2021,  2022, and 2024.
+is an Innovation Officer at ESA ESRIN, with a Ph.D. in information engineering from the University of Pisa. He works on satellite onboard processing, edge computing, AI4EO, and neuromorphic computing. He is Associate Editor of Astrodynamics and IEEE GRSL, co-chair of the IEEE GRSS ESI technical committee, second organizer of the 3rd and 4th AI4Space workshops, and main organizer of the ESA Workshop on Cognitive Cloud Computing in Space.
+\\paragraph{Yuji Takubo}
+is a Ph.D. candidate in Aeronautics and Astronautics at Stanford's Space Rendezvous Laboratory, with a B.S. from Georgia Tech. He previously worked at NASA JPL on mission design for Europa Clipper and an Enceladus orbiter concept. His research advances AI for space through foundation models, language-grounded trajectory generation, and autonomous spacecraft guidance. He has received paper and poster awards at AAS, AIAA, and the CVPR 2026 AI4Space Workshop.
+\\paragraph{Ana-Maria Pelin}
+is an M.Sc. student at TU Delft and Visiting Researcher at ESA Phi-Lab. She previously developed segmentation and stereo matching models for contrail research at Eurocontrol and detection-based controllers at a 3D vision drone startup. Her research focuses on onboard multi-satellite coordination, agentic AI, and multi-agent systems for managing heterogeneous constellations in disaster scenarios.
 \\paragraph{Djamila Aouada}
-is Senior Research Scientist and Assistant Professor at the Interdisciplinary Centre for
-Security, Reliability, and Trust (SnT) of the University of Luxembourg. She is
-Head of the Computer Vision, Imaging and Machine Intelligence (CVI$^{2}$) research
-group, and co-head of the Zero-G Space Lab. Her research interests include 3D
-vision (shape modelling, RGB-D data) and multi-sensor fusion. Djamila served as Chair
-of SHARP Workshops (ECCV`20, CVPR`21, CVPR`22, ICCV`23), Chair of SPARK at
-ICIP`21, Area Chair at 3DV`20 and 3DV`22, Program Chair at 3DV`21, General Chair at RTIP2R`22, Co-organizer of AI4Space at ECCV`22, and Program Chair at EUVIP`23.
-\\paragraph{Rajat Talak}
-is a Research Scientist in the Department of Aeronautics and Astronautics at the Massachusetts Institute of Technology. Prior to this, he was a Postdoctoral Associate in the Department of Aeronautics and Astronautics, at the Massachusetts Institute Technology. He received his PhD from the Laboratory of Information and Decision Systems at the Massachusetts Institute Technology in 2020.
-His research interests are spatial robot perception, certifiable models, domain adaptation, and networked autonomy. He is the recipient of ACM MobiHoc 2018 Best Paper award, Gold medal for his master\'s thesis, and also co-authored a monograph on the topic of information freshness. He is actively engaged on the topic of safe autonomy and has recently organized a workshop on the topic (Towards Safe Autonomy: New Challenges and Trends in Robot Perception) at the Robotics: Science and Systems Conference in 2023.
-\\paragraph{Viorela Ila}
-is a senior lecturer with The University of Sydney, School of Aerospace, Mechanical and Mechatronic Engineering. Her research interests span from robot vision to advanced techniques for simultaneous localization and mapping (SLAM) and 3D reconstruction based on cutting-edge computational tools such as graphical models, modern optimization methods and information theory. Viorela has substantial experience in organising workshops and tutorials in field of robotics and computer vision: IROS 2010 - GraphBot2010 - Workshop on Probabilistic Graphical Models in Robotics, ICRA2020 - Sensing, Estimating and Understanding the Dynamic World, ECCV 2022 - AI4Space, Robotic vision Summer school (2016-2018).
-\\paragraph{Roberto Del Prete} is Ph.D. candidate specializing in TinyML and edge computing. He focuses on enhancing time-critical decision-making through cutting-edge AI solutions for both space missions and Earth monitoring. Currently pursuing a Ph.D. at the University of Naples Federico II, his work focuses on developing innovative systems such as vision-based navigation and onboard AI solutions for analyzing Synthetic Aperture Radar (SAR) raw data.
-Del Prete\'s professional journey includes roles as a Visiting Researcher at both the European Space Agency\'s $\\Phi$-Lab and SmartSat CRC in Australia. Recognized for his contributions, he received the 2022 NATO STO Early Career Scientist Award and participated in the 2021 NASA-ESA Trans-Atlantic Training. Notably, he won the best presentation award at the AI4Space@CVPR workshop in 2024, and
-he has been a key contributor to high-impact projects like the Kanyini Mission. With more than 30 scientific publications, Del Prete\'s dedication to leveraging AI and remote sensing technologies aims to address global challenges in EO and space exploration.
-\\paragraph{Gianluca Furano}
-Gianluca Furano received the Ph.D. in
-microelectronics engineering from University of Rome and since 2003 works for the European
-Space Agency’s Data System Division, Noordwijk,
-The Netherlands.
-He is in charge of research and development activities and he coordinates European Space
-Agency (ESA) activities on on-board artificial intelligence. He has authored or coauthored more than
-100 publications. Among his interests in ESA are
-on-board data handling systems and their major
-components, such as space grade microprocessors
-and support electronics, meeting very stringent requirements in terms of radiation tolerance, reliability, availability, and safety; key avionics building
-blocks such as platform mass memories, remote terminal units, on-board buses, and data networks; and on-board and space to ground data communication protocols including protocol security aspects. He also provides support to European Standardization [Consultative Committee for Space Data
-Systems (CCSDS), European Cooperation for Space Standardization (ECSS)] in areas such as telemetry, telecommand and on-board data, and wireless and
-monitoring control interfaces.
-\\paragraph{Pablo Gòmez}
-is a Data Scientist in the Data Science Section at the European Space Agency (ESA), based at the European Space Astronomy Center (ESAC) near Madrid. His work focuses on leveraging ML methods to maximise the scientific return from missions such as Gaia, XMM-Newton, Euclid, and Ariel, alongside building and improving the ESA Datalabs platform for enhanced science data analysis.
-Previously, Pablo was a Research Fellow in ESA’s Advanced Concepts Team (ACT), where he worked on various projects involving remote sensing, semi-supervised learning, astrophysics, and differentiable methods. He completed a secondment to AI Sweden in Stockholm on distributed onboard ML. He holds an M.Sc. in Computer Science from the Technical University of Munich (TUM) and a Ph.D. in Electrical Engineering from the Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU), where he developed deep learning techniques for high-speed video endoscopy and numerical models of the human voice.
-Pablo has extensive experience in organising events, including the AI for Space workshop at CVPR 2021, the Space Optimisation Competition at GECCO 2022, the Accessibility in Human Spaceflight webinar in 2023, and the forthcoming ESA Datalabs Ariel Hackathon in 2025.
-\\paragraph{Alberto Candela}
-is a Data Scientist in the Artificial Intelligence Group at the Jet Propulsion Laboratory, California Institute of Technology. He is a researcher who works at the intersection of perception, learning and planning to create new methods for onboard science data analysis and autonomous decision-making; applications include planetary rovers, satellites and remote sensing instruments. At JPL, Alberto has worked on developing deep learning models for image and spectral analysis on board the ISS and spacecraft such as CogniSat-6 and YAM-6, improving the AEGIS AI software for science autonomy on NASA Mars rovers, increasing the autonomy capabilities of the Mars Helicopter, and onboard planning for the Endurance lunar rover concept. He received his Ph.D. and M.S. in Robotics from Carnegie Mellon University, and his B.S. in Mechatronics Engineering from Instituto Tecnológico Autónomo de México. Alberto received the NASA Group Achievement Award, the JPL Voyager Award, and was finalist for the IEEE/RSJ IROS Best Paper Award on Cognitive Robotics. He has served as program committee member of the International Workshop of Planning and Scheduling for Space (IWPSS) since 2021.
+is Deputy Director of the SnT Center at the University of Luxembourg, Head of the CVI2 research group, and co-head of the Zero-G Space Lab. Her research covers 3D vision and multi-sensor fusion. She chaired the SHARP workshops (ECCV'20 to ICCV'23) and SPARK (ICIP'21), was Program Chair of 3DV'21 and EUVIP'23, co-organizer of AI4Space at ECCV'22, and is General Chair of EUVIP'26.
 \\paragraph{Arunkumar Rathinam}
-Arunkumar Rathinam is a Research Scientist at the Interdisciplinary Centre for Security, Reliability, and Trust (SnT) at the University of Luxembourg. He is a member of the Computer Vision, Imaging and Machine Intelligence (CVI2) research group within SnT. Before joining SnT, he was a Postdoctoral Associate at the Surrey Space Center, University of Surrey, UK. He earned his PhD from the University of New South Wales, Sydney, Australia, in 2019. His research focuses on developing machine learning algorithms for vision-based navigation for proximity operations in space. He has also created several open-source benchmark datasets, including SPARK 2022, SPARK 2024, and SPADES, aimed at advancing data driven approaches for space applications. He has also served as a co-organizer of the previous edition of AI4Space/SPARK challenge at ECCV 2022 and CVPR 2024.
+is a researcher in machine learning for vision-based navigation in space proximity operations. He created the open-source benchmark datasets SPARK 2022, SPARK 2024, and SPADES, advancing data-driven approaches for space applications. He co-organized the AI4Space/SPARK challenge at ECCV 2022 and CVPR 2024.
+\\paragraph{Tat-Jun Chin}
+is a Professor of Computer Science at The University of Adelaide working on optimization for vision and learning, robotic vision, and AI for space. He was Program Chair of ACCV'22, Special Sessions Chair of ICIP'23, and Tutorial Chair of CVPR'21 and ACCV'18, and has organized workshops and tutorials at CVPR, ICCV, RSS, and ICRA. He founded the AI4Space workshop series, leading it in 2021, 2022, and 2024.
 """
 
 organizing_committee_data = []
@@ -91,7 +55,7 @@ bio_paragraphs = re.split(r'\\paragraph{(.*?)}', bios_text)[1:] # Split by parag
 parsed_bios = {}
 for i in range(0, len(bio_paragraphs), 2):
     name = clean_text(bio_paragraphs[i])
-    bio_content = clean_text(bio_paragraphs[i+1])
+    bio_content = clean_text(bio_paragraphs[i+1]).rstrip(' \\')
     parsed_bios[name] = bio_content
 
 default_image = "https://i0.wp.com/www.sciencenews.org/wp-content/uploads/2022/11/Hubble-Pillars-of-Creation.jpg?resize=1500%2C1565&ssl=1"
@@ -103,30 +67,17 @@ for org_item in raw_organizers:
     # Assign roles based on known individuals or default
     role = "Organizer"
     image_url = default_image
-    if "Gabriele Meoni" in name:
-        role = "General Chair"
+    if "Daniele Gammelli" in name:
+        role = "Primary Organizer"
+    elif "Gabriele Meoni" in name:
+        role = "Secondary Organizer"
         image_url = "https://0.academia-photos.com/42414807/11430474/34762757/s200_gabriele.meoni.jpg"
-    elif "Roberto Del Prete" in name:
-        role = "Program Chair"
-        image_url = "https://avatars.githubusercontent.com/u/71963566?v=4"
     elif "Tat-Jun Chin" in name:
-        role = "Co-Chair" # Example role
-        image_url = "https://dtb.solutions/wp-content/uploads/2025/02/AIML_TJ_Chin-480x480.jpg" # Updated image URL
+        image_url = "https://dtb.solutions/wp-content/uploads/2025/02/AIML_TJ_Chin-480x480.jpg"
     elif "Djamila Aouada" in name:
-        role = "Co-Chair" # Example role
-        image_url = "https://hitlaml.uni.lu/img/speakers/3_.jpg" # Updated image URL
-    elif "Rajat Talak" in name:
-        image_url = "https://media.licdn.com/dms/image/v2/D4E03AQE21FbA8trgAw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1699225243205?e=2147483647&v=beta&t=H9Y3yQtMJkhzgD0R_DGG31yjgKHsd659-wqaYof6sno"
-    elif "Viorela Ila" in name:
-        image_url = "https://www.sydney.edu.au/AcademicProfiles/profile/resource?urlid=viorela.ila"
-    elif "Gianluca Furano" in name:
-        image_url = "https://media.gettyimages.com/id/165847424/it/foto/capra.jpg?s=612x612&w=gi&k=20&c=jtbGJY37rJcW2jY6MLSI4zQjKF0nmNs8rnAarJDAUOY="
-    elif "Alberto Candela" in name:
-        image_url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9EN_CCkAkCSlgpSFYC-jllZtT9nLOEkLAgA&s"
-    elif "Arunkumar Rathinam" in name: # Corrected name from Arankumar to Arunkumar
+        image_url = "https://hitlaml.uni.lu/img/speakers/3_.jpg"
+    elif "Arunkumar Rathinam" in name:
         image_url = "https://media.licdn.com/dms/image/v2/C5603AQEXyHGZAwZlhw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1521003185275?e=2147483647&v=beta&t=uEfZeNiWqmPxghrvoQQfP1tInk1VN_eEEKBMLx6IAuk"
-    elif "Pablo Gòmez" in name: # Added entry for Pablo Gòmez
-        image_url = "https://media.licdn.com/dms/image/v2/C4E03AQFKIocgRlS3lQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1660475809846?e=2147483647&v=beta&t=uT8IPpErdb5nyl1HEpW9BhOGAHLuPt4l7Z7tawp-njs"
 
     bio = parsed_bios.get(name.strip(), "Biography not available.")
     organizing_committee_data.append({
@@ -140,79 +91,55 @@ for org_item in raw_organizers:
 
 # --- Data from src/list_speakers.txt ---
 invited_speakers_data = [
-    # {
-    #     "name": "Victoria Ashley Villar",
-    #     "bio": (
-    #         "Victoria Ashley Villar received her B.S. in Physics from MIT in 2014 and her Ph.D. in Astronomy "
-    #         "and Astrophysics from Harvard University in 2020. She was formerly a Simons Junior Postdoctoral "
-    #         "Fellow at Columbia University (2020–2021) and a faculty member at Penn State University (2021–2023), "
-    #         "before joining the Harvard Astronomy faculty in 2023. Prof. Villar’s research interests include "
-    #         "theoretical and observational studies of extragalactic transients, including core-collapse supernovae "
-    #         "and kilonovae, development of statistical and deep learning methodologies for wide-field surveys, such as "
-    #         "the Vera C. Rubin Observatory's Legacy Survey of Space and Time and Nancy Grace Roman Observatory. "
-    #         "Prof. Ashley Villar is a Packard Fellow, RCSA Scialog Fellow and Harvard Aramont Fellow."
-    #     ),
-    #     "relevance": (
-    #         "Prof. Villar is a prominent researcher from Harvard University in the use of data-driven methods in astronomy. "
-    #         "She has made significant contributions to the field by developing statistical and deep learning methodologies "
-    #         "to study chemical compositions of supernovae, stellar phenomena such as eruptions, mergers, and explosions, "
-    #         "and detect celestial bodies in astronomical data. The invited talk will provide insight into novel applications "
-    #         "in the field of astronomy enabled by ML and deep learning, showcasing the potential of AI for astronomical data processing."
-    #     ),
-    #     "status": (
-    #         "Confirmed/Final (In person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
-    #     ),
-    #     "homepage": "http://ashleyvillar.com/",
-    #     "imageUrl": "https://ecos-appdev-production.s3.amazonaws.com/science_site/s3fs-public/2021-09/HispanicHeritageMonthAshleyVillar300_300.png",
-    #     "talkType": "Academic Talk"
-    # },
     {
-        "name": "David Rijlaarsdam",
-        "bio": (
-            "David Rijlaarsdam is Director of Space System Engineering for Ubotica Technologies, where he manages the "
-            "Space System R&D team and is involved as a System Engineer in several space missions. He has a Master of "
-            "Science in Aerospace Engineering from Delft University of Technology with a specialization in Space System Engineering. "
-            "David has previously been part of the Automation and Robotics Section of the European Space Agency where he "
-            "researched relative navigation for spacecraft and has been part of the advanced architecture team of Intel Movidius, "
-            "where he researched the application of AI for star identification algorithms."
-        ),
-        "relevance": (
-            "Ubotica Technologies contributed to integrate machine learning solutions for payload image processing in numerous satellite "
-            "missions, such as ESA Φ-Sat-1, ΦSat-2, and CogniSat-6 (proprietary satellite). In this keynote, David Rijlaarsdam will share "
-            "Ubotica's vision on challenges and perspectives related to the use of Machine Learning and Artificial Intelligence solutions "
-            "in spacecraft missions."
-        ),
-        "status": (
-            "Confirmed/Final (in person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
-        ),
-        "homepage": "https://ubotica.com/",
-        "imageUrl": "https://media.licdn.com/dms/image/v2/C4E03AQHDbVMMnf6F4A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1550244386287?e=2147483647&v=beta&t=9OweAVjd6m7RawvvYgZOwuAGbDoyw3RwSJHGJsiTANY",
-        "talkType": "Industrial Talk"
+        "name": 'Steve Chien',
+        "bio": "Technical Fellow in Artificial Intelligence and Co-head of the Artificial Intelligence Group at the Jet Propulsion Laboratory (JPL), California Institute of Technology. His work on autonomous science, automated planning and scheduling, and intelligent spacecraft operations includes Earth Observing One, ESA's Rosetta Orbiter, and NASA's Mars 2020 mission.",
+        "homepage": 'https://ai.jpl.nasa.gov/public/people/chien/',
+        "imageUrl": default_image,
+        "talkType": 'Keynote: Distributed Autonomy in Space Operations and Earth Observation'
     },
-    # {
-    #     "name": "James Parr",
-    #     "bio": (
-    #         "James is the founder and Chief Executive Officer (CEO) of Trillium Technologies - a global technology contractor "
-    #         "that specialises in the application of AI and systems approaches to grand challenges, such as climate change, violent "
-    #         "extremism, prevention strategies for cancer and obesity, deforestation mitigation, climate resilience and planetary defence. "
-    #         "He is founder of FDL, an AI research lab partnership with ESA in Europe (ESLab.ai) and NASA in the USA. FDL has over 50 "
-    #         "applied AI firsts and was awarded the best AI accelerator at the 2023 Cog X awards in London. He lives in London with his wife "
-    #         "and twin daughters."
-    #     ),
-    #     "relevance": (
-    #         "James Parr is the CEO of Trillium Technologies, which oversees the Frontiers Development Lab (FDL) Europe project. This initiative, "
-    #         "in partnership with ESA’s Φ-Lab, ESA ESRIN, and the University of Oxford, focuses on advancing AI and high-performance computing "
-    #         "for EO applications. Through numerous research sprints, Trillium Technologies fosters collaboration to develop AI-based solutions "
-    #         "to complex research problems, such as: the design of a Deep Learning model for onboard satellite detection of floods or the use of "
-    #         "AI to support the design of ESA VIGIL mission."
-    #     ),
-    #     "status": (
-    #         "Confirmed/Final (in person. Virtual presentation is possible if the speaker cannot attend in person due to unforeseen reasons.)"
-    #     ),
-    #     "homepage": "https://trillium.tech/",
-    #     "imageUrl": "https://i1.rgstatic.net/ii/profile.image/682472295636996-1539725483467_Q512/James-Parr-3.jpg",
-    #     "talkType": "Academic Talk"
-    # }
+    {
+        "name": 'Paolo Panicucci',
+        "bio": 'Assistant Professor at Politecnico di Milano and researcher at DART Lab, specializing in computer vision, vision-based navigation, and spacecraft autonomy. He has worked on autonomous GNC in projects such as EXTREMA and LUMIO; his talk will cover ESA ION-V and neuromorphic computing and sensing for Earth Observation.',
+        "homepage": 'https://dart.polimi.it/member/?p=paolo+panicucci',
+        "imageUrl": default_image,
+        "talkType": 'Keynote: Disruptive Computing and Sensing Paradigms for EdgeAI in Space'
+    },
+    {
+        "name": 'Al Tadros',
+        "bio": 'CTO of Redwire, with over 30 years of experience in aerospace engineering and leadership in AI-enabled autonomy, machine vision, robotics, and rendezvous and proximity operations. Previously Vice President of Space Infrastructure and Civil Space at Maxar Technologies, contributing to 13 space missions.',
+        "homepage": 'https://aiaa.org/people/al-tadros/',
+        "imageUrl": default_image,
+        "talkType": 'Keynote: Automating Satellite Manufacturing, Design and Testing'
+    },
+    {
+        "name": 'Hiro Ono',
+        "bio": 'Associate Professor at the School of Aerospace Engineering at Georgia Tech and Director of the Planetary Robotics Lab. During 13 years at NASA JPL he developed autonomous navigation algorithms for the Perseverance Mars rover and led the Exobiology Extant Life Surveyor (EELS) snake robot project.',
+        "homepage": 'https://ae.gatech.edu/directory/person/masahiro-hiro-ono',
+        "imageUrl": default_image,
+        "talkType": 'Keynote: AI for Robotic Planetary Exploration'
+    },
+    {
+        "name": "Simone D'Amico",
+        "bio": 'Associate Professor at Stanford University and Founding Director of the Space Rendezvous Laboratory, with over 20 years of experience in autonomous spacecraft and distributed space systems, including TanDEM-X, PRISMA, and NASA Starling.',
+        "homepage": 'https://slab.stanford.edu/people/simone-damico',
+        "imageUrl": default_image,
+        "talkType": 'Keynote: AI-driven Spacecraft Trajectory Optimization and Autonomous Mission Design'
+    },
+    {
+        "name": 'Roberto Del Prete',
+        "bio": 'CTO of Setanta Space and former ESA Phi-lab Research Fellow, specializing in onboard AI and computing for space applications, including the Vertis heterogeneous computing platform.',
+        "homepage": 'https://scholar.google.com/citations?user=Dwc8YxwAAAAJ&hl=en',
+        "imageUrl": default_image,
+        "talkType": 'Fishbowl Speaker'
+    },
+    {
+        "name": 'Marco Pavone',
+        "bio": 'Professor in the Department of Aeronautics and Astronautics at Stanford University and Director of Autonomous Vehicle Research at NVIDIA, working on motion planning, decision-making under uncertainty, and AI-driven autonomy.',
+        "homepage": 'https://web.stanford.edu/~pavone/',
+        "imageUrl": default_image,
+        "talkType": 'Fishbowl Speaker'
+    },
 ]
 
 # --- Data from src/topics.txt ---

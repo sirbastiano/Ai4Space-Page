@@ -42,7 +42,7 @@ const ChallengeDetailApp = {
                     this.challenge = null;
                 } else {
                     this.challenge = data;
-                    document.title = `${this.challenge.title || 'Challenge Details'} - AI4Space @ NeurIPS`;
+                    document.title = `${this.challenge.title || 'Challenge Details'} - AI4Space @ CVPR 2027`;
                 }
             } catch (error) {
                 console.error('Failed to fetch challenge details:', error);
