@@ -17,7 +17,7 @@ def clean_text(text):
 organizers_text = r"""
 \\subsection{List of organizers}
 \\begin{itemize}
-    \\item Daniele Gammelli (Stanford University)
+    \\item Daniele Gammelli (Stanford University / AI4I)
     \\item Gabriele Meoni (European Space Agency)
     \\item Yuji Takubo (Stanford University)
     \\item Ana-Maria Pelin (TU Delft / ESA Phi-Lab)
@@ -92,6 +92,9 @@ for org_item in raw_organizers:
         "imageUrl": image_url,
         "bio": bio
     })
+
+# Show organizers in alphabetical order by first name
+organizing_committee_data.sort(key=lambda member: member["name"])
 
 
 # --- Data from src/list_speakers.txt ---
