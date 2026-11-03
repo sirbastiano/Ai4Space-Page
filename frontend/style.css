@@ -936,6 +936,10 @@ footer p {
     object-fit: cover; /* Ensures image covers the area, might crop */
 }
 
+.speaker-card img {
+    object-position: center top; /* Keep faces in frame when cropping portraits */
+}
+
 .content-card .content-info {
     padding: 20px;
     flex-grow: 1; /* Allows this section to take available space */

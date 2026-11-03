@@ -69,15 +69,20 @@ for org_item in raw_organizers:
     image_url = default_image
     if "Daniele Gammelli" in name:
         role = "Primary Organizer"
+        image_url = "/images/gammelli.jpg"
     elif "Gabriele Meoni" in name:
         role = "Secondary Organizer"
-        image_url = "https://0.academia-photos.com/42414807/11430474/34762757/s200_gabriele.meoni.jpg"
-    elif "Tat-Jun Chin" in name:
-        image_url = "https://dtb.solutions/wp-content/uploads/2025/02/AIML_TJ_Chin-480x480.jpg"
+        image_url = "/images/meoni.jpg"
+    elif "Yuji Takubo" in name:
+        image_url = "/images/takubo.jpg"
+    elif "Ana-Maria Pelin" in name:
+        image_url = "/images/pelin.jpg"
     elif "Djamila Aouada" in name:
-        image_url = "https://hitlaml.uni.lu/img/speakers/3_.jpg"
+        image_url = "/images/aouada.jpg"
     elif "Arunkumar Rathinam" in name:
-        image_url = "https://media.licdn.com/dms/image/v2/C5603AQEXyHGZAwZlhw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1521003185275?e=2147483647&v=beta&t=uEfZeNiWqmPxghrvoQQfP1tInk1VN_eEEKBMLx6IAuk"
+        image_url = "/images/rathinam.jpg"
+    elif "Tat-Jun Chin" in name:
+        image_url = "/images/chin.jpg"
 
     bio = parsed_bios.get(name.strip(), "Biography not available.")
     organizing_committee_data.append({
@@ -95,49 +100,49 @@ invited_speakers_data = [
         "name": 'Steve Chien',
         "bio": "Technical Fellow in Artificial Intelligence and Co-head of the Artificial Intelligence Group at the Jet Propulsion Laboratory (JPL), California Institute of Technology. His work on autonomous science, automated planning and scheduling, and intelligent spacecraft operations includes Earth Observing One, ESA's Rosetta Orbiter, and NASA's Mars 2020 mission.",
         "homepage": 'https://ai.jpl.nasa.gov/public/people/chien/',
-        "imageUrl": default_image,
+        "imageUrl": "/images/chien.jpg",
         "talkType": 'Keynote: Distributed Autonomy in Space Operations and Earth Observation'
     },
     {
         "name": 'Paolo Panicucci',
         "bio": 'Assistant Professor at Politecnico di Milano and researcher at DART Lab, specializing in computer vision, vision-based navigation, and spacecraft autonomy. He has worked on autonomous GNC in projects such as EXTREMA and LUMIO; his talk will cover ESA ION-V and neuromorphic computing and sensing for Earth Observation.',
         "homepage": 'https://dart.polimi.it/member/?p=paolo+panicucci',
-        "imageUrl": default_image,
+        "imageUrl": "/images/panicucci.jpg",
         "talkType": 'Keynote: Disruptive Computing and Sensing Paradigms for EdgeAI in Space'
     },
     {
         "name": 'Al Tadros',
         "bio": 'CTO of Redwire, with over 30 years of experience in aerospace engineering and leadership in AI-enabled autonomy, machine vision, robotics, and rendezvous and proximity operations. Previously Vice President of Space Infrastructure and Civil Space at Maxar Technologies, contributing to 13 space missions.',
         "homepage": 'https://aiaa.org/people/al-tadros/',
-        "imageUrl": default_image,
+        "imageUrl": "/images/tadros.jpg",
         "talkType": 'Keynote: Automating Satellite Manufacturing, Design and Testing'
     },
     {
         "name": 'Hiro Ono',
         "bio": 'Associate Professor at the School of Aerospace Engineering at Georgia Tech and Director of the Planetary Robotics Lab. During 13 years at NASA JPL he developed autonomous navigation algorithms for the Perseverance Mars rover and led the Exobiology Extant Life Surveyor (EELS) snake robot project.',
         "homepage": 'https://ae.gatech.edu/directory/person/masahiro-hiro-ono',
-        "imageUrl": default_image,
+        "imageUrl": "/images/ono.jpg",
         "talkType": 'Keynote: AI for Robotic Planetary Exploration'
     },
     {
         "name": "Simone D'Amico",
         "bio": 'Associate Professor at Stanford University and Founding Director of the Space Rendezvous Laboratory, with over 20 years of experience in autonomous spacecraft and distributed space systems, including TanDEM-X, PRISMA, and NASA Starling.',
         "homepage": 'https://slab.stanford.edu/people/simone-damico',
-        "imageUrl": default_image,
+        "imageUrl": "/images/damico.jpg",
         "talkType": 'Keynote: AI-driven Spacecraft Trajectory Optimization and Autonomous Mission Design'
     },
     {
         "name": 'Roberto Del Prete',
         "bio": 'CTO of Setanta Space and former ESA Phi-lab Research Fellow, specializing in onboard AI and computing for space applications, including the Vertis heterogeneous computing platform.',
         "homepage": 'https://scholar.google.com/citations?user=Dwc8YxwAAAAJ&hl=en',
-        "imageUrl": default_image,
+        "imageUrl": "/images/delprete.jpg",
         "talkType": 'Fishbowl Speaker'
     },
     {
         "name": 'Marco Pavone',
         "bio": 'Professor in the Department of Aeronautics and Astronautics at Stanford University and Director of Autonomous Vehicle Research at NVIDIA, working on motion planning, decision-making under uncertainty, and AI-driven autonomy.',
         "homepage": 'https://web.stanford.edu/~pavone/',
-        "imageUrl": default_image,
+        "imageUrl": "/images/pavone.jpg",
         "talkType": 'Fishbowl Speaker'
     },
 ]
