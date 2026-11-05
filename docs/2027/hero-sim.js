@@ -1,12 +1,12 @@
-/* AI4Space landing scenes: four simulations drawn as HUD displays on one pinned canvas.
- * 01 agentic mission design (multi-agent trade-space exploration), 02 vision-based rendezvous
- * (Clohessy-Wiltshire approach, pose estimation, event camera), 03 Earth tip-and-cue (optical
- * detection cueing a SAR satellite), 04 cooperative Mars exploration (frontier allocation).
+/* AI4Space landing scenes: four simulations drawn as HUD displays on one carousel canvas.
+ * 01 vision-based rendezvous (Clohessy-Wiltshire approach, pose estimation, event camera),
+ * 02 Earth tip-and-cue (onboard segmentation cueing a SAR satellite), 03 agentic mission design
+ * (multi-agent trade-space exploration), 04 cooperative Mars exploration with terrain segmentation.
  * Plain JS, no dependencies. */
 (function () {
     'use strict';
 
-    const block = document.querySelector('.scenes');
+    const block = document.getElementById('scenes');
     const pin = document.querySelector('.scenes-pin');
     const canvas = document.getElementById('hero-canvas');
     if (!block || !pin || !canvas || !canvas.getContext) return;
@@ -14,12 +14,13 @@
     const ctx = canvas.getContext('2d');
     const panels = Array.from(document.querySelectorAll('.scene-panel'));
     const ticks = Array.from(document.querySelectorAll('.scene-rail button'));
+    const arrows = Array.from(document.querySelectorAll('.scene-arrow'));
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const COL = {
-        cyan: '#5ad1ff',
-        cyanDim: 'rgba(90, 209, 255, 0.16)',
-        cyanMid: 'rgba(90, 209, 255, 0.45)',
+        cyan: '#667eea',
+        cyanDim: 'rgba(102, 126, 234, 0.16)',
+        cyanMid: 'rgba(102, 126, 234, 0.45)',
         amber: '#ffb14a',
         red: '#ff5a4f',
         blue: '#3d8bff',
@@ -31,6 +32,7 @@
     const TAU = Math.PI * 2;
     const DEG = Math.PI / 180;
     const FADE_SECONDS = 0.35;
+    const AUTO_SECONDS = 12;           // carousel advances on its own until the visitor picks a scene
 
     let W = 0, H = 0, dpr = 1, small = false;
     let stage = { x: 0, y: 0, w: 0, h: 0 };
@@ -43,12 +45,12 @@
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
     const hyp = (v) => Math.hypot(v[0], v[1]);
 
-    function mono(size, weight) {
-        return `${weight || 500} ${size}px "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace`;
+    function hudFont(size, weight) {
+        return `${weight || 500} ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;   // same family as the page body
     }
 
     function text(str, x, y, color, size, align, weight) {
-        ctx.font = mono(size || 11, weight);
+        ctx.font = hudFont(size || 11, weight);
         ctx.fillStyle = color;
         ctx.textAlign = align || 'left';
         ctx.textBaseline = 'alphabetic';
@@ -100,8 +102,38 @@
         return `${hh}:${mm}:${ss}`;
     }
 
+    /* ---------- synthetic image tiles (what an onboard camera would see) ---------- */
+
+    function tileHash(ix, iy, seed) {
+        const v = Math.sin(ix * 127.1 + iy * 311.7 + seed * 74.7) * 43758.5453;
+        return v - Math.floor(v);
+    }
+
+    function tileNoise(px, py, seed) {
+        let sum = 0, amp = 0.5, f = 1;
+        for (let o = 0; o < 3; o++) {
+            const x = px * f, y = py * f;
+            const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+            const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+            const a = tileHash(xi, yi, seed), b = tileHash(xi + 1, yi, seed);
+            const c = tileHash(xi, yi + 1, seed), d = tileHash(xi + 1, yi + 1, seed);
+            sum += amp * (a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v);
+            f *= 2;
+            amp *= 0.5;
+        }
+        return sum / 0.875;
+    }
+
+    function insetBox(ix, iy, iw, ih, title) {
+        ctx.fillStyle = 'rgba(2, 4, 8, 0.92)';
+        ctx.fillRect(ix - 1, iy - 1, iw + 2, ih + 2);
+        ctx.strokeStyle = 'rgba(102, 126, 234, 0.45)';
+        ctx.strokeRect(ix - 0.5, iy - 0.5, iw + 1, ih + 1);
+        text(title, ix + 2, iy - 6, COL.cyan, small ? 8 : 9, 'left', 600);
+    }
+
     /* =====================================================================
-     * 01  Agentic mission design: an orchestrator and five specialist agents exchange
+     * 03  Agentic mission design: an orchestrator and five specialist agents exchange
      * messages while candidate designs fill a mass-cost trade space. The Pareto front
      * tightens, a knee-point design is selected, the spec sheet fills in and the V&V agent
      * traces every requirement. Sizing relations are simple but physically motivated
@@ -110,7 +142,7 @@
     const agents = (function () {
         const scene = {
             id: 'agents',
-            title: '01 // AGENTIC MISSION DESIGN',
+            title: '03 // AGENTIC MISSION DESIGN',
             subtitle: 'MULTI-AGENT SYSTEMS ENGINEERING · TRADE-SPACE EXPLORATION',
             logs: []
         };
@@ -173,6 +205,7 @@
             s.packets = s.packets.filter((p) => p.t < 1);
             s.designs.forEach((d) => { d.age += dt; });
 
+
             if (s.t > T.explore[0] && s.t < T.explore[1]) {
                 s.nextDesign -= dt;
                 if (s.nextDesign <= 0) {
@@ -224,7 +257,7 @@
             const r = small ? Math.min(w * 0.3, h * 0.17) : Math.min(w * 0.15, h * 0.28);
 
             // links
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.22)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.22)';
             ctx.setLineDash([3, 5]);
             for (let i = 1; i <= AGENTS.length; i++) {
                 const [ax, ay] = nodePos(i, gx, gy, r);
@@ -236,7 +269,7 @@
                 if (i === 1) ctx.moveTo(ax, ay); else ctx.lineTo(ax, ay);
             }
             ctx.closePath();
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.08)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.08)';
             ctx.stroke();
             ctx.setLineDash([]);
 
@@ -291,7 +324,7 @@
                 const dx = X(clamp(d.mass, MASS[0], MASS[1])), dy = Y(clamp(d.cost, COST[0], COST[1]));
                 const fresh = clamp(1 - d.age / 0.6, 0, 1);
                 if (d.feasible) {
-                    ctx.fillStyle = `rgba(90, 209, 255, ${0.45 + 0.5 * fresh})`;
+                    ctx.fillStyle = `rgba(102, 126, 234, ${0.45 + 0.5 * fresh})`;
                     ctx.beginPath(); ctx.arc(dx, dy, 2.2 + 2 * fresh, 0, TAU); ctx.fill();
                 } else {
                     ctx.strokeStyle = 'rgba(255, 90, 79, 0.55)';
@@ -346,7 +379,7 @@
     })();
 
     /* =====================================================================
-     * 02  Vision-based rendezvous: a chaser approaches a tumbling target in the target's
+     * 01  Vision-based rendezvous: a chaser approaches a tumbling target in the target's
      * local orbital frame. Relative motion follows the Clohessy-Wiltshire equations (n = 1,
      * time = orbital phase, positions in metres); each leg is a two-impulse transfer chosen
      * as the lowest-Δv of nine candidates, then a straight V-bar final approach. Two insets
@@ -356,7 +389,7 @@
     const rpo = (function () {
         const scene = {
             id: 'rpo',
-            title: '02 // VISION-BASED RENDEZVOUS',
+            title: '01 // VISION-BASED RENDEZVOUS',
             subtitle: 'CLOHESSY-WILTSHIRE APPROACH · 6-DOF POSE ESTIMATION · EVENT CAMERA',
             logs: []
         };
@@ -534,7 +567,7 @@
         function insetFrame(ix, iy, iw, ih, title) {
             ctx.fillStyle = 'rgba(2, 4, 8, 0.92)';
             ctx.fillRect(ix, iy, iw, ih);
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.4)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.4)';
             ctx.strokeRect(ix + 0.5, iy + 0.5, iw, ih);
             text(title, ix + 6, iy - 6, COL.cyan, small ? 8 : 9, 'left', 600);
         }
@@ -581,7 +614,7 @@
                 const reveal = clamp(s.t / 0.9, 0, 1);
                 s.candidates.forEach((c) => {
                     const isBest = c === s.best && s.t > 1.0;
-                    ctx.strokeStyle = isBest ? COL.amber : 'rgba(90, 209, 255, 0.28)';
+                    ctx.strokeStyle = isBest ? COL.amber : 'rgba(102, 126, 234, 0.28)';
                     ctx.lineWidth = isBest ? 1.6 : 1;
                     ctx.setLineDash(isBest ? [] : [2, 4]);
                     polyline(c.path.map(P), Math.ceil(reveal * c.path.length));
@@ -595,7 +628,7 @@
                 ctx.setLineDash([]);
             }
 
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.75)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.75)';
             ctx.lineWidth = 1.4;
             polyline(s.trail.map(P));
             ctx.lineWidth = 1;
@@ -622,7 +655,7 @@
             // camera insets
             const iw = small ? Math.min(150, (w - 40) / 2) : Math.min(230, w * 0.24);
             const ih = iw * 0.72;
-            const ix = x + 14, iy = y + (small ? 128 : 72);
+            const ix = stage.safeX, iy = y + (small ? 128 : 72);
             const k = iw * 0.16 * clamp(150 / range(), 0.5, 1.1);   // apparent size grows as the range closes
             const fcx = ix + iw / 2, fcy = iy + ih / 2;
 
@@ -699,7 +732,7 @@
     })();
 
     /* =====================================================================
-     * 03  Earth tip-and-cue: optical satellites in sun-synchronous orbits detect a wildfire
+     * 02  Earth tip-and-cue: optical satellites in sun-synchronous orbits detect a wildfire
      * or flood onboard ("tip") and cue the radar (SAR) satellite that will pass over the
      * area soonest; the SAR satellite images through smoke or cloud and downlinks the alert
      * to the nearest ground station. Ground tracks come from the orbits and Earth's rotation.
@@ -707,7 +740,7 @@
     const earth = (function () {
         const scene = {
             id: 'earth',
-            title: '03 // EARTH TIP-AND-CUE',
+            title: '02 // EARTH TIP-AND-CUE',
             subtitle: 'ONBOARD DETECTION · CUEING A RADAR SATELLITE · RAPID ALERTING',
             logs: []
         };
@@ -810,7 +843,7 @@
         scene.resize = function () {
             cx = stage.x + stage.w / 2;
             cy = stage.y + stage.h / 2 + (small ? 10 : 6);
-            R = Math.min(stage.w, stage.h) * (small ? 0.36 : 0.37);
+            R = Math.max(40, Math.min(stage.w, stage.h) * (small ? 0.36 : 0.37));
             if (!sats.length) scene.reset();
         };
 
@@ -898,11 +931,11 @@
             ctx.beginPath(); ctx.arc(cx, cy, R * 1.18, 0, TAU); ctx.fill();
             ctx.fillStyle = 'rgba(4, 12, 24, 0.95)';
             ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.fill();
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.5)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.5)';
             ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke();
 
             // graticule
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.12)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.12)';
             ctx.beginPath();
             for (let lat = -60; lat <= 60; lat += 30) {
                 let started = false;
@@ -927,7 +960,7 @@
             for (let k = 0; k < land.length; k++) {
                 const p = project(land[k][0], land[k][1]);
                 if (p.z <= 0) continue;
-                ctx.fillStyle = `rgba(90, 209, 255, ${0.15 + 0.55 * p.z})`;
+                ctx.fillStyle = `rgba(102, 126, 234, ${0.15 + 0.55 * p.z})`;
                 ctx.fillRect(p.x - dot / 2, p.y - dot / 2, dot, dot);
             }
 
@@ -982,8 +1015,8 @@
                     });
                     ctx.stroke();
                 };
-                if (s.kind === 'OPT') draw(small ? 5 : 8, 'rgba(90, 209, 255, 0.07)');
-                draw(1, s.kind === 'OPT' ? 'rgba(90, 209, 255, 0.45)' : 'rgba(255, 177, 74, 0.45)');
+                if (s.kind === 'OPT') draw(small ? 5 : 8, 'rgba(102, 126, 234, 0.07)');
+                draw(1, s.kind === 'OPT' ? 'rgba(102, 126, 234, 0.45)' : 'rgba(255, 177, 74, 0.45)');
             });
             ctx.lineWidth = 1;
 
@@ -1053,6 +1086,12 @@
         let seed = 1, terrain = null, cells = null, FX = 0, FY = 0, cw = 0, ch = 0;
         let agents = [], sites = [], packets = [], links = [];
         let msgs = 0, explored = 0, packetT = 0, finished = -1;
+        let cam = null;                       // R1 navigation camera: ground rocks ahead of the rover (m)
+        const CAM_HEIGHT = 1.5;               // camera height above ground, m
+
+        function newRock(far) {
+            return { x: rand(-6, 6), z: far ? rand(24, 34) : rand(3, 34), r: rand(0.18, 0.7) };
+        }
 
         function hash(ix, iy) {
             const v = Math.sin(ix * 127.1 + iy * 311.7 + seed * 17.13) * 43758.5453;
@@ -1199,6 +1238,7 @@
             }));
             agents.forEach(reveal);
             agents.forEach(retarget);
+            cam = { travel: 0, rocks: Array.from({ length: 16 }, () => newRock(false)), warnT: 0, seed: rand(0, 100) };
             pushLog(scene, 'LANDED · 4 AGENTS ONLINE · MAP SYNC ESTABLISHED');
         };
 
@@ -1210,6 +1250,7 @@
                 if (finished > 3) scene.reset();
                 return;
             }
+            const r1 = agents[0], r1x = r1.x, r1y = r1.y;
             // assign rovers to newly found sites
             sites.forEach((site) => {
                 if (!site.found || site.assigned) return;
@@ -1251,6 +1292,19 @@
                 if (a.trailT > 0.12) { a.trailT = 0; a.trail.push([a.x, a.y]); if (a.trail.length > 70) a.trail.shift(); }
             });
 
+            // drive the navigation camera forward by the distance R1 actually moved (map px -> m)
+            const moved = Math.hypot(r1.x - r1x, r1.y - r1y) * (60 / stage.w);
+            cam.travel += moved;
+            cam.warnT -= dt;
+            cam.rocks.forEach((rk, i) => {
+                rk.z -= moved;
+                if (rk.z < 1.2) cam.rocks[i] = newRock(true);
+                else if (rk.z < 4 && Math.abs(rk.x) < 1.2 && rk.r > 0.4 && cam.warnT <= 0) {
+                    cam.warnT = 5;
+                    pushLog(scene, `R1 ▸ HAZARD ${rk.z.toFixed(1)} m AHEAD · ROCK ${(rk.r * 100).toFixed(0)} cm · PATH ADJUSTED`);
+                }
+            });
+
             const range = stage.w * 0.45;
             links = [];
             for (let i = 0; i < agents.length; i++) {
@@ -1286,7 +1340,7 @@
             for (let j = 0; j < FY; j++) {
                 for (let i = 0; i < FX; i++) if (!cells[j][i]) ctx.fillRect(x + i * cw - 0.5, y + j * ch - 0.5, cw + 1, ch + 1);
             }
-            ctx.fillStyle = 'rgba(90, 209, 255, 0.18)';
+            ctx.fillStyle = 'rgba(102, 126, 234, 0.18)';
             for (let j = 0; j < FY; j += 2) {
                 for (let i = 0; i < FX; i += 2) if (!cells[j][i]) ctx.fillRect(x + (i + 0.5) * cw - 1, y + (j + 0.5) * ch - 1, 2, 2);
             }
@@ -1302,7 +1356,7 @@
             });
 
             // comm links and packets
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.35)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.35)';
             ctx.setLineDash([3, 5]);
             links.forEach(([a, b]) => {
                 ctx.beginPath(); ctx.moveTo(x + a.x, y + a.y); ctx.lineTo(x + b.x, y + b.y); ctx.stroke();
@@ -1316,9 +1370,9 @@
             // agents
             agents.forEach((a) => {
                 const ax = x + a.x, ay = y + a.y;
-                ctx.fillStyle = a.kind === 'heli' ? 'rgba(255, 177, 74, 0.55)' : 'rgba(90, 209, 255, 0.55)';
+                ctx.fillStyle = a.kind === 'heli' ? 'rgba(255, 177, 74, 0.55)' : 'rgba(102, 126, 234, 0.55)';
                 a.trail.forEach((p, i) => { if (i % 2 === 0) ctx.fillRect(x + p[0] - 0.7, y + p[1] - 0.7, 1.4, 1.4); });
-                ctx.strokeStyle = 'rgba(90, 209, 255, 0.15)';
+                ctx.strokeStyle = 'rgba(102, 126, 234, 0.15)';
                 ctx.beginPath(); ctx.arc(ax, ay, a.sense, 0, TAU); ctx.stroke();
                 if (a.kind === 'heli') {
                     ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
@@ -1334,7 +1388,7 @@
                     ctx.save();
                     ctx.translate(ax, ay);
                     ctx.rotate(a.heading);
-                    ctx.fillStyle = 'rgba(90, 209, 255, 0.25)';
+                    ctx.fillStyle = 'rgba(102, 126, 234, 0.25)';
                     ctx.strokeStyle = COL.cyan;
                     ctx.fillRect(-6, -4, 12, 8);
                     ctx.strokeRect(-6, -4, 12, 8);
@@ -1347,7 +1401,66 @@
                 }
             });
             ctx.restore();
+            drawNavcam();
         };
+
+        /* R1 navigation camera: left half is the image, right half the per-pixel terrain classes
+         * a segmentation network would output (sand, bedrock, hazard). */
+        function drawNavcam() {
+            const iw = small ? Math.min(150, stage.w * 0.42) : Math.min(250, stage.w * 0.24);
+            const ih = iw * 0.62;
+            const ix = stage.x + 14, iy = stage.y + (small ? 52 : 70);
+            insetBox(ix, iy, iw, ih, 'R1 NAVCAM · TERRAIN SEGMENTATION');
+            const hz = iy + ih * 0.3, f = ih * 0.9, cxc = ix + iw / 2, mid = ix + iw / 2;
+            const sky = ctx.createLinearGradient(0, iy, 0, hz);
+            sky.addColorStop(0, 'rgb(70, 46, 38)');
+            sky.addColorStop(1, 'rgb(150, 105, 80)');
+            ctx.fillStyle = sky;
+            ctx.fillRect(ix, iy, iw, hz - iy);
+            const cols = 28, rows = 12;
+            const cw2 = iw / cols, rh = (iy + ih - hz) / rows;
+            for (let r = 0; r < rows; r++) {
+                const sy = hz + (r + 0.5) * rh;
+                const z = (f * CAM_HEIGHT) / (sy - hz);
+                const haze = clamp(z / 40, 0, 0.6);
+                for (let c = 0; c < cols; c++) {
+                    const sx = ix + (c + 0.5) * cw2;
+                    const wx = ((sx - cxc) * z) / f;
+                    const n = tileNoise(wx * 0.55, (z + cam.travel) * 0.45, cam.seed);
+                    if (sx < mid) {
+                        const k = 0.55 + 0.6 * n;
+                        ctx.fillStyle = `rgb(${(170 * k * (1 - haze) + 150 * haze) | 0}, ${(105 * k * (1 - haze) + 105 * haze) | 0}, ${(70 * k * (1 - haze) + 80 * haze) | 0})`;
+                    } else {
+                        ctx.fillStyle = n < 0.45 ? 'rgba(255, 177, 74, 0.75)' : n < 0.68 ? 'rgba(102, 126, 234, 0.6)' : 'rgba(255, 90, 79, 0.7)';
+                    }
+                    ctx.fillRect(ix + c * cw2, hz + r * rh, cw2 + 0.5, rh + 0.5);
+                }
+            }
+            [[ix, mid, false], [mid, ix + iw, true]].forEach(([x0, x1, seg]) => {
+                ctx.save();
+                ctx.beginPath(); ctx.rect(x0, hz, x1 - x0, iy + ih - hz); ctx.clip();
+                cam.rocks.slice().sort((a, b) => b.z - a.z).forEach((rk) => {
+                    const sy = hz + (f * CAM_HEIGHT) / rk.z;
+                    const sx = cxc + (f * rk.x) / rk.z;
+                    const rr = (f * rk.r) / rk.z;
+                    ctx.fillStyle = seg ? 'rgba(255, 90, 79, 0.95)' : 'rgb(48, 30, 24)';
+                    ctx.beginPath(); ctx.ellipse(sx, sy - rr * 0.4, rr, rr * 0.6, 0, 0, TAU); ctx.fill();
+                    if (seg && rk.z < 8 && Math.abs(rk.x) < 2) {
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.strokeRect(sx - rr - 2, sy - rr - 2, rr * 2 + 4, rr * 1.4 + 4);
+                    }
+                });
+                ctx.restore();
+            });
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.beginPath(); ctx.moveTo(mid, iy); ctx.lineTo(mid, iy + ih); ctx.stroke();
+            text('RGB', ix + 4, iy + 10, COL.text, 8, 'left', 600);
+            text('SEG', mid + 4, iy + 10, COL.text, 8, 'left', 600);
+            const ly = iy + ih + 12;
+            text('■ SAND', ix, ly, COL.amber, 8);
+            text('■ BEDROCK', ix + iw * 0.3, ly, COL.cyan, 8);
+            text('■ HAZARD', ix + iw * 0.68, ly, COL.red, 8);
+        }
 
         scene.stats = function () {
             return [
@@ -1413,11 +1526,12 @@
 
 
     /* =====================================================================
-     * Pinned scene viewer: one full-screen canvas inside a sticky wrapper. The text panel
-     * crossing the middle of the screen picks the scene; the rail ticks jump to a panel.
+     * Carousel scene viewer: one canvas in a framed slide. The rail buttons, arrows and
+     * horizontal swipes pick the scene; it advances on its own until the visitor does.
      * ===================================================================== */
-    const scenes = [agents, rpo, earth, mars];
+    const scenes = [rpo, earth, agents, mars];
     let current = 0, trans = null, running = false, last = 0, inView = false;
+    let autoplay = !reduceMotion, autoClock = 0;
 
     function layout() {
         const r = pin.getBoundingClientRect();
@@ -1431,23 +1545,21 @@
         canvas.style.height = `${H}px`;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         stars = Array.from({ length: Math.round((W * H) / 6000) }, () => ({ x: rand(0, W), y: rand(0, H), r: rand(0.3, 1.2), p: rand(0, TAU) }));
-        stage = stageFor(current);
+        stage = stageFor();
         scenes.forEach((sc) => sc.resize());
     }
 
-    /* Desktop: a wide stage shifted away from the caption, which alternates left (even scenes)
-     * and right (odd scenes). Phone: the upper part of the screen, caption below. */
-    function stageFor(i) {
-        const top = 84;
-        if (small) return { x: 12, y: top, w: W - 24, h: Math.max(260, H * 0.62 - top) };
-        const shift = Math.round(W * 0.2);
-        const w = W - 64 - shift;
-        return { x: i % 2 === 0 ? 32 + shift : 32, y: top, w, h: H - top - 64 };
+    /* The stage fills the frame with a small margin; captions sit below the canvas, so the
+     * whole width is free (safeX/safeR are the inner edges for HUD text and insets). */
+    function stageFor() {
+        const m = small ? 10 : 16;
+        const w = Math.max(200, W - 2 * m), h = Math.max(240, H - 2 * m);
+        return { x: m, y: m, w, h, safeX: m + 14, safeR: m + w - 14 };
     }
 
     function showScene(i) {
         current = i;
-        stage = stageFor(i);
+        stage = stageFor();
         scenes[i].resize();
         if (scenes[i] === rpo || scenes[i] === agents) scenes[i].reset(); // these tell a story from the start
     }
@@ -1460,7 +1572,7 @@
             ctx.fillRect(st.x, st.y, st.r, st.r);
         }
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = 'rgba(90, 209, 255, 0.06)';
+        ctx.strokeStyle = 'rgba(102, 126, 234, 0.06)';
         ctx.beginPath();
         const gs = small ? 40 : 64;
         for (let gx = gs; gx < W; gx += gs) { ctx.moveTo(gx, 0); ctx.lineTo(gx, H); }
@@ -1470,16 +1582,17 @@
 
     function drawHudOverlay(scene) {
         const { x, y, w, h } = stage;
-        brackets(x, y, w, h, 18, 'rgba(90, 209, 255, 0.55)');
-        text(scene.title, x + 14, y + 24, COL.cyan, small ? 11 : 13, 'left', 600);
-        if (!small) text(scene.subtitle, x + 14, y + 41, COL.dim, 10);
+        brackets(x, y, w, h, 18, 'rgba(102, 126, 234, 0.55)');
+        const lx = stage.safeX;               // left edge not covered by a caption card
+        text(scene.title, lx, y + 24, COL.cyan, small ? 11 : 13, 'left', 600);
+        if (!small) text(scene.subtitle, lx, y + 41, COL.dim, 10);
 
         const stats = scene.stats();
         const pw = small ? 150 : 190, ph = stats.length * 16 + 12;
         const px = x + w - pw - 12, py = small ? y + 36 : y + 12;
         ctx.fillStyle = 'rgba(5, 8, 13, 0.72)';
         ctx.fillRect(px, py, pw, ph);
-        ctx.strokeStyle = 'rgba(90, 209, 255, 0.3)';
+        ctx.strokeStyle = 'rgba(102, 126, 234, 0.3)';
         ctx.strokeRect(px + 0.5, py + 0.5, pw, ph);
         stats.forEach(([k, v], i) => {
             text(k, px + 8, py + 19 + i * 16, COL.dim, small ? 9 : 10);
@@ -1487,15 +1600,15 @@
         });
 
         const lines = scene.logs.slice(small ? -2 : -4);
-        const lw = Math.min(w - 24, small ? w - 24 : 470);
+        const lw = Math.min(x + w - lx - 12, small ? w - 24 : 470);
         const lh = lines.length * 15 + 10;
         if (lines.length) {
             ctx.fillStyle = 'rgba(5, 8, 13, 0.72)';
-            ctx.fillRect(x + 12, y + h - lh - 12, lw, lh);
+            ctx.fillRect(lx - 2, y + h - lh - 12, lw, lh);
         }
         lines.forEach((ln, i) => {
             const alpha = 0.45 + 0.55 * ((i + 1) / lines.length);
-            text(`> ${ln}`, x + 20, y + h - lh - 12 + 19 + i * 15, `rgba(216, 227, 236, ${alpha})`, small ? 9 : 10);
+            text(`> ${ln}`, lx + 6, y + h - lh - 12 + 19 + i * 15, `rgba(216, 227, 236, ${alpha})`, small ? 9 : 10);
         });
         if (!small) text(`MET ${fmtClock(met)}`, x + w - 14, y + h - 16, COL.cyanMid, 10, 'right');
     }
@@ -1514,11 +1627,14 @@
             ctx.fillStyle = `rgba(5, 8, 13, ${clamp(a, 0, 1)})`;
             ctx.fillRect(0, 0, W, H);
         }
-        const shown = trans ? trans.to : current;
-        ticks.forEach((b, i) => {
-            b.classList.toggle('active', i === shown);
-            b.setAttribute('aria-current', i === shown ? 'step' : 'false');
+    }
+
+    function markActive(i) {
+        ticks.forEach((b, k) => {
+            b.classList.toggle('active', k === i);
+            b.setAttribute('aria-current', k === i ? 'step' : 'false');
         });
+        panels.forEach((p, k) => { p.hidden = k !== i; });
     }
 
     /* dt drives the simulations (clamped); fadeDt is real elapsed time so a slow device
@@ -1536,6 +1652,8 @@
 
     function setScene(i) {
         if (i === (trans ? trans.to : current)) return;
+        markActive(i);
+        autoClock = 0;
         if (reduceMotion || !running) {
             trans = null;
             showScene(i);
@@ -1551,6 +1669,7 @@
         const elapsed = (now - last) / 1000;
         last = now;
         step(Math.min(0.05, elapsed), Math.min(FADE_SECONDS, elapsed));
+        if (autoplay && !trans && (autoClock += elapsed) >= AUTO_SECONDS) setScene((current + 1) % scenes.length);
         render();
         requestAnimationFrame(frame);
     }
@@ -1566,9 +1685,27 @@
         }
     }
 
-    ticks.forEach((b, i) => b.addEventListener('click', () => {
-        if (panels[i]) panels[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-    }));
+    /* Any choice by the visitor stops the autoplay for good. */
+    function pick(i) {
+        autoplay = false;
+        setScene((i + scenes.length) % scenes.length);
+    }
+    const target = () => (trans ? trans.to : current);
+
+    ticks.forEach((b, i) => b.addEventListener('click', () => pick(i)));
+    arrows.forEach((b) => b.addEventListener('click', () => pick(target() + (b.classList.contains('prev') ? -1 : 1))));
+    block.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') pick(target() + (e.key === 'ArrowLeft' ? -1 : 1));
+    });
+    let swipeX = null, swipeY = 0;
+    pin.addEventListener('pointerdown', (e) => { swipeX = e.clientX; swipeY = e.clientY; });
+    pin.addEventListener('pointerup', (e) => {
+        if (swipeX === null) return;
+        const dx = e.clientX - swipeX, dy = e.clientY - swipeY;
+        swipeX = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) pick(target() + (dx < 0 ? 1 : -1));
+    });
+    pin.addEventListener('pointercancel', () => { swipeX = null; });
 
     let resizeTimer = 0;
     window.addEventListener('resize', () => {
@@ -1581,18 +1718,13 @@
             inView = entries[0].isIntersecting;
             updateRunning();
         }).observe(block);
-        // A panel becomes active when it crosses the horizontal middle of the viewport.
-        const picker = new IntersectionObserver((entries) => {
-            entries.forEach((e) => { if (e.isIntersecting) setScene(panels.indexOf(e.target)); });
-        }, { rootMargin: '-50% 0px -50% 0px' });
-        panels.forEach((p) => picker.observe(p));
     } else {
         inView = true;
         updateRunning();
     }
 
     layout(); // each scene's resize() also seeds it on first call
-    if (new URLSearchParams(location.search).has('simdebug')) window.__hero = { step, render, scenes, setScene };
+    if (new URLSearchParams(location.search).has('simdebug')) window.__hero = { step, render, scenes, setScene, pick };
     if (reduceMotion) {
         // Still frames: advance each simulation a few seconds so every scene has something to show.
         for (let k = 0; k < 240; k++) scenes[current].update(1 / 30);
