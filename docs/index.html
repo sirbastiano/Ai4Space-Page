@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="landing.css?v=focus1">
+    <link rel="stylesheet" href="landing.css?v=v2b">
 </head>
 <body class="landing">
 
@@ -65,34 +65,43 @@
             <canvas id="hero-canvas" aria-hidden="true"></canvas>
             <div class="hero-scanlines" aria-hidden="true"></div>
             <nav class="scene-rail" aria-label="Scenes">
-                <button type="button" class="active" aria-current="step"><span>01</span> Mars</button>
-                <button type="button" aria-current="false"><span>02</span> Launch</button>
+                <button type="button" class="active" aria-current="step"><span>01</span> Design</button>
+                <button type="button" aria-current="false"><span>02</span> Rendezvous</button>
                 <button type="button" aria-current="false"><span>03</span> Earth</button>
+                <button type="button" aria-current="false"><span>04</span> Mars</button>
             </nav>
         </div>
         <div class="scene-panels">
             <article class="scene-panel">
                 <div class="scene-card">
-                    <p class="sec-label">01 / Mars surface ops</p>
+                    <p class="sec-label">01 / Agentic mission design</p>
+                    <h2>AI agents that <em>design the mission</em>.</h2>
+                    <p>Requirements, orbit, power and communications agents negotiate a spacecraft design, explore the trade space and trace every requirement before an engineer signs off.</p>
+                    <p class="scene-topics">Agentic AI for mission and space system design</p>
+                </div>
+            </article>
+            <article class="scene-panel right">
+                <div class="scene-card">
+                    <p class="sec-label">02 / Vision-based rendezvous</p>
+                    <h2>Docking guided by <em>what the camera sees</em>.</h2>
+                    <p>A chaser approaches a tumbling target through hold points at 250, 100 and 30 m, estimating its 6-DoF pose with a frame camera and an event camera that only reports change.</p>
+                    <p class="scene-topics">Vision and learning for GNC · Emerging computing and sensing</p>
+                </div>
+            </article>
+            <article class="scene-panel">
+                <div class="scene-card">
+                    <p class="sec-label">03 / Earth tip-and-cue</p>
+                    <h2>Satellites that <em>cue each other</em>.</h2>
+                    <p>An optical satellite spots a wildfire or flood onboard and cues a radar satellite, which retargets, images through smoke and cloud, and downlinks the alert.</p>
+                    <p class="scene-topics">Distributed AI for mission operations and adaptive sensing</p>
+                </div>
+            </article>
+            <article class="scene-panel right">
+                <div class="scene-card">
+                    <p class="sec-label">04 / Mars surface ops</p>
                     <h2>Robots that explore <em>together</em>.</h2>
                     <p>Three rovers and a scout helicopter share one map, split the unexplored frontier between them and send the nearest rover to every promising sample site.</p>
                     <p class="scene-topics">AI for space robotics and autonomous operations</p>
-                </div>
-            </article>
-            <article class="scene-panel">
-                <div class="scene-card">
-                    <p class="sec-label">02 / Autonomous GNC</p>
-                    <h2>Rockets that <em>fly themselves home</em>.</h2>
-                    <p>The upper stage lights while still attached, the booster flips and returns to land, and the upper stage climbs from a parking orbit into its transfer orbit.</p>
-                    <p class="scene-topics">Vision and learning for guidance, navigation, and control</p>
-                </div>
-            </article>
-            <article class="scene-panel">
-                <div class="scene-card">
-                    <p class="sec-label">03 / Earth response</p>
-                    <h2>Constellations that <em>respond</em> to a changing Earth.</h2>
-                    <p>Satellites detect floods and wildfires onboard, relay the alert over inter-satellite links, re-task a neighbour to confirm and downlink it to the nearest ground station.</p>
-                    <p class="scene-topics">Distributed AI for mission operations and adaptive sensing</p>
                 </div>
             </article>
         </div>
@@ -155,7 +164,7 @@
                     <article class="panel focus-spotlight">
                         <span class="focus-tag">New in 2027</span>
                         <h3>Agentic AI</h3>
-                        <p>For autonomous mission orchestration and the automation of space system and subsystem design, reflecting emerging trends and growing interest within the space community.</p>
+                        <p>For autonomous mission orchestration and trajectory generation, and the automation of space system and subsystem design, reflecting emerging trends and growing interest within the space community.</p>
                     </article>
                     <article class="panel focus-spotlight">
                         <span class="focus-tag">New in 2027</span>
@@ -163,62 +172,32 @@
                         <p>Integrating AI with new computing paradigms and sensing technologies, such as neuromorphic computing and sensing, to enable new capabilities and applications for future space missions.</p>
                     </article>
                 </div>
-                <h3 class="focus-subhead">Topics</h3>
-                <div class="focus-grid">
-                    <article class="panel focus-card spot">
-                        <span class="focus-num">01<em>Spotlight</em></span>
-                        <h3>Agentic AI for mission and space system design</h3>
-                        <p>Tool-using agents for systems engineering, multi-agent design workflows, requirements generation and traceability, automated design-space exploration, and agent-assisted verification and validation.</p>
+                <h3 class="focus-subhead">Core subject areas</h3>
+                <div class="focus-grid focus-grid-five">
+                    <article class="panel focus-card">
+                        <span class="focus-num">01</span>
+                        <h3>Deep learning architectures and techniques</h3>
+                        <p>Lightweight architectures, robust generalization, self- and semi-supervised learning, few-shot adaptation and synthetic-data training, for tasks from Earth observation segmentation and wildfire detection to spacecraft pose estimation and planetary navigation.</p>
                     </article>
-                    <article class="panel focus-card spot">
-                        <span class="focus-num">02<em>Spotlight</em></span>
-                        <h3>Emerging computing paradigms and sensing technologies</h3>
-                        <p>Neuromorphic computing, event-based sensing, and in-memory computing.</p>
+                    <article class="panel focus-card">
+                        <span class="focus-num">02</span>
+                        <h3>Efficient, edge, and scalable vision</h3>
+                        <p>Model efficiency, energy-efficient computing and sensing, and power-efficient edge hardware, so increasingly capable models, including multimodal foundation models, can run onboard under tight compute and power budgets.</p>
                     </article>
                     <article class="panel focus-card">
                         <span class="focus-num">03</span>
-                        <h3>Foundation and multimodal models for space data</h3>
-                        <p>Multimodal reasoning across imagery, telemetry, geospatial metadata, and scientific measurements; pretraining on EO and astronomy datasets; and evaluation protocols.</p>
+                        <h3>Foundation models</h3>
+                        <p>Geospatial foundation models that generalize across sensors, regions and acquisition conditions, and VLMs, VLAs, LLMs and agentic AI for event-based operations, onboard mission orchestration and automated mission design.</p>
                     </article>
                     <article class="panel focus-card">
                         <span class="focus-num">04</span>
-                        <h3>Distributed AI for mission operations and adaptive sensing</h3>
-                        <p>Federated and distributed learning, tip-and-cue architectures, event-driven operations, and autonomous mission orchestration.</p>
+                        <h3>Photogrammetry and remote sensing</h3>
+                        <p>Deep learning, geospatial foundation models and edge computing for multispectral, hyperspectral and SAR data, and onboard AI for responsive tip-and-cue observation.</p>
                     </article>
                     <article class="panel focus-card">
                         <span class="focus-num">05</span>
-                        <h3>Vision and learning for guidance, navigation, and control</h3>
-                        <p>Rendezvous and docking, pose estimation, entry, descent, and landing (EDL), and space object tracking.</p>
-                    </article>
-                    <article class="panel focus-card">
-                        <span class="focus-num">06</span>
-                        <h3>AI for space robotics and autonomous operations</h3>
-                        <p>Perception, planning, control, multi-robot coordination, and learning-based dynamics modeling.</p>
-                    </article>
-                    <article class="panel focus-card">
-                        <span class="focus-num">07</span>
-                        <h3>Machine learning for astronomy and planetary science</h3>
-                        <p>Planetary mapping, astronomical image analysis, anomaly detection, risk-aware decision-making for space exploration, and physics-informed modeling.</p>
-                    </article>
-                    <article class="panel focus-card">
-                        <span class="focus-num">08</span>
-                        <h3>Edge AI under tight compute and energy constraints</h3>
-                        <p>Quantization, pruning, neural architecture search, and parameter-efficient adaptation of foundation models.</p>
-                    </article>
-                    <article class="panel focus-card">
-                        <span class="focus-num">09</span>
-                        <h3>Onboard AI computing platforms</h3>
-                        <p>AI accelerators, hardware–software co-design, and integration with flight computing systems.</p>
-                    </article>
-                    <article class="panel focus-card">
-                        <span class="focus-num">10</span>
-                        <h3>Trustworthy and resilient AI for space</h3>
-                        <p>Uncertainty estimation, out-of-distribution detection, explainability, fault diagnosis and recovery, and safety assurance.</p>
-                    </article>
-                    <article class="panel focus-card">
-                        <span class="focus-num">11</span>
-                        <h3>Datasets, benchmarks, and data-centric AI for space</h3>
-                        <p>Automated labeling, synthetic data generation, adaptation across sensors and missions, bridging the sim-to-real gap, and benchmark development.</p>
+                        <h3>Robot perception</h3>
+                        <p>3D perception, localization and mapping, pose estimation, uncertainty-aware sensor fusion and sim-to-real generalization for planetary navigation, rendezvous, docking and robotic servicing.</p>
                     </article>
                 </div>
                 <a href="call4paper.html" class="btn btn-ghost focus-cta">Full call for papers →</a>
@@ -346,7 +325,7 @@
 
     <script src="app.js?v=20260604c"></script>
     <script src="countdown.js"></script>
-    <script src="hero-sim.js?v=scroll3"></script>
+    <script src="hero-sim.js?v=v2f"></script>
     <script>
         document.querySelectorAll('.bio-toggle').forEach(btn => {
             btn.addEventListener('click', () => {

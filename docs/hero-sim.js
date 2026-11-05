@@ -1,7 +1,8 @@
-/* AI4Space hero "mission console": three simulated channels drawn as HUD displays on one canvas.
- * CH-1 cooperative Mars exploration (frontier allocation on a shared map), CH-2 launch with hot
- * staging, booster return and transfer-orbit insertion, CH-3 Earth-observation constellation relaying flood and
- * wildfire alerts over inter-satellite links. Plain JS, no dependencies. */
+/* AI4Space landing scenes: four simulations drawn as HUD displays on one pinned canvas.
+ * 01 agentic mission design (multi-agent trade-space exploration), 02 vision-based rendezvous
+ * (Clohessy-Wiltshire approach, pose estimation, event camera), 03 Earth tip-and-cue (optical
+ * detection cueing a SAR satellite), 04 cooperative Mars exploration (frontier allocation).
+ * Plain JS, no dependencies. */
 (function () {
     'use strict';
 
@@ -100,330 +101,244 @@
     }
 
     /* =====================================================================
-     * CH-2  Autonomous GNC: launch with hot staging. The upper stage ignites while still
-     * attached, the booster flips, burns back and lands near the pad, and the upper stage
-     * reaches a parking orbit before burning into a transfer orbit. Side view of Earth with
-     * altitudes exaggerated so the whole profile fits; the transfer orbit coasts with
-     * constant angular momentum (r² dθ/dt = const) and speed from vis-viva.
+     * 01  Agentic mission design: an orchestrator and five specialist agents exchange
+     * messages while candidate designs fill a mass-cost trade space. The Pareto front
+     * tightens, a knee-point design is selected, the spec sheet fills in and the V&V agent
+     * traces every requirement. Sizing relations are simple but physically motivated
+     * (mass grows with aperture and array power, cost with mass and aperture²).
      * ===================================================================== */
-    const gnc = (function () {
+    const agents = (function () {
         const scene = {
-            id: 'gnc',
-            title: 'CH-2 // AUTONOMOUS GNC',
-            subtitle: 'HOT STAGING · BOOSTER RETURN · TRANSFER ORBIT INSERTION',
+            id: 'agents',
+            title: '01 // AGENTIC MISSION DESIGN',
+            subtitle: 'MULTI-AGENT SYSTEMS ENGINEERING · TRADE-SPACE EXPLORATION',
             logs: []
         };
-        // event times in scene seconds
-        const T = {
-            liftoff: 0.6, maxQ: 2.3, hot: 4.3, sep: 4.65, flip: 5.0, boostback: [5.5, 6.6], seco: 8.6,
-            entry: [9.0, 9.6], landing: [10.6, 11.3], transfer: [10.0, 11.0], end: 15.5
-        };
-        const PARK_KM = 200;
-        const SEP_KM = 70;
-        const ECC = 0.85;                       // transfer orbit eccentricity
-        const RISE = 6;                         // visual exaggeration of the transfer orbit's climb
-        const MET_SCALE = 50;                   // scene seconds -> mission seconds
-        const EVENTS = [
-            [T.liftoff, 'LIFTOFF · ALL ENGINES NOMINAL'],
-            [T.maxQ, 'MAX-Q · THROTTLE BUCKET'],
-            [T.hot, 'HOT STAGING · S2 IGNITION BEFORE SEPARATION'],
-            [T.sep, 'STAGE SEPARATION CONFIRMED'],
-            [T.boostback[0], 'S1 FLIP COMPLETE · BOOSTBACK BURN → LZ-1'],
-            [T.seco, `S2 ENGINE CUTOFF · PARKING ORBIT ${PARK_KM} km`],
-            [T.entry[0], 'S1 ENTRY BURN'],
-            [T.transfer[0], 'S2 TRANSFER BURN · GTO INSERTION'],
-            [T.landing[0], 'S1 LANDING BURN · LEGS DEPLOYED'],
-            [T.transfer[1], 'S2 COASTING TO APOGEE 35 786 km'],
-            [T.landing[1], 'S1 TOUCHDOWN AT LZ-1']
+        const AGENTS = [
+            { id: 'REQ', name: 'REQUIREMENTS' },
+            { id: 'ORB', name: 'ORBIT' },
+            { id: 'PWR', name: 'POWER' },
+            { id: 'COM', name: 'COMMS' },
+            { id: 'VV', name: 'V&V' }
         ];
-        let s = null, g = null;
+        const TALK = {
+            REQ: ['GSD ≤ 20 m in SWIR', 'revisit ≤ 24 h', 'alert latency ≤ 30 min'],
+            ORB: ['SSO 550 km · LTAN 10:30', 'Δv budget 62 m/s', 'eclipse 35 min per orbit'],
+            PWR: ['array 1.8 m² · 180 W EOL', 'battery 140 Wh', 'power margin +22 %'],
+            COM: ['X-band 150 Mbps downlink', 'S-band ISL for cueing', 'link margin 4.1 dB'],
+            VV: ['REQ-07 traced to ORB-02', 'test case TC-31 generated', 'coverage check passed']
+        };
+        const REQS = 24;
+        const T = { explore: [1.2, 10.5], select: 11, spec: [11.6, 13.6], trace: [13.6, 16], end: 18 };
+        const MASS = [45, 135], COST = [10, 30];
+        let s = null;
 
-        const pos = (phi, r) => [g.cx + r * Math.sin(phi), g.cy - r * Math.cos(phi)];
-        const transferR = (nu) => (g.rp * (1 + ECC)) / (1 + ECC * Math.cos(nu));
-        const transferShown = (nu) => g.rp + (transferR(nu) - g.rp) * RISE;
-        const within = (t, span) => t >= span[0] && t <= span[1];
-
-        function geometry() {
-            const { x, y, w, h } = stage;
-            const R = Math.max(w, h) * 1.05;
-            const ang = (frac) => Math.asin(clamp(((frac - 0.5) * w) / R, -1, 1));
-            const hp = h * 0.42;
-            g = {
-                R, cx: x + w * 0.5, cy: y + h * 0.7 + R, hp, hs: (hp * SEP_KM) / PARK_KM,
-                pad: ang(0.12), lz: ang(0.19), sep: ang(0.3), seco: ang(0.46)
-            };
-            g.omegaPark = ((g.seco - g.sep) / (T.seco - T.sep)) * 1.15;
-            g.burn = g.seco + g.omegaPark * (T.transfer[0] - T.seco);
-            g.rp = g.R + g.hp;
-            // altitude-per-angle at the end of the ascent, expressed for the post-separation segment
-            const ascentSlope = (g.hs * 1.25) / (2.2 * (g.sep - g.pad));
-            g.climbSlope = clamp((ascentSlope * (g.seco - g.sep)) / (g.hp - g.hs), 0, 3);
+        function candidate() {
+            const D = rand(0.08, 0.32);           // payload aperture, m
+            const P = rand(80, 320);              // end-of-life array power, W
+            const mass = 30 + 160 * D + 0.12 * P + rand(-6, 6);
+            const cost = 6 + 0.11 * mass + 55 * D * D + rand(-1.5, 1.5);
+            return { D, P, mass, cost, feasible: D >= 0.12 && P >= 140, age: 0 };
         }
 
-        function ascent(t) {
-            const u = clamp((t - T.liftoff) / (T.sep - T.liftoff), 0, 1);
-            return [g.pad + (g.sep - g.pad) * Math.pow(u, 2.2), g.R + g.hs * Math.pow(u, 1.25)];
+        function updateFront() {
+            const ok = s.designs.filter((d) => d.feasible).sort((a, b) => a.mass - b.mass);
+            const front = [];
+            let best = Infinity;
+            ok.forEach((d) => { if (d.cost < best) { front.push(d); best = d.cost; } });
+            s.front = front;
         }
 
-        function upperPolar(t) {
-            if (t <= T.sep) return ascent(t);
-            if (t <= T.seco) {
-                // cubic Hermite climb: matches the ascent's flight-path angle at separation, levels off at SECO
-                const u = (t - T.sep) / (T.seco - T.sep);
-                const m = g.climbSlope;
-                const f = m * u + (3 - 2 * m) * u * u + (m - 2) * u * u * u;
-                return [g.sep + (g.seco - g.sep) * u, g.R + g.hs + (g.hp - g.hs) * f];
-            }
-            if (t <= T.transfer[0]) return [g.seco + g.omegaPark * (t - T.seco), g.rp];
-            return [g.burn + s.nu, transferShown(s.nu)];
+        function kneePoint() {
+            const n = (d) => Math.hypot((d.mass - MASS[0]) / (MASS[1] - MASS[0]), (d.cost - COST[0]) / (COST[1] - COST[0]));
+            return s.front.reduce((a, b) => (n(b) < n(a) ? b : a));
         }
 
-        /* Return-to-launch-site arc: quadratic Bezier in (angle, radius), slowing toward touchdown. */
-        function boosterPolar(t) {
-            if (t <= T.sep) return ascent(t);
-            const u0 = clamp((t - T.sep) / (T.landing[1] - T.sep), 0, 1);
-            const u = 1 - Math.pow(1 - u0, 1.7);
-            const p0 = [g.sep, g.R + g.hs];
-            const p1 = [g.sep + 0.45 * (g.sep - g.pad), g.R + g.hs * 2.2];
-            const p2 = [g.lz, g.R];
-            const a = (1 - u) * (1 - u), b = 2 * u * (1 - u), c = u * u;
-            return [a * p0[0] + b * p1[0] + c * p2[0], a * p0[1] + b * p1[1] + c * p2[1]];
-        }
-
-        function upperSpeed(t, r) {
-            const table = [[0, 0], [T.liftoff, 0], [T.sep, 2.1], [T.seco, 7.8], [T.transfer[0], 7.8], [T.transfer[1], 10.2]];
-            if (t >= T.transfer[1]) {
-                const a = g.rp / (1 - ECC);
-                return 10.2 * Math.sqrt((2 / r - 1 / a) / (2 / g.rp - 1 / a));
-            }
-            for (let i = 1; i < table.length; i++) {
-                if (t <= table[i][0]) {
-                    const [t0, v0] = table[i - 1], [t1, v1] = table[i];
-                    return v0 + ((v1 - v0) * (t - t0)) / Math.max(1e-6, t1 - t0);
-                }
-            }
-            return 7.8;
+        function send(fromIdx, toIdx, label) {
+            s.packets.push({ from: fromIdx, to: toIdx, t: 0, label });
         }
 
         scene.reset = function () {
-            s = { t: 0, nu: 0, fired: 0, trailA: [], trailU: [], trailB: [], headU: -Math.PI / 2, headB: -Math.PI / 2 };
+            s = { t: 0, designs: [], front: [], chosen: null, packets: [], nextDesign: 0, nextTalk: 0, active: -1, activeT: 0 };
             scene.logs = [];
-            pushLog(scene, 'T-0 · GUIDANCE INTERNAL · TARGET GTO');
+            pushLog(scene, 'ORCH ▸ BRIEF RECEIVED · EO WILDFIRE & FLOOD MISSION');
         };
 
-        scene.resize = function () {
-            geometry();
-            if (!s) scene.reset();
-        };
+        scene.resize = function () { if (!s) scene.reset(); };
 
         scene.update = function (dt) {
-            const prevU = pos(...upperPolar(s.t));
-            const prevB = pos(...boosterPolar(s.t));
             s.t += dt;
-            if (s.t > T.transfer[0]) {
-                const r = transferR(s.nu);
-                s.nu += g.omegaPark * Math.sqrt(1 + ECC) * (g.rp / r) * (g.rp / r) * dt;
+            s.activeT -= dt;
+            s.packets.forEach((p) => { p.t += dt / 0.7; });
+            s.packets = s.packets.filter((p) => p.t < 1);
+            s.designs.forEach((d) => { d.age += dt; });
+
+            if (s.t > T.explore[0] && s.t < T.explore[1]) {
+                s.nextDesign -= dt;
+                if (s.nextDesign <= 0) {
+                    s.nextDesign = 0.28;
+                    s.designs.push(candidate());
+                    updateFront();
+                    const a = 1 + Math.floor(Math.random() * 3);   // orbit, power or comms evaluates it
+                    send(0, a + 1, null);
+                }
+                s.nextTalk -= dt;
+                if (s.nextTalk <= 0) {
+                    s.nextTalk = 1.1;
+                    const k = Math.floor(Math.random() * 4);       // REQ, ORB, PWR, COM
+                    const ag = AGENTS[k];
+                    const line = TALK[ag.id][Math.floor(Math.random() * TALK[ag.id].length)];
+                    send(k + 1, 0, line);
+                    s.active = k + 1;
+                    s.activeT = 0.8;
+                    pushLog(scene, `${ag.id} → ORCH · ${line}`);
+                }
             }
-            while (s.fired < EVENTS.length && s.t >= EVENTS[s.fired][0]) pushLog(scene, EVENTS[s.fired++][1]);
-
-            const pu = pos(...upperPolar(s.t));
-            const pb = pos(...boosterPolar(s.t));
-            if (Math.hypot(pu[0] - prevU[0], pu[1] - prevU[1]) > 0.01) s.headU = Math.atan2(pu[1] - prevU[1], pu[0] - prevU[0]);
-            if (Math.hypot(pb[0] - prevB[0], pb[1] - prevB[1]) > 0.01) s.headB = Math.atan2(pb[1] - prevB[1], pb[0] - prevB[0]);
-
-            if (s.t > T.liftoff && s.t <= T.sep) s.trailA.push(pu);
-            if (s.t > T.sep) { s.trailU.push(pu); if (s.t <= T.landing[1]) s.trailB.push(pb); }
-            if (s.trailU.length > 900) s.trailU.shift();
+            if (!s.chosen && s.t >= T.select && s.front.length) {
+                s.chosen = kneePoint();
+                pushLog(scene, `ORCH ▸ DESIGN SELECTED · ${s.chosen.mass.toFixed(0)} kg · ${s.chosen.cost.toFixed(1)} M€ (KNEE OF PARETO FRONT)`);
+            }
+            if (s.t >= T.trace[0] && !s.traceLogged) {
+                s.traceLogged = true;
+                s.active = 5;
+                s.activeT = 2.4;
+                send(5, 0, 'tracing requirements');
+            }
+            if (s.t >= T.trace[1] && !s.doneLogged) {
+                s.doneLogged = true;
+                pushLog(scene, `VV → ORCH · ${REQS}/${REQS} REQUIREMENTS TRACED · READY FOR REVIEW`);
+            }
             if (s.t > T.end) scene.reset();
         };
 
-        /* Booster attitude: along velocity, flipping to engine-first after separation. */
-        function boosterAttitude(t) {
-            if (t <= T.liftoff) return g.pad - Math.PI / 2;
-            if (t <= T.flip) return s.headB;
-            if (t >= T.landing[1]) return g.lz - Math.PI / 2;
-            const k = clamp((t - T.flip) / 0.5, 0, 1);
-            return s.headB + Math.PI * k;
-        }
-
-        function plume(len, width) {
-            const flick = 0.75 + Math.random() * 0.45;
-            ctx.fillStyle = 'rgba(255, 177, 74, 0.85)';
-            ctx.beginPath(); ctx.moveTo(0, -width); ctx.lineTo(-len * flick, 0); ctx.lineTo(0, width); ctx.closePath(); ctx.fill();
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.beginPath(); ctx.moveTo(0, -width * 0.45); ctx.lineTo(-len * 0.4 * flick, 0); ctx.lineTo(0, width * 0.45); ctx.closePath(); ctx.fill();
-        }
-
-        /* Draw a stage in its own frame: nose toward +x, engine at x = from. */
-        function body(from, to, wd, nose, fins) {
-            ctx.fillStyle = 'rgba(216, 227, 236, 0.18)';
-            ctx.strokeStyle = COL.text;
-            ctx.lineWidth = 1;
-            ctx.fillRect(from, -wd / 2, to - from, wd);
-            ctx.strokeRect(from, -wd / 2, to - from, wd);
-            if (nose) {
-                ctx.beginPath(); ctx.moveTo(to, -wd / 2); ctx.lineTo(to + wd * 1.4, 0); ctx.lineTo(to, wd / 2); ctx.stroke();
-            }
-            if (fins) {
-                ctx.strokeStyle = COL.cyan;
-                ctx.beginPath(); ctx.moveTo(to - 1, -wd / 2); ctx.lineTo(to - 1, -wd / 2 - 3); ctx.moveTo(to - 1, wd / 2); ctx.lineTo(to - 1, wd / 2 + 3); ctx.stroke();
-            }
+        function nodePos(i, gx, gy, r) {
+            if (i === 0) return [gx, gy];
+            const a = -Math.PI / 2 + ((i - 1) / AGENTS.length) * TAU;
+            return [gx + Math.cos(a) * r, gy + Math.sin(a) * r];
         }
 
         scene.draw = function () {
             const { x, y, w, h } = stage;
-            const t = s.t;
-            const scale = small ? 0.85 : 1;
-            const LB = 24 * scale, LU = 12 * scale, WD = 4.5 * scale;
+            const gx = small ? x + w * 0.5 : x + w * 0.31;
+            const gy = small ? y + h * 0.4 : y + h * 0.5;
+            const r = small ? Math.min(w * 0.3, h * 0.17) : Math.min(w * 0.15, h * 0.28);
 
-            // Earth, atmosphere and reference altitudes
-            const atm = ctx.createRadialGradient(g.cx, g.cy, g.R, g.cx, g.cy, g.R + g.hp * 0.45);
-            atm.addColorStop(0, 'rgba(61, 139, 255, 0.28)');
-            atm.addColorStop(1, 'rgba(61, 139, 255, 0)');
-            ctx.fillStyle = atm;
-            ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R + g.hp * 0.45, 0, TAU); ctx.fill();
-            ctx.fillStyle = 'rgba(4, 12, 24, 0.96)';
-            ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R, 0, TAU); ctx.fill();
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.6)';
-            ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R, 0, TAU); ctx.stroke();
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.1)';
-            for (let k = 1; k < 7; k++) {
-                ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R - k * 26, 0, TAU); ctx.stroke();
+            // links
+            ctx.strokeStyle = 'rgba(90, 209, 255, 0.22)';
+            ctx.setLineDash([3, 5]);
+            for (let i = 1; i <= AGENTS.length; i++) {
+                const [ax, ay] = nodePos(i, gx, gy, r);
+                ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(ax, ay); ctx.stroke();
             }
-            ctx.setLineDash([2, 6]);
-            ctx.strokeStyle = 'rgba(216, 227, 236, 0.18)';
-            ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R + g.hp * 0.5, 0, TAU); ctx.stroke();
-            const karman = pos(g.lz - 0.02, g.R + g.hp * 0.5);
-            text('100 km', karman[0], karman[1] - 4, COL.dim, 9);
-
-            // parking orbit and transfer orbit predictions
-            if (t > T.hot) {
-                ctx.strokeStyle = 'rgba(90, 209, 255, 0.35)';
-                ctx.beginPath(); ctx.arc(g.cx, g.cy, g.rp, 0, TAU); ctx.stroke();
-                const lab = pos(g.seco - 0.05, g.rp);
-                text(`PARKING ORBIT ${PARK_KM} km`, lab[0], lab[1] - 8, COL.cyanMid, 9, 'center');
+            ctx.beginPath();
+            for (let i = 1; i <= AGENTS.length; i++) {
+                const [ax, ay] = nodePos(i, gx, gy, r);
+                if (i === 1) ctx.moveTo(ax, ay); else ctx.lineTo(ax, ay);
             }
-            if (t > T.transfer[0] - 0.4) {
-                ctx.strokeStyle = 'rgba(255, 177, 74, 0.6)';
-                ctx.beginPath();
-                let lastIn = null;
-                for (let k = 0; k <= 90; k++) {
-                    const nu = (k / 90) * Math.PI;
-                    const p = pos(g.burn + nu, transferShown(nu));
-                    if (k === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
-                    if (p[0] > x + 20 && p[0] < x + w - 20 && p[1] > y + 60 && p[1] < y + h - 20) lastIn = p;
-                }
-                ctx.stroke();
-                if (lastIn) text('TRANSFER ORBIT → APOGEE 35 786 km', lastIn[0] - 6, lastIn[1] + 14, COL.amber, 9, 'right');
-            }
+            ctx.closePath();
+            ctx.strokeStyle = 'rgba(90, 209, 255, 0.08)';
+            ctx.stroke();
             ctx.setLineDash([]);
 
-            // pads
-            [[g.pad, 'LC-1'], [g.lz, 'LZ-1']].forEach(([phi, name]) => {
-                const p = pos(phi, g.R);
-                ctx.save();
-                ctx.translate(p[0], p[1]);
-                ctx.rotate(phi);
-                ctx.strokeStyle = COL.amber;
-                ctx.beginPath(); ctx.moveTo(-9, 0); ctx.lineTo(9, 0); ctx.stroke();
-                if (name === 'LZ-1') { ctx.beginPath(); ctx.arc(0, -0.5, 5, Math.PI, TAU); ctx.stroke(); }
-                ctx.restore();
-                text(name, p[0], p[1] + 16, COL.amber, 9, 'center');
+            // packets
+            s.packets.forEach((p) => {
+                const a = nodePos(p.from, gx, gy, r), b = nodePos(p.to, gx, gy, r);
+                const px = a[0] + (b[0] - a[0]) * p.t, py = a[1] + (b[1] - a[1]) * p.t;
+                glowDot(px, py, 2.4, p.label ? COL.amber : COL.cyan);
+                if (p.label && !small) text(p.label, px + 8, py - 6, COL.amber, 9);
             });
 
-            // trails
-            ctx.lineWidth = 1.4;
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.85)';
-            polyline(s.trailA);
-            polyline(s.trailU);
-            ctx.strokeStyle = 'rgba(255, 177, 74, 0.7)';
-            ctx.setLineDash([3, 4]);
-            polyline(s.trailB);
-            ctx.setLineDash([]);
-            ctx.lineWidth = 1;
-
-            // liftoff exhaust cloud
-            if (t > T.liftoff - 0.2 && t < T.liftoff + 1.6) {
-                const p = pos(g.pad, g.R);
-                const k = clamp((t - T.liftoff + 0.2) / 1.8, 0, 1);
-                ctx.fillStyle = `rgba(216, 227, 236, ${0.25 * (1 - k)})`;
-                ctx.beginPath(); ctx.ellipse(p[0], p[1] - 3, 10 + 26 * k, 5 + 8 * k, g.pad, 0, TAU); ctx.fill();
+            // nodes
+            const nr = small ? 15 : 20;
+            for (let i = 0; i <= AGENTS.length; i++) {
+                const [nx, ny] = nodePos(i, gx, gy, r);
+                const on = i === s.active && s.activeT > 0;
+                ctx.fillStyle = 'rgba(5, 8, 13, 0.9)';
+                ctx.strokeStyle = i === 0 ? COL.cyan : on ? COL.amber : COL.cyanMid;
+                ctx.lineWidth = i === 0 || on ? 1.6 : 1;
+                ctx.beginPath();
+                for (let k = 0; k < 6; k++) {
+                    const a = Math.PI / 6 + (k / 6) * TAU;
+                    const rr = i === 0 ? nr * 1.35 : nr;
+                    if (k === 0) ctx.moveTo(nx + Math.cos(a) * rr, ny + Math.sin(a) * rr); else ctx.lineTo(nx + Math.cos(a) * rr, ny + Math.sin(a) * rr);
+                }
+                ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.lineWidth = 1;
+                if (on) {
+                    ctx.strokeStyle = `rgba(255, 177, 74, ${0.6 * s.activeT})`;
+                    ctx.beginPath(); ctx.arc(nx, ny, nr + 8 + (1 - s.activeT) * 10, 0, TAU); ctx.stroke();
+                }
+                const label = i === 0 ? 'ORCH' : AGENTS[i - 1].id;
+                text(label, nx, ny + 3, i === 0 ? COL.cyan : on ? COL.amber : COL.text, small ? 9 : 10, 'center', 600);
+                if (i > 0 && !small) text(AGENTS[i - 1].name, nx, ny + nr + 14, COL.dim, 8, 'center');
             }
 
-            if (t <= T.sep) {
-                // stacked vehicle
-                const p = pos(...upperPolar(t));
-                const a = t <= T.liftoff ? -Math.PI / 2 + g.pad : s.headU;
-                ctx.save();
-                ctx.translate(p[0], p[1]);
-                ctx.rotate(a);
-                if (t > T.liftoff && t < T.hot + 0.1) { ctx.save(); ctx.translate(-LB, 0); plume(26 * scale, WD * 0.9); ctx.restore(); }
-                body(-LB, 0, WD, false, false);
-                body(1, LU, WD * 0.9, true, false);
-                if (t > T.hot) {
-                    // hot-staging flash through the open interstage
-                    const f = 0.6 + Math.random() * 0.4;
-                    ctx.fillStyle = `rgba(255, 177, 74, ${0.8 * f})`;
-                    ctx.beginPath(); ctx.arc(0.5, 0, 6 * f * scale, 0, TAU); ctx.fill();
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-                    ctx.beginPath(); ctx.arc(0.5, 0, 2.5 * scale, 0, TAU); ctx.fill();
+            // trade space
+            const px = small ? x + 40 : x + w * 0.56;
+            const pw = small ? w - 60 : w * 0.38;
+            const py = small ? y + h * 0.56 : y + 118;
+            const ph = small ? h * 0.24 : h * 0.4;
+            ctx.strokeStyle = COL.cyanMid;
+            ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py + ph); ctx.lineTo(px + pw, py + ph); ctx.stroke();
+            text('TRADE SPACE', px, py - 8, COL.cyan, 10, 'left', 600);
+            text('mass [kg] →', px + pw, py + ph + 14, COL.dim, 9, 'right');
+            text('cost [M€]', px - 6, py + 4, COL.dim, 9, 'right');
+            const X = (m) => px + ((m - MASS[0]) / (MASS[1] - MASS[0])) * pw;
+            const Y = (c) => py + ph - ((c - COST[0]) / (COST[1] - COST[0])) * ph;
+            for (let m = 60; m < MASS[1]; m += 20) text(String(m), X(m), py + ph + 14, COL.dim, 8, 'center');
+            for (let c = 15; c < COST[1]; c += 5) text(String(c), px - 6, Y(c) + 3, COL.dim, 8, 'right');
+            s.designs.forEach((d) => {
+                const dx = X(clamp(d.mass, MASS[0], MASS[1])), dy = Y(clamp(d.cost, COST[0], COST[1]));
+                const fresh = clamp(1 - d.age / 0.6, 0, 1);
+                if (d.feasible) {
+                    ctx.fillStyle = `rgba(90, 209, 255, ${0.45 + 0.5 * fresh})`;
+                    ctx.beginPath(); ctx.arc(dx, dy, 2.2 + 2 * fresh, 0, TAU); ctx.fill();
+                } else {
+                    ctx.strokeStyle = 'rgba(255, 90, 79, 0.55)';
+                    ctx.beginPath(); ctx.moveTo(dx - 2.5, dy - 2.5); ctx.lineTo(dx + 2.5, dy + 2.5); ctx.moveTo(dx + 2.5, dy - 2.5); ctx.lineTo(dx - 2.5, dy + 2.5); ctx.stroke();
                 }
-                ctx.restore();
-                if (t > T.hot) text('HOT STAGING', p[0] + 14, p[1] - 14, COL.amber, 10, 'left', 600);
-                else if (t > T.liftoff) text('S1+S2', p[0] + 12, p[1] - 10, COL.cyan, 9);
-            } else {
-                // upper stage
-                const pu = pos(...upperPolar(t));
-                ctx.save();
-                ctx.translate(pu[0], pu[1]);
-                ctx.rotate(s.headU);
-                const s2Burn = (t > T.sep && t < T.seco) || within(t, T.transfer);
-                if (s2Burn) { ctx.save(); ctx.translate(-LU / 2, 0); plume(18 * scale, WD * 0.75); ctx.restore(); }
-                body(-LU / 2, LU / 2, WD * 0.9, true, false);
-                ctx.restore();
-                glowDot(pu[0], pu[1], 1.6, COL.cyan);
-                text('S2', pu[0] + 10, pu[1] - 10, COL.cyan, 10, 'left', 600);
+            });
+            if (s.front.length > 1) {
+                ctx.strokeStyle = COL.amber;
+                ctx.lineWidth = 1.4;
+                polyline(s.front.map((d) => [X(d.mass), Y(d.cost)]));
+                ctx.lineWidth = 1;
+            }
+            if (s.chosen) {
+                const cx = X(s.chosen.mass), cy = Y(s.chosen.cost);
+                ctx.strokeStyle = COL.amber;
+                ctx.beginPath(); ctx.arc(cx, cy, 9, 0, TAU); ctx.stroke();
+                text('SELECTED', cx + 12, cy - 8, COL.amber, 9, 'left', 600);
+            }
 
-                // booster
-                const pb = pos(...boosterPolar(t));
-                const ab = boosterAttitude(t);
-                ctx.save();
-                ctx.translate(pb[0], pb[1]);
-                ctx.rotate(ab);
-                const s1Burn = within(t, T.boostback) || within(t, T.entry) || within(t, T.landing);
-                if (s1Burn) { ctx.save(); ctx.translate(-LB / 2, 0); plume(16 * scale, WD * 0.85); ctx.restore(); }
-                body(-LB / 2, LB / 2, WD, false, true);
-                if (t > T.landing[0] + 0.2) {
-                    ctx.strokeStyle = COL.text;
-                    ctx.beginPath();
-                    ctx.moveTo(-LB / 2 + 3, -WD / 2); ctx.lineTo(-LB / 2 - 3, -WD / 2 - 5);
-                    ctx.moveTo(-LB / 2 + 3, WD / 2); ctx.lineTo(-LB / 2 - 3, WD / 2 + 5);
-                    ctx.stroke();
-                }
-                ctx.restore();
-                text('S1', pb[0] + 10, pb[1] - 10, COL.amber, 10, 'left', 600);
-                if (t >= T.landing[1]) text('LANDED ✓', pb[0] + 10, pb[1] + 2, COL.amber, 9);
+            // spec sheet
+            if (!small && s.t > T.spec[0]) {
+                const rows = [
+                    ['MISSION', 'Wildfire & flood monitoring'],
+                    ['ORBIT', 'SSO 550 km · LTAN 10:30'],
+                    ['PAYLOAD', `SWIR imager · ${(s.chosen ? s.chosen.D * 100 : 0).toFixed(0)} cm aperture`],
+                    ['POWER', `${(s.chosen ? s.chosen.P : 0).toFixed(0)} W EOL`],
+                    ['COMMS', 'X-band 150 Mbps · S-band ISL'],
+                    ['MASS / COST', s.chosen ? `${s.chosen.mass.toFixed(0)} kg · ${s.chosen.cost.toFixed(1)} M€` : '—'],
+                    ['REQUIREMENTS', `${Math.round(clamp((s.t - T.trace[0]) / (T.trace[1] - T.trace[0]), 0, 1) * REQS)}/${REQS} traced`]
+                ];
+                const shown = Math.ceil(clamp((s.t - T.spec[0]) / (T.spec[1] - T.spec[0]), 0, 1) * rows.length);
+                const sy = py + ph + 40;
+                text('SPEC SHEET v0.3', px, sy, COL.cyan, 10, 'left', 600);
+                rows.slice(0, shown).forEach(([k, v], i) => {
+                    text(k, px, sy + 18 + i * 15, COL.dim, 9);
+                    text(v, px + pw, sy + 18 + i * 15, i === rows.length - 1 && s.t >= T.trace[1] ? COL.amber : COL.text, 9, 'right', 600);
+                });
             }
         };
 
         scene.stats = function () {
-            const t = s.t;
-            const r = t > T.transfer[0] ? transferR(s.nu) : upperPolar(t)[1];
-            const met = Math.max(0, (t - T.liftoff) * MET_SCALE);
-            const mm = String(Math.floor(met / 60)).padStart(2, '0');
-            const ss = String(Math.floor(met % 60)).padStart(2, '0');
-            let s1 = 'ON PAD';
-            if (t >= T.landing[1]) s1 = 'LANDED';
-            else if (within(t, T.landing)) s1 = 'LANDING BURN';
-            else if (within(t, T.entry)) s1 = 'ENTRY BURN';
-            else if (within(t, T.boostback)) s1 = 'BOOSTBACK';
-            else if (t > T.sep) s1 = 'COAST';
-            else if (t > T.liftoff) s1 = 'ASCENT';
+            const traced = Math.round(clamp((s.t - T.trace[0]) / (T.trace[1] - T.trace[0]), 0, 1) * REQS);
             return [
-                ['T+', `${mm}:${ss}`],
-                ['S2 ALTITUDE', `${Math.max(0, ((r - g.R) / g.hp) * PARK_KM).toFixed(0)} km`],
-                ['S2 VELOCITY', `${upperSpeed(t, r).toFixed(2)} km/s`],
-                ['S1 BOOSTER', s1]
+                ['DESIGNS', `${s.designs.length}`],
+                ['FEASIBLE', `${s.designs.filter((d) => d.feasible).length}`],
+                ['PARETO-OPTIMAL', `${s.front.length}`],
+                ['REQS TRACED', `${traced}/${REQS}`]
             ];
         };
 
@@ -431,13 +346,706 @@
     })();
 
     /* =====================================================================
-     * CH-1  Mars: three rovers and a helicopter share one map and split the
+     * 02  Vision-based rendezvous: a chaser approaches a tumbling target in the target's
+     * local orbital frame. Relative motion follows the Clohessy-Wiltshire equations (n = 1,
+     * time = orbital phase, positions in metres); each leg is a two-impulse transfer chosen
+     * as the lowest-Δv of nine candidates, then a straight V-bar final approach. Two insets
+     * show the target as seen by a frame camera (with estimated keypoints and pose axes)
+     * and by an event camera, which only fires where edges move.
+     * ===================================================================== */
+    const rpo = (function () {
+        const scene = {
+            id: 'rpo',
+            title: '02 // VISION-BASED RENDEZVOUS',
+            subtitle: 'CLOHESSY-WILTSHIRE APPROACH · 6-DOF POSE ESTIMATION · EVENT CAMERA',
+            logs: []
+        };
+        const MEAN_MOTION = 0.00113;            // rad/s, ~LEO; converts m per rad of phase to m/s
+        const SIM_RATE = 0.5;                   // orbital phase (rad) advanced per wall-clock second
+        const HOLDS = [{ y: -250, name: 'H1' }, { y: -100, name: 'H2' }, { y: -30, name: 'H3' }];
+        const CLOSING = 9;                      // final-approach speed, m per wall-clock second (displayed as 0.1 m/s)
+        // target model: bus corners and two solar wings (unit ~ metres)
+        const V = [
+            [-0.5, -0.5, -0.7], [0.5, -0.5, -0.7], [0.5, 0.5, -0.7], [-0.5, 0.5, -0.7],
+            [-0.5, -0.5, 0.7], [0.5, -0.5, 0.7], [0.5, 0.5, 0.7], [-0.5, 0.5, 0.7],
+            [0.6, -0.4, 0], [2.7, -0.4, 0], [2.7, 0.4, 0], [0.6, 0.4, 0],
+            [-0.6, -0.4, 0], [-2.7, -0.4, 0], [-2.7, 0.4, 0], [-0.6, 0.4, 0],
+            [0, 0, 0.7], [0, 0, 1.3]
+        ];
+        const E = [
+            [0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7],
+            [8, 9], [9, 10], [10, 11], [11, 8], [12, 13], [13, 14], [14, 15], [15, 12], [16, 17]
+        ];
+        const KEYPOINTS = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 13, 14, 17];
+        const EVENT_WINDOW = 0.25;              // s of events accumulated in the event-camera view
+        let s = null;
+
+        function stm(t) {
+            const c = Math.cos(t), sn = Math.sin(t);
+            return {
+                rr: [[4 - 3 * c, 0], [6 * (sn - t), 1]],
+                rv: [[sn, 2 * (1 - c)], [-2 * (1 - c), 4 * sn - 3 * t]],
+                vr: [[3 * sn, 0], [6 * (c - 1), 0]],
+                vv: [[c, 2 * sn], [-2 * sn, 4 * c - 3]]
+            };
+        }
+        const mv = (m, v) => [m[0][0] * v[0] + m[0][1] * v[1], m[1][0] * v[0] + m[1][1] * v[1]];
+
+        function propagate(r, v, t) {
+            const P = stm(t);
+            const a = mv(P.rr, r), b = mv(P.rv, v), c = mv(P.vr, r), d = mv(P.vv, v);
+            return { r: [a[0] + b[0], a[1] + b[1]], v: [c[0] + d[0], c[1] + d[1]] };
+        }
+
+        /* Velocity needed at r0 to reach rf after phase T (two-impulse targeting). */
+        function solveTransfer(r0, rf, T) {
+            const P = stm(T);
+            const m = P.rv;
+            const det = m[0][0] * m[1][1] - m[0][1] * m[1][0];
+            if (Math.abs(det) < 1e-3) return null;
+            const a = mv(P.rr, r0);
+            const dx = rf[0] - a[0], dy = rf[1] - a[1];
+            return [(m[1][1] * dx - m[0][1] * dy) / det, (-m[1][0] * dx + m[0][0] * dy) / det];
+        }
+
+        function startPlan() {
+            const hold = HOLDS[s.leg];
+            const rf = [0, hold.y];
+            s.phase = 'plan';
+            s.t = 0;
+            s.candidates = [];
+            for (let k = 0; k < 9; k++) {
+                const T = (0.45 + k * 0.09) * Math.PI;
+                const v0 = solveTransfer(s.r, rf, T);
+                if (!v0) continue;
+                const path = [];
+                for (let i = 0; i < 48; i++) path.push(propagate(s.r, v0, (T * i) / 47).r);
+                const vf = propagate(s.r, v0, T).v;
+                const dv = hyp([v0[0] - s.v[0], v0[1] - s.v[1]]) + hyp(vf);
+                s.candidates.push({ T, v0, path, dv });
+            }
+            s.best = s.candidates.reduce((a, b) => (b.dv < a.dv ? b : a));
+            pushLog(scene, `PLAN → ${hold.name} (${Math.abs(hold.y)} m) · 9 CANDIDATES · BEST Δv ${(s.best.dv * MEAN_MOTION * 100).toFixed(1)} cm/s`);
+        }
+
+        scene.reset = function () {
+            const x0 = rand(25, 45) * (Math.random() < 0.5 ? -1 : 1);
+            s = {
+                r: [x0, rand(-440, -400)], v: [0, 0],
+                leg: 0, phase: 'plan', t: 0, legT: 0, trail: [], dvUsed: 0, burn: null,
+                candidates: [], best: null, att: [rand(0, TAU), rand(0, TAU), rand(0, TAU)],
+                frameAtt: null, frameT: 0, ghosts: [], prevEdges: null, events: 0, evBuf: []
+            };
+            scene.logs = [];
+            pushLog(scene, 'TARGET ACQUIRED · TUMBLE 2.1 °/s · NAV FILTER CONVERGED');
+            startPlan();
+        };
+
+        scene.resize = function () { if (!s) scene.reset(); };
+
+        scene.update = function (dt) {
+            s.t += dt;
+            s.att[0] += 0.32 * dt; s.att[1] += 0.47 * dt; s.att[2] += 0.18 * dt;
+            s.frameT -= dt;
+            if (s.frameT <= 0) {                // the frame camera only refreshes at 10 Hz
+                s.frameT = 0.1;
+                if (s.frameAtt) s.ghosts.unshift(s.frameAtt.slice());
+                s.ghosts = s.ghosts.slice(0, 2);
+                s.frameAtt = s.att.slice();
+            }
+            if (s.burn) { s.burn.t += dt; if (s.burn.t > 0.9) s.burn = null; }
+            s.evBuf.forEach((e) => { e.age += dt; });
+            s.evBuf = s.evBuf.filter((e) => e.age < EVENT_WINDOW);
+
+            if (s.phase === 'plan' && s.t > 1.6) {
+                const dv1 = [s.best.v0[0] - s.v[0], s.best.v0[1] - s.v[1]];
+                s.dvUsed += hyp(dv1);
+                s.v = s.best.v0.slice();
+                s.r0 = s.r.slice();
+                s.v0 = s.v.slice();
+                s.legT = 0;
+                s.burn = { dir: dv1, t: 0 };
+                s.phase = 'coast';
+                pushLog(scene, `BURN · Δv ${(hyp(dv1) * MEAN_MOTION * 100).toFixed(1)} cm/s · TOF ${((s.best.T / TAU) * 92).toFixed(0)} min`);
+            } else if (s.phase === 'coast') {
+                s.legT += dt * SIM_RATE;
+                const done = s.legT >= s.best.T;
+                const st = propagate(s.r0, s.v0, Math.min(s.legT, s.best.T));
+                s.r = st.r;
+                s.v = st.v;
+                if (done) {
+                    const hold = HOLDS[s.leg];
+                    s.dvUsed += hyp(s.v);
+                    s.burn = { dir: [-s.v[0], -s.v[1]], t: 0 };
+                    s.r = [0, hold.y];
+                    s.v = [0, 0];
+                    s.phase = 'hold';
+                    s.t = 0;
+                    pushLog(scene, `BRAKE · HOLDING AT ${hold.name} · POSE ERROR ${poseError().toFixed(1)}°`);
+                }
+            } else if (s.phase === 'hold' && s.t > 1.3) {
+                s.leg++;
+                if (s.leg < HOLDS.length) startPlan();
+                else { s.phase = 'final'; s.t = 0; pushLog(scene, 'FINAL APPROACH ON V-BAR · 0.1 m/s'); }
+            } else if (s.phase === 'final') {
+                s.r = [0, Math.min(-3, s.r[1] + CLOSING * dt)];
+                s.v = [0, CLOSING / (SIM_RATE * 1)];
+                if (s.r[1] >= -3) { s.phase = 'capture'; s.t = 0; s.v = [0, 0]; pushLog(scene, 'CONTACT · SOFT CAPTURE CONFIRMED'); }
+            } else if (s.phase === 'capture' && s.t > 2.6) {
+                scene.reset();
+            }
+            s.trail.push(s.r.slice());
+            if (s.trail.length > 700) s.trail.shift();
+        };
+
+        function range() { return Math.max(3, hyp(s.r)); }
+        function poseError() { return 0.15 + range() * 0.006; }
+
+        function rot(att) {
+            const [a, b, c] = att;
+            const ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b), cc = Math.cos(c), sc = Math.sin(c);
+            return [
+                [cb * cc, -cb * sc, sb],
+                [sa * sb * cc + ca * sc, -sa * sb * sc + ca * cc, -sa * cb],
+                [-ca * sb * cc + sa * sc, ca * sb * sc + sa * cc, ca * cb]
+            ];
+        }
+
+        function project(att, k, cx, cy) {
+            const m = rot(att);
+            return V.map((p) => {
+                const X = m[0][0] * p[0] + m[0][1] * p[1] + m[0][2] * p[2];
+                const Y = m[1][0] * p[0] + m[1][1] * p[1] + m[1][2] * p[2];
+                const Z = m[2][0] * p[0] + m[2][1] * p[1] + m[2][2] * p[2];
+                const f = 6 / (6 + Z);
+                return [cx + X * k * f, cy + Y * k * f];
+            });
+        }
+
+        function drawWire(pts, color, width) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.beginPath();
+            E.forEach(([a, b]) => { ctx.moveTo(pts[a][0], pts[a][1]); ctx.lineTo(pts[b][0], pts[b][1]); });
+            ctx.stroke();
+            ctx.lineWidth = 1;
+        }
+
+        function insetFrame(ix, iy, iw, ih, title) {
+            ctx.fillStyle = 'rgba(2, 4, 8, 0.92)';
+            ctx.fillRect(ix, iy, iw, ih);
+            ctx.strokeStyle = 'rgba(90, 209, 255, 0.4)';
+            ctx.strokeRect(ix + 0.5, iy + 0.5, iw, ih);
+            text(title, ix + 6, iy - 6, COL.cyan, small ? 8 : 9, 'left', 600);
+        }
+
+        scene.draw = function () {
+            const { x, y, w, h } = stage;
+            const tx = x + w * (small ? 0.88 : 0.84);
+            const ty = y + h * (small ? 0.86 : 0.66);
+            const sc = Math.min((w * 0.76) / 460, (h * 0.3) / 80);
+            const P = (r) => [tx + r[1] * sc, ty - r[0] * sc];
+
+            // axes, ticks, corridor, keep-out sphere
+            ctx.strokeStyle = COL.cyanDim;
+            ctx.setLineDash([3, 6]);
+            ctx.beginPath(); ctx.moveTo(x, ty); ctx.lineTo(x + w, ty); ctx.moveTo(tx, ty - h * 0.3); ctx.lineTo(tx, ty + h * 0.25); ctx.stroke();
+            ctx.setLineDash([]);
+            for (let m = -450; m <= 0; m += 50) {
+                const [px] = P([0, m]);
+                if (px < x + 8) continue;
+                ctx.strokeStyle = COL.cyanMid;
+                ctx.beginPath(); ctx.moveTo(px, ty - 3); ctx.lineTo(px, ty + 3); ctx.stroke();
+                if (m % 100 === 0 && m !== 0) text(`${m}`, px, ty + 16, COL.dim, 9, 'center');
+            }
+            text('V-BAR  [m]', x + 16, ty - 8, COL.cyanMid, 10);
+            text('R-BAR', tx + 8, ty - h * 0.3 + 12, COL.cyanMid, 10);
+            ctx.strokeStyle = 'rgba(255, 177, 74, 0.25)';
+            const cone = Math.tan(10 * DEG) * 280;
+            ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(...P([cone, -280])); ctx.moveTo(tx, ty); ctx.lineTo(...P([-cone, -280])); ctx.stroke();
+            ctx.strokeStyle = 'rgba(255, 90, 79, 0.6)';
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath(); ctx.arc(tx, ty, 20 * sc, 0, TAU); ctx.stroke();
+            ctx.setLineDash([]);
+            text('KOS 20 m', tx + 20 * sc + 4, ty - 20 * sc, 'rgba(255, 90, 79, 0.85)', 9);
+
+            HOLDS.forEach((hp, i) => {
+                const [hx, hy] = P([0, hp.y]);
+                const reached = s.leg > i || (s.leg === i && s.phase === 'hold');
+                ctx.strokeStyle = reached ? COL.amber : COL.cyanMid;
+                ctx.beginPath(); ctx.moveTo(hx, hy - 5); ctx.lineTo(hx + 5, hy); ctx.lineTo(hx, hy + 5); ctx.lineTo(hx - 5, hy); ctx.closePath(); ctx.stroke();
+                text(hp.name, hx, hy - 9, reached ? COL.amber : COL.dim, 9, 'center');
+            });
+
+            if (s.phase === 'plan') {
+                const reveal = clamp(s.t / 0.9, 0, 1);
+                s.candidates.forEach((c) => {
+                    const isBest = c === s.best && s.t > 1.0;
+                    ctx.strokeStyle = isBest ? COL.amber : 'rgba(90, 209, 255, 0.28)';
+                    ctx.lineWidth = isBest ? 1.6 : 1;
+                    ctx.setLineDash(isBest ? [] : [2, 4]);
+                    polyline(c.path.map(P), Math.ceil(reveal * c.path.length));
+                });
+                ctx.setLineDash([]);
+                ctx.lineWidth = 1;
+            } else if (s.phase === 'coast') {
+                ctx.strokeStyle = 'rgba(255, 177, 74, 0.55)';
+                ctx.setLineDash([5, 5]);
+                polyline(s.best.path.map(P));
+                ctx.setLineDash([]);
+            }
+
+            ctx.strokeStyle = 'rgba(90, 209, 255, 0.75)';
+            ctx.lineWidth = 1.4;
+            polyline(s.trail.map(P));
+            ctx.lineWidth = 1;
+
+            // target and chaser markers
+            ctx.strokeStyle = COL.text;
+            ctx.strokeRect(tx - 5, ty - 5, 10, 10);
+            ctx.beginPath(); ctx.moveTo(tx - 13, ty); ctx.lineTo(tx - 5, ty); ctx.moveTo(tx + 5, ty); ctx.lineTo(tx + 13, ty); ctx.stroke();
+            text('TGT', tx, ty + 22, COL.text, 9, 'center');
+            const [cx, cy] = P(s.r);
+            if (s.burn) {
+                const m = hyp(s.burn.dir) || 1;
+                const len = 30 * (1 - s.burn.t / 0.9);
+                ctx.strokeStyle = COL.amber;
+                ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx - (s.burn.dir[1] / m) * len, cy + (s.burn.dir[0] / m) * len); ctx.stroke();
+                ctx.lineWidth = 1;
+            }
+            glowDot(cx, cy, 3, s.phase === 'capture' ? COL.amber : COL.cyan);
+            ctx.strokeStyle = COL.cyanMid;
+            ctx.strokeRect(cx - 7, cy - 7, 14, 14);
+            text('CHASER', cx + 11, cy - 9, COL.cyan, 9);
+
+            // camera insets
+            const iw = small ? Math.min(150, (w - 40) / 2) : Math.min(230, w * 0.24);
+            const ih = iw * 0.72;
+            const ix = x + 14, iy = y + (small ? 128 : 72);
+            const k = iw * 0.16 * clamp(150 / range(), 0.5, 1.1);   // apparent size grows as the range closes
+            const fcx = ix + iw / 2, fcy = iy + ih / 2;
+
+            insetFrame(ix, iy, iw, ih, 'NAV CAM · FRAME 10 Hz');
+            ctx.save();
+            ctx.beginPath(); ctx.rect(ix, iy, iw, ih); ctx.clip();
+            s.ghosts.forEach((g, i) => drawWire(project(g, k, fcx, fcy), `rgba(216, 227, 236, ${0.18 / (i + 1)})`, 1));
+            const pts = project(s.frameAtt || s.att, k, fcx, fcy);
+            drawWire(pts, 'rgba(216, 227, 236, 0.75)', 1);
+            const err = poseError();
+            ctx.fillStyle = COL.cyan;
+            KEYPOINTS.forEach((i) => {
+                const jx = Math.sin(met * 7 + i) * err * 0.6, jy = Math.cos(met * 5 + i) * err * 0.6;
+                ctx.strokeStyle = COL.cyan;
+                ctx.strokeRect(pts[i][0] - 2.5 + jx, pts[i][1] - 2.5 + jy, 5, 5);
+            });
+            const m = rot(s.frameAtt || s.att);
+            [[0, COL.amber], [1, COL.cyan], [2, '#ffffff']].forEach(([axis, color]) => {
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.6;
+                ctx.beginPath(); ctx.moveTo(fcx, fcy); ctx.lineTo(fcx + m[0][axis] * k * 1.4, fcy + m[1][axis] * k * 1.4); ctx.stroke();
+                ctx.lineWidth = 1;
+            });
+            ctx.restore();
+            text(`POSE ERR ${err.toFixed(1)}° · ${(range() * 0.0008).toFixed(2)} m`, ix + 6, iy + ih - 6, COL.amber, small ? 8 : 9);
+
+            // event camera: dots only where projected edges moved since the last frame
+            const ex = small ? ix + iw + 12 : ix, ey = small ? iy : iy + ih + 26;
+            insetFrame(ex, ey, iw, ih, 'EVENT CAM · ON / OFF');
+            const ecx = ex + iw / 2, ecy = ey + ih / 2;
+            const cur = project(s.att, k, ecx, ecy);
+            let count = 0;
+            if (s.prevEdges) {
+                E.forEach(([a, b]) => {
+                    for (let q = 0; q <= 8; q++) {
+                        const u = q / 8;
+                        const px = cur[a][0] + (cur[b][0] - cur[a][0]) * u, py = cur[a][1] + (cur[b][1] - cur[a][1]) * u;
+                        const ox = s.prevEdges[a][0] + (s.prevEdges[b][0] - s.prevEdges[a][0]) * u;
+                        const oy = s.prevEdges[a][1] + (s.prevEdges[b][1] - s.prevEdges[a][1]) * u;
+                        const mx = px - ox, my = py - oy;
+                        if (Math.hypot(mx, my) < 0.05) continue;
+                        const nx = -(cur[b][1] - cur[a][1]), ny = cur[b][0] - cur[a][0];
+                        s.evBuf.push({ x: px - ex + rand(-1, 1), y: py - ey + rand(-1, 1), on: mx * nx + my * ny > 0, age: 0 });
+                        count++;
+                    }
+                });
+            }
+            ctx.save();
+            ctx.beginPath(); ctx.rect(ex, ey, iw, ih); ctx.clip();
+            s.evBuf.forEach((e) => {
+                ctx.globalAlpha = 1 - e.age / EVENT_WINDOW;
+                ctx.fillStyle = e.on ? COL.cyan : COL.amber;
+                ctx.fillRect(ex + e.x - 0.8, ey + e.y - 0.8, 1.6, 1.6);
+            });
+            ctx.globalAlpha = 1;
+            ctx.restore();
+            s.prevEdges = cur;
+            s.events = s.events * 0.9 + count * 0.1;
+            text(`${(s.events * 0.06).toFixed(2)} Mev/s`, ex + 6, ey + ih - 6, COL.cyan, small ? 8 : 9);
+        };
+
+        scene.stats = function () {
+            const rr = range() > 3.01 ? (s.r[0] * s.v[0] + s.r[1] * s.v[1]) / range() : 0;
+            const mode = { plan: 'PLANNING', coast: 'COAST', hold: 'HOLD', final: 'FINAL APPROACH', capture: 'CAPTURED' }[s.phase];
+            return [
+                ['RANGE', `${range().toFixed(1)} m`],
+                ['RANGE-RATE', `${s.phase === 'final' ? '-0.10' : (rr * MEAN_MOTION).toFixed(2)} m/s`],
+                ['Δv USED', `${(s.dvUsed * MEAN_MOTION * 100).toFixed(1)} cm/s`],
+                ['MODE', mode]
+            ];
+        };
+
+        return scene;
+    })();
+
+    /* =====================================================================
+     * 03  Earth tip-and-cue: optical satellites in sun-synchronous orbits detect a wildfire
+     * or flood onboard ("tip") and cue the radar (SAR) satellite that will pass over the
+     * area soonest; the SAR satellite images through smoke or cloud and downlinks the alert
+     * to the nearest ground station. Ground tracks come from the orbits and Earth's rotation.
+     * ===================================================================== */
+    const earth = (function () {
+        const scene = {
+            id: 'earth',
+            title: '03 // EARTH TIP-AND-CUE',
+            subtitle: 'ONBOARD DETECTION · CUEING A RADAR SATELLITE · RAPID ALERTING',
+            logs: []
+        };
+        const TILT = 18 * DEG;
+        const EVENTS = [
+            { kind: 'FLOOD', where: 'VALENCIA', lat: 39.4, lon: -0.4 },
+            { kind: 'WILDFIRE', where: 'SIERRA NEVADA', lat: 38.9, lon: -120.1 },
+            { kind: 'FLOOD', where: 'BRAHMAPUTRA', lat: 24.5, lon: 90.4 },
+            { kind: 'WILDFIRE', where: 'ATTICA', lat: 38.1, lon: 23.8 },
+            { kind: 'FLOOD', where: 'INDUS', lat: 27.0, lon: 68.3 },
+            { kind: 'WILDFIRE', where: 'NEW SOUTH WALES', lat: -33.5, lon: 150.2 },
+            { kind: 'FLOOD', where: 'RIO GRANDE DO SUL', lat: -30.0, lon: -51.2 },
+            { kind: 'WILDFIRE', where: 'ALBERTA', lat: 56.7, lon: -111.4 },
+            { kind: 'FLOOD', where: 'BEIRA', lat: -19.8, lon: 34.9 },
+            { kind: 'WILDFIRE', where: 'YAKUTIA', lat: 62.0, lon: 129.7 }
+        ];
+        const STATIONS = [
+            { name: 'SVALBARD', lat: 78.2, lon: 15.4 },
+            { name: 'MATERA', lat: 40.6, lon: 16.7 },
+            { name: 'SANTIAGO', lat: -33.4, lon: -70.6 },
+            { name: 'CANBERRA', lat: -35.4, lon: 149.0 },
+            { name: 'FAIRBANKS', lat: 64.8, lon: -147.7 },
+            { name: 'HARTEBEESTHOEK', lat: -25.9, lon: 27.7 }
+        ];
+        let land = [];
+        let sats = [], events = [], packets = [], tasks = [];
+        let lon0 = 0, spin = 0, spawnT = 0, nextEvent = 0, alerts = 0, cues = 0;
+        let cx = 0, cy = 0, R = 0;
+
+        scene.setLand = function (points) { land = points; };
+
+        function project(lat, lon, k) {
+            const phi = lat * DEG, lam = (lon - lon0) * DEG;
+            const X = Math.cos(phi) * Math.sin(lam);
+            const Y = Math.cos(TILT) * Math.sin(phi) - Math.sin(TILT) * Math.cos(phi) * Math.cos(lam);
+            const Z = Math.sin(TILT) * Math.sin(phi) + Math.cos(TILT) * Math.cos(phi) * Math.cos(lam);
+            const kk = k || 1;
+            const hidden = Z < 0 && Math.hypot(X, Y) * kk < 1;
+            return { x: cx + kk * R * X, y: cy - kk * R * Y, z: Z, hidden };
+        }
+
+        function angDist(lat1, lon1, lat2, lon2) {
+            const p1 = lat1 * DEG, p2 = lat2 * DEG, dl = (lon2 - lon1) * DEG;
+            return Math.acos(clamp(Math.sin(p1) * Math.sin(p2) + Math.cos(p1) * Math.cos(p2) * Math.cos(dl), -1, 1)) / DEG;
+        }
+
+        function satLatLon(sat) {
+            const u = sat.u, i = sat.inc, O = sat.raan;
+            const X = Math.cos(O) * Math.cos(u) - Math.sin(O) * Math.sin(u) * Math.cos(i);
+            const Y = Math.sin(O) * Math.cos(u) + Math.cos(O) * Math.sin(u) * Math.cos(i);
+            const Z = Math.sin(u) * Math.sin(i);
+            return [Math.asin(Z) / DEG, Math.atan2(Y, X) / DEG - spin];
+        }
+
+        function fmtLL(lat, lon) {
+            return `${Math.abs(lat).toFixed(1)}${lat >= 0 ? 'N' : 'S'} ${Math.abs(lon).toFixed(1)}${lon >= 0 ? 'E' : 'W'}`;
+        }
+
+        function send(fromFn, toFn, dur, color, onArrive) {
+            packets.push({ fromFn, toFn, t: 0, dur, color, onArrive });
+        }
+
+        /* Tip-and-cue: hand the event to the SAR satellite currently closest to it. */
+        function cue(ev, tip) {
+            const sar = sats.filter((s) => s.kind === 'SAR')
+                .reduce((p, q) => (angDist(q.lat, q.lon, ev.lat, ev.lon) < angDist(p.lat, p.lon, ev.lat, ev.lon) ? q : p));
+            ev.tip = tip;
+            ev.sar = sar;
+            ev.state = 'cueing';
+            ev.cueAge = 0;
+            cues++;
+            send(() => project(tip.lat, tip.lon, 1.13), () => project(sar.lat, sar.lon, 1.13), 1.0, COL.cyan, () => {
+                if (ev.state === 'cueing') ev.state = 'cued';
+                pushLog(scene, `${tip.id} ⇢ ${sar.id} CUE · TASKED OVER ${ev.where}`);
+            });
+        }
+
+        scene.reset = function () {
+            sats = [];
+            const planes = [
+                { kind: 'OPT', inc: 97.6 * DEG, raan: 20 * DEG, n: 3 },
+                { kind: 'OPT', inc: 97.6 * DEG, raan: 110 * DEG, n: 3 },
+                { kind: 'SAR', inc: 97.4 * DEG, raan: 200 * DEG, n: 2 },
+                { kind: 'SAR', inc: 53 * DEG, raan: 300 * DEG, n: 2 }
+            ];
+            const count = { OPT: 1, SAR: 1 };
+            planes.forEach((pl) => {
+                for (let k = 0; k < pl.n; k++) {
+                    sats.push({ id: `${pl.kind}-${count[pl.kind]++}`, kind: pl.kind, inc: pl.inc, raan: pl.raan, u: (k / pl.n) * TAU + rand(0, 0.5), rate: TAU / 13, track: [], trackT: 0 });
+                }
+            });
+            events = [];
+            packets = [];
+            tasks = [];
+            nextEvent = Math.floor(rand(0, EVENTS.length));
+            spawnT = 1.5;
+            pushLog(scene, '6 OPTICAL + 4 SAR SPACECRAFT NOMINAL · CUEING LINK ONLINE');
+        };
+
+        scene.resize = function () {
+            cx = stage.x + stage.w / 2;
+            cy = stage.y + stage.h / 2 + (small ? 10 : 6);
+            R = Math.min(stage.w, stage.h) * (small ? 0.36 : 0.37);
+            if (!sats.length) scene.reset();
+        };
+
+        scene.update = function (dt) {
+            lon0 += dt * 7;
+            spin += dt * 1.5;
+            sats.forEach((s) => {
+                s.u += s.rate * dt;
+                const ll = satLatLon(s);
+                s.lat = ll[0];
+                s.lon = ll[1];
+                s.trackT += dt;
+                if (s.trackT > 0.12) { s.trackT = 0; s.track.push([s.lat, s.lon]); if (s.track.length > 46) s.track.shift(); }
+            });
+
+            spawnT -= dt;
+            if (spawnT <= 0 && events.filter((e) => e.state !== 'done').length < 4) {
+                const proto = EVENTS[nextEvent % EVENTS.length];
+                nextEvent++;
+                if (!events.some((e) => e.where === proto.where)) events.push(Object.assign({ state: 'active', age: 0 }, proto));
+                spawnT = rand(1.8, 3.2);
+            }
+
+            events.forEach((ev) => {
+                ev.age += dt;
+                if (ev.state === 'active') {
+                    const tip = sats.find((s) => s.kind === 'OPT' && angDist(s.lat, s.lon, ev.lat, ev.lon) < 14);
+                    if (!tip) return;
+                    ev.state = 'tipped';
+                    pushLog(scene, `${tip.id} ▸ ${ev.kind} DETECTED ONBOARD · ${ev.where} ${fmtLL(ev.lat, ev.lon)}`);
+                    cue(ev, tip);
+                } else if (ev.state === 'cued') {
+                    ev.cueAge += dt;
+                    const sar = ev.sar;
+                    if (angDist(sar.lat, sar.lon, ev.lat, ev.lon) < 22) {
+                        ev.state = 'imaged';
+                        tasks.push({ sat: sar, ev, t: 0 });
+                        pushLog(scene, `${sar.id} ▸ RADAR ACQUISITION · ${ev.kind === 'FLOOD' ? 'FLOOD EXTENT MAPPED THROUGH CLOUD' : 'BURN SCAR MAPPED THROUGH SMOKE'}`);
+                        const gs = STATIONS.reduce((p, q) => (angDist(q.lat, q.lon, sar.lat, sar.lon) < angDist(p.lat, p.lon, sar.lat, sar.lon) ? q : p));
+                        send(() => project(sar.lat, sar.lon, 1.13), () => project(gs.lat, gs.lon, 1), 1.1, COL.amber, () => {
+                            ev.state = 'alerted';
+                            ev.doneAge = ev.age;
+                            alerts++;
+                            pushLog(scene, `GS ${gs.name} ▸ ${ev.kind} ALERT DISPATCHED`);
+                        });
+                    } else if (ev.cueAge > 9) {
+                        cue(ev, ev.tip);                 // pass missed: re-cue whichever SAR is closest now
+                    }
+                } else if (ev.state === 'alerted' && ev.age - ev.doneAge > 5) {
+                    ev.state = 'done';
+                }
+            });
+            events = events.filter((e) => e.state !== 'done');
+            tasks.forEach((tk) => { tk.t += dt; });
+            tasks = tasks.filter((tk) => tk.t < 3.5);
+            packets.forEach((p) => {
+                p.t += dt / p.dur;
+                if (p.t >= 1 && !p.arrived) { p.arrived = true; if (p.onArrive) p.onArrive(); }
+            });
+            packets = packets.filter((p) => p.t < 1);
+        };
+
+        function drawOrbit(sat) {
+            ctx.beginPath();
+            let started = false;
+            for (let k = 0; k <= 64; k++) {
+                const u = (k / 64) * TAU;
+                const X = Math.cos(sat.raan) * Math.cos(u) - Math.sin(sat.raan) * Math.sin(u) * Math.cos(sat.inc);
+                const Y = Math.sin(sat.raan) * Math.cos(u) + Math.cos(sat.raan) * Math.sin(u) * Math.cos(sat.inc);
+                const Z = Math.sin(u) * Math.sin(sat.inc);
+                const p = project(Math.asin(Z) / DEG, Math.atan2(Y, X) / DEG - spin, 1.13);
+                if (p.hidden) { started = false; continue; }
+                if (!started) { ctx.moveTo(p.x, p.y); started = true; } else ctx.lineTo(p.x, p.y);
+            }
+            ctx.stroke();
+        }
+
+        scene.draw = function () {
+            // atmosphere and disc
+            const g = ctx.createRadialGradient(cx, cy, R * 0.9, cx, cy, R * 1.18);
+            g.addColorStop(0, 'rgba(61, 139, 255, 0.0)');
+            g.addColorStop(0.45, 'rgba(61, 139, 255, 0.16)');
+            g.addColorStop(1, 'rgba(61, 139, 255, 0)');
+            ctx.fillStyle = g;
+            ctx.beginPath(); ctx.arc(cx, cy, R * 1.18, 0, TAU); ctx.fill();
+            ctx.fillStyle = 'rgba(4, 12, 24, 0.95)';
+            ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.fill();
+            ctx.strokeStyle = 'rgba(90, 209, 255, 0.5)';
+            ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke();
+
+            // graticule
+            ctx.strokeStyle = 'rgba(90, 209, 255, 0.12)';
+            ctx.beginPath();
+            for (let lat = -60; lat <= 60; lat += 30) {
+                let started = false;
+                for (let lon = -180; lon <= 180; lon += 4) {
+                    const p = project(lat, lon);
+                    if (p.z < 0) { started = false; continue; }
+                    if (!started) { ctx.moveTo(p.x, p.y); started = true; } else ctx.lineTo(p.x, p.y);
+                }
+            }
+            for (let lon = -180; lon < 180; lon += 30) {
+                let started = false;
+                for (let lat = -90; lat <= 90; lat += 4) {
+                    const p = project(lat, lon);
+                    if (p.z < 0) { started = false; continue; }
+                    if (!started) { ctx.moveTo(p.x, p.y); started = true; } else ctx.lineTo(p.x, p.y);
+                }
+            }
+            ctx.stroke();
+
+            // land as a dot matrix, dimmer toward the limb
+            const dot = small ? 1.3 : 1.6;
+            for (let k = 0; k < land.length; k++) {
+                const p = project(land[k][0], land[k][1]);
+                if (p.z <= 0) continue;
+                ctx.fillStyle = `rgba(90, 209, 255, ${0.15 + 0.55 * p.z})`;
+                ctx.fillRect(p.x - dot / 2, p.y - dot / 2, dot, dot);
+            }
+
+            // ground stations
+            STATIONS.forEach((gs) => {
+                const p = project(gs.lat, gs.lon);
+                if (p.z <= 0) return;
+                ctx.strokeStyle = 'rgba(255, 177, 74, 0.8)';
+                ctx.beginPath(); ctx.moveTo(p.x, p.y - 4); ctx.lineTo(p.x + 4, p.y + 3); ctx.lineTo(p.x - 4, p.y + 3); ctx.closePath(); ctx.stroke();
+                if (!small) text(gs.name, p.x + 6, p.y + 3, 'rgba(255, 177, 74, 0.7)', 8);
+            });
+
+            // events
+            events.forEach((ev) => {
+                const p = project(ev.lat, ev.lon);
+                if (p.z <= 0) return;
+                const color = ev.kind === 'FLOOD' ? COL.blue : COL.red;
+                const pulse = (ev.age * 1.2) % 1;
+                ctx.strokeStyle = color;
+                ctx.globalAlpha = 1 - pulse;
+                ctx.beginPath(); ctx.arc(p.x, p.y, 4 + pulse * 18, 0, TAU); ctx.stroke();
+                ctx.globalAlpha = 1;
+                if (ev.kind === 'WILDFIRE') {
+                    for (let k = 0; k < 6; k++) {
+                        ctx.fillStyle = k % 2 ? COL.red : COL.amber;
+                        ctx.fillRect(p.x + Math.sin(ev.age * 9 + k * 2.1) * 5, p.y + Math.cos(ev.age * 7 + k) * 4, 1.6, 1.6);
+                    }
+                } else {
+                    ctx.fillStyle = 'rgba(61, 139, 255, 0.35)';
+                    ctx.beginPath(); ctx.ellipse(p.x, p.y, 7, 4, 0.4, 0, TAU); ctx.fill();
+                }
+                glowDot(p.x, p.y, 2.2, color);
+                if (ev.state !== 'active' && !small) {
+                    const tag = { tipped: 'DETECTED', cueing: 'CUEING SAR', cued: 'SAR TASKED', imaged: 'SAR IMAGED', alerted: 'ALERTED' }[ev.state];
+                    text(`${ev.kind} · ${tag}`, p.x + 10, p.y - 8, color, 9, 'left', 600);
+                }
+            });
+
+            // orbits (one per plane) and recent ground tracks; optical tracks show the imaging swath
+            ctx.strokeStyle = 'rgba(216, 227, 236, 0.08)';
+            sats.filter((s, i) => i === 0 || sats[i - 1].raan !== s.raan).forEach(drawOrbit);
+            sats.forEach((s) => {
+                const pts = s.track.map(([la, lo]) => project(la, lo));
+                const draw = (width, color) => {
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = width;
+                    ctx.beginPath();
+                    let started = false;
+                    pts.forEach((p, i) => {
+                        if (p.z <= 0 || (i > 0 && Math.abs(p.x - pts[i - 1].x) > R * 0.5)) { started = false; return; }
+                        if (!started) { ctx.moveTo(p.x, p.y); started = true; } else ctx.lineTo(p.x, p.y);
+                    });
+                    ctx.stroke();
+                };
+                if (s.kind === 'OPT') draw(small ? 5 : 8, 'rgba(90, 209, 255, 0.07)');
+                draw(1, s.kind === 'OPT' ? 'rgba(90, 209, 255, 0.45)' : 'rgba(255, 177, 74, 0.45)');
+            });
+            ctx.lineWidth = 1;
+
+            // re-tasked sensors pointing at events
+            tasks.forEach((tk) => {
+                const a = project(tk.sat.lat, tk.sat.lon, 1.13);
+                const b = project(tk.ev.lat, tk.ev.lon);
+                if (a.hidden || b.z <= 0) return;
+                ctx.fillStyle = 'rgba(255, 177, 74, 0.12)';
+                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x - 9, b.y); ctx.lineTo(b.x + 9, b.y); ctx.closePath(); ctx.fill();
+                ctx.strokeStyle = 'rgba(255, 177, 74, 0.7)';
+                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+            });
+
+            // satellites: optical as bars, SAR as diamonds
+            sats.forEach((s) => {
+                const p = project(s.lat, s.lon, 1.13);
+                if (p.hidden) return;
+                const busy = tasks.some((tk) => tk.sat === s);
+                const color = s.kind === 'SAR' ? COL.amber : COL.cyan;
+                ctx.strokeStyle = busy ? '#ffffff' : color;
+                if (s.kind === 'SAR') {
+                    ctx.beginPath(); ctx.moveTo(p.x, p.y - 5); ctx.lineTo(p.x + 5, p.y); ctx.lineTo(p.x, p.y + 5); ctx.lineTo(p.x - 5, p.y); ctx.closePath(); ctx.stroke();
+                } else {
+                    ctx.beginPath(); ctx.moveTo(p.x - 6, p.y); ctx.lineTo(p.x + 6, p.y); ctx.stroke();
+                }
+                glowDot(p.x, p.y, 1.8, color);
+                if (!small || s.kind === 'SAR') text(s.id, p.x + 8, p.y - 6, busy ? '#ffffff' : color, 8, 'left', 600);
+            });
+
+            // packets in flight
+            packets.forEach((pk) => {
+                const a = pk.fromFn(), b = pk.toFn();
+                const t = clamp(pk.t, 0, 1);
+                ctx.strokeStyle = pk.color;
+                ctx.globalAlpha = 0.5;
+                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+                ctx.globalAlpha = 1;
+                glowDot(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, 2.6, pk.color);
+            });
+        };
+
+        scene.stats = function () {
+            return [
+                ['OPTICAL / SAR', `${sats.filter((s) => s.kind === 'OPT').length} / ${sats.filter((s) => s.kind === 'SAR').length}`],
+                ['ACTIVE EVENTS', `${events.length}`],
+                ['CUES SENT', `${cues}`],
+                ['ALERTS', `${alerts}`]
+            ];
+        };
+
+        return scene;
+    })();
+
+    /* =====================================================================
+     * 04  Mars: three rovers and a helicopter share one map and split the
      * unexplored frontier between them; found sample sites get a rover assigned.
      * ===================================================================== */
     const mars = (function () {
         const scene = {
             id: 'mars',
-            title: 'CH-1 // MARS SURFACE OPS',
+            title: '04 // MARS SURFACE OPS',
             subtitle: 'MULTI-ROBOT EXPLORATION · SHARED MAP · FRONTIER ALLOCATION',
             logs: []
         };
@@ -753,315 +1361,6 @@
         return scene;
     })();
 
-    /* =====================================================================
-     * CH-3  Earth: a small Earth-observation constellation. A satellite passing over a
-     * flood or wildfire detects it, relays over an inter-satellite link to a neighbour that
-     * re-tasks to confirm, which downlinks the alert to the nearest ground station.
-     * ===================================================================== */
-    const earth = (function () {
-        const scene = {
-            id: 'earth',
-            title: 'CH-3 // EARTH RESPONSE CONSTELLATION',
-            subtitle: 'ONBOARD DETECTION · INTER-SATELLITE RELAY · RAPID ALERTING',
-            logs: []
-        };
-        const TILT = 18 * DEG;
-        const EVENTS = [
-            { kind: 'FLOOD', where: 'VALENCIA', lat: 39.4, lon: -0.4 },
-            { kind: 'WILDFIRE', where: 'SIERRA NEVADA', lat: 38.9, lon: -120.1 },
-            { kind: 'FLOOD', where: 'BRAHMAPUTRA', lat: 24.5, lon: 90.4 },
-            { kind: 'WILDFIRE', where: 'ATTICA', lat: 38.1, lon: 23.8 },
-            { kind: 'FLOOD', where: 'INDUS', lat: 27.0, lon: 68.3 },
-            { kind: 'WILDFIRE', where: 'NEW SOUTH WALES', lat: -33.5, lon: 150.2 },
-            { kind: 'FLOOD', where: 'RIO GRANDE DO SUL', lat: -30.0, lon: -51.2 },
-            { kind: 'WILDFIRE', where: 'ALBERTA', lat: 56.7, lon: -111.4 },
-            { kind: 'FLOOD', where: 'BEIRA', lat: -19.8, lon: 34.9 },
-            { kind: 'WILDFIRE', where: 'YAKUTIA', lat: 62.0, lon: 129.7 }
-        ];
-        const STATIONS = [
-            { name: 'SVALBARD', lat: 78.2, lon: 15.4 },
-            { name: 'MATERA', lat: 40.6, lon: 16.7 },
-            { name: 'SANTIAGO', lat: -33.4, lon: -70.6 },
-            { name: 'CANBERRA', lat: -35.4, lon: 149.0 },
-            { name: 'FAIRBANKS', lat: 64.8, lon: -147.7 },
-            { name: 'HARTEBEESTHOEK', lat: -25.9, lon: 27.7 }
-        ];
-        let land = [];
-        let sats = [], events = [], packets = [], tasks = [];
-        let lon0 = 0, spin = 0, spawnT = 0, nextEvent = 0, alerts = 0;
-        let cx = 0, cy = 0, R = 0;
-
-        scene.setLand = function (points) { land = points; };
-
-        function project(lat, lon, k) {
-            const phi = lat * DEG, lam = (lon - lon0) * DEG;
-            const X = Math.cos(phi) * Math.sin(lam);
-            const Y = Math.cos(TILT) * Math.sin(phi) - Math.sin(TILT) * Math.cos(phi) * Math.cos(lam);
-            const Z = Math.sin(TILT) * Math.sin(phi) + Math.cos(TILT) * Math.cos(phi) * Math.cos(lam);
-            const kk = k || 1;
-            const hidden = Z < 0 && Math.hypot(X, Y) * kk < 1;
-            return { x: cx + kk * R * X, y: cy - kk * R * Y, z: Z, hidden };
-        }
-
-        function angDist(lat1, lon1, lat2, lon2) {
-            const p1 = lat1 * DEG, p2 = lat2 * DEG, dl = (lon2 - lon1) * DEG;
-            return Math.acos(clamp(Math.sin(p1) * Math.sin(p2) + Math.cos(p1) * Math.cos(p2) * Math.cos(dl), -1, 1)) / DEG;
-        }
-
-        function satLatLon(sat) {
-            const u = sat.u, i = sat.inc, O = sat.raan;
-            const X = Math.cos(O) * Math.cos(u) - Math.sin(O) * Math.sin(u) * Math.cos(i);
-            const Y = Math.sin(O) * Math.cos(u) + Math.cos(O) * Math.sin(u) * Math.cos(i);
-            const Z = Math.sin(u) * Math.sin(i);
-            return [Math.asin(Z) / DEG, Math.atan2(Y, X) / DEG - spin];
-        }
-
-        function fmtLL(lat, lon) {
-            return `${Math.abs(lat).toFixed(1)}${lat >= 0 ? 'N' : 'S'} ${Math.abs(lon).toFixed(1)}${lon >= 0 ? 'E' : 'W'}`;
-        }
-
-        function send(fromFn, toFn, dur, color, onArrive) {
-            packets.push({ fromFn, toFn, t: 0, dur, color, onArrive });
-        }
-
-        scene.reset = function () {
-            sats = [];
-            const planes = [
-                { inc: 97.6 * DEG, raan: 20 * DEG, n: 4 },
-                { inc: 53 * DEG, raan: 140 * DEG, n: 4 },
-                { inc: 70 * DEG, raan: 260 * DEG, n: 4 }
-            ];
-            let id = 1;
-            planes.forEach((pl) => {
-                for (let k = 0; k < pl.n; k++) {
-                    sats.push({ id: `SAT-${String(id++).padStart(2, '0')}`, inc: pl.inc, raan: pl.raan, u: (k / pl.n) * TAU + rand(0, 0.4), rate: TAU / 13 });
-                }
-            });
-            events = [];
-            packets = [];
-            tasks = [];
-            nextEvent = Math.floor(rand(0, EVENTS.length));
-            spawnT = 1.5;
-            pushLog(scene, '12 SPACECRAFT NOMINAL · ISL MESH ONLINE');
-        };
-
-        scene.resize = function () {
-            cx = stage.x + stage.w / 2;
-            cy = stage.y + stage.h / 2 + (small ? 10 : 6);
-            R = Math.min(stage.w, stage.h) * (small ? 0.36 : 0.34);
-            if (!sats.length) scene.reset();
-        };
-
-        scene.update = function (dt) {
-            lon0 += dt * 7;
-            spin += dt * 1.5;
-            sats.forEach((s) => {
-                s.u += s.rate * dt;
-                const ll = satLatLon(s);
-                s.lat = ll[0];
-                s.lon = ll[1];
-            });
-
-            spawnT -= dt;
-            if (spawnT <= 0 && events.filter((e) => e.state !== 'done').length < 4) {
-                const proto = EVENTS[nextEvent % EVENTS.length];
-                nextEvent++;
-                if (!events.some((e) => e.where === proto.where)) events.push(Object.assign({ state: 'active', age: 0 }, proto));
-                spawnT = rand(1.8, 3.2);
-            }
-
-            events.forEach((ev) => {
-                ev.age += dt;
-                if (ev.state === 'active') {
-                    const det = sats.find((s) => angDist(s.lat, s.lon, ev.lat, ev.lon) < 16);
-                    if (!det) return;
-                    ev.state = 'detected';
-                    pushLog(scene, `${det.id} ▸ ${ev.kind} DETECTED · ${ev.where} ${fmtLL(ev.lat, ev.lon)}`);
-                    const nb = sats.filter((s) => s !== det)
-                        .reduce((a, b) => (angDist(b.lat, b.lon, det.lat, det.lon) < angDist(a.lat, a.lon, det.lat, det.lon) ? b : a));
-                    send(() => project(det.lat, det.lon, 1.13), () => project(nb.lat, nb.lon, 1.13), 0.9, COL.cyan, () => {
-                        ev.state = 'confirmed';
-                        tasks.push({ sat: nb, ev, t: 0 });
-                        pushLog(scene, `${det.id} ⇢ ${nb.id} ISL RELAY · ${nb.id} RE-TASKED`);
-                        const gs = STATIONS.reduce((a, b) => (angDist(b.lat, b.lon, nb.lat, nb.lon) < angDist(a.lat, a.lon, nb.lat, nb.lon) ? b : a));
-                        send(() => project(nb.lat, nb.lon, 1.13), () => project(gs.lat, gs.lon, 1), 1.1, COL.amber, () => {
-                            ev.state = 'relayed';
-                            ev.doneAge = ev.age;
-                            alerts++;
-                            pushLog(scene, `GS ${gs.name} ▸ ${ev.kind} ALERT DISPATCHED`);
-                        });
-                    });
-                } else if (ev.state === 'relayed' && ev.age - ev.doneAge > 5) {
-                    ev.state = 'done';
-                }
-            });
-            events = events.filter((e) => e.state !== 'done');
-            tasks.forEach((tk) => { tk.t += dt; });
-            tasks = tasks.filter((tk) => tk.t < 3.5);
-            packets.forEach((p) => {
-                p.t += dt / p.dur;
-                if (p.t >= 1 && !p.arrived) { p.arrived = true; if (p.onArrive) p.onArrive(); }
-            });
-            packets = packets.filter((p) => p.t < 1);
-        };
-
-        function drawOrbit(sat) {
-            ctx.beginPath();
-            let started = false;
-            for (let k = 0; k <= 64; k++) {
-                const u = (k / 64) * TAU;
-                const X = Math.cos(sat.raan) * Math.cos(u) - Math.sin(sat.raan) * Math.sin(u) * Math.cos(sat.inc);
-                const Y = Math.sin(sat.raan) * Math.cos(u) + Math.cos(sat.raan) * Math.sin(u) * Math.cos(sat.inc);
-                const Z = Math.sin(u) * Math.sin(sat.inc);
-                const p = project(Math.asin(Z) / DEG, Math.atan2(Y, X) / DEG - spin, 1.13);
-                if (p.hidden) { started = false; continue; }
-                if (!started) { ctx.moveTo(p.x, p.y); started = true; } else ctx.lineTo(p.x, p.y);
-            }
-            ctx.stroke();
-        }
-
-        scene.draw = function () {
-            // atmosphere and disc
-            const g = ctx.createRadialGradient(cx, cy, R * 0.9, cx, cy, R * 1.18);
-            g.addColorStop(0, 'rgba(61, 139, 255, 0.0)');
-            g.addColorStop(0.45, 'rgba(61, 139, 255, 0.16)');
-            g.addColorStop(1, 'rgba(61, 139, 255, 0)');
-            ctx.fillStyle = g;
-            ctx.beginPath(); ctx.arc(cx, cy, R * 1.18, 0, TAU); ctx.fill();
-            ctx.fillStyle = 'rgba(4, 12, 24, 0.95)';
-            ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.fill();
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.5)';
-            ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke();
-
-            // graticule
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.12)';
-            ctx.beginPath();
-            for (let lat = -60; lat <= 60; lat += 30) {
-                let started = false;
-                for (let lon = -180; lon <= 180; lon += 4) {
-                    const p = project(lat, lon);
-                    if (p.z < 0) { started = false; continue; }
-                    if (!started) { ctx.moveTo(p.x, p.y); started = true; } else ctx.lineTo(p.x, p.y);
-                }
-            }
-            for (let lon = -180; lon < 180; lon += 30) {
-                let started = false;
-                for (let lat = -90; lat <= 90; lat += 4) {
-                    const p = project(lat, lon);
-                    if (p.z < 0) { started = false; continue; }
-                    if (!started) { ctx.moveTo(p.x, p.y); started = true; } else ctx.lineTo(p.x, p.y);
-                }
-            }
-            ctx.stroke();
-
-            // land as a dot matrix, dimmer toward the limb
-            const dot = small ? 1.3 : 1.6;
-            for (let k = 0; k < land.length; k++) {
-                const p = project(land[k][0], land[k][1]);
-                if (p.z <= 0) continue;
-                ctx.fillStyle = `rgba(90, 209, 255, ${0.15 + 0.55 * p.z})`;
-                ctx.fillRect(p.x - dot / 2, p.y - dot / 2, dot, dot);
-            }
-
-            // ground stations
-            STATIONS.forEach((gs) => {
-                const p = project(gs.lat, gs.lon);
-                if (p.z <= 0) return;
-                ctx.strokeStyle = 'rgba(255, 177, 74, 0.8)';
-                ctx.beginPath(); ctx.moveTo(p.x, p.y - 4); ctx.lineTo(p.x + 4, p.y + 3); ctx.lineTo(p.x - 4, p.y + 3); ctx.closePath(); ctx.stroke();
-                if (!small) text(gs.name, p.x + 6, p.y + 3, 'rgba(255, 177, 74, 0.7)', 8);
-            });
-
-            // events
-            events.forEach((ev) => {
-                const p = project(ev.lat, ev.lon);
-                if (p.z <= 0) return;
-                const color = ev.kind === 'FLOOD' ? COL.blue : COL.red;
-                const pulse = (ev.age * 1.2) % 1;
-                ctx.strokeStyle = color;
-                ctx.globalAlpha = 1 - pulse;
-                ctx.beginPath(); ctx.arc(p.x, p.y, 4 + pulse * 18, 0, TAU); ctx.stroke();
-                ctx.globalAlpha = 1;
-                if (ev.kind === 'WILDFIRE') {
-                    for (let k = 0; k < 6; k++) {
-                        ctx.fillStyle = k % 2 ? COL.red : COL.amber;
-                        ctx.fillRect(p.x + Math.sin(ev.age * 9 + k * 2.1) * 5, p.y + Math.cos(ev.age * 7 + k) * 4, 1.6, 1.6);
-                    }
-                } else {
-                    ctx.fillStyle = 'rgba(61, 139, 255, 0.35)';
-                    ctx.beginPath(); ctx.ellipse(p.x, p.y, 7, 4, 0.4, 0, TAU); ctx.fill();
-                }
-                glowDot(p.x, p.y, 2.2, color);
-                if (ev.state !== 'active' && !small) {
-                    const tag = { detected: 'DETECTED', confirmed: 'CONFIRMED', relayed: 'ALERTED' }[ev.state];
-                    text(`${ev.kind} · ${tag}`, p.x + 10, p.y - 8, color, 9, 'left', 600);
-                }
-            });
-
-            // orbits
-            ctx.strokeStyle = 'rgba(216, 227, 236, 0.1)';
-            [0, 4, 8].forEach((i) => sats[i] && drawOrbit(sats[i]));
-
-            // inter-satellite links between nearby visible spacecraft
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.18)';
-            ctx.setLineDash([2, 5]);
-            for (let i = 0; i < sats.length; i++) {
-                const a = project(sats[i].lat, sats[i].lon, 1.13);
-                if (a.hidden) continue;
-                for (let j = i + 1; j < sats.length; j++) {
-                    if (angDist(sats[i].lat, sats[i].lon, sats[j].lat, sats[j].lon) > 45) continue;
-                    const b = project(sats[j].lat, sats[j].lon, 1.13);
-                    if (b.hidden) continue;
-                    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-                }
-            }
-            ctx.setLineDash([]);
-
-            // re-tasked sensors pointing at events
-            tasks.forEach((tk) => {
-                const a = project(tk.sat.lat, tk.sat.lon, 1.13);
-                const b = project(tk.ev.lat, tk.ev.lon);
-                if (a.hidden || b.z <= 0) return;
-                ctx.fillStyle = 'rgba(255, 177, 74, 0.12)';
-                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x - 9, b.y); ctx.lineTo(b.x + 9, b.y); ctx.closePath(); ctx.fill();
-                ctx.strokeStyle = 'rgba(255, 177, 74, 0.7)';
-                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-            });
-
-            // satellites
-            sats.forEach((s) => {
-                const p = project(s.lat, s.lon, 1.13);
-                if (p.hidden) return;
-                const busy = tasks.some((tk) => tk.sat === s);
-                ctx.strokeStyle = busy ? COL.amber : COL.text;
-                ctx.beginPath(); ctx.moveTo(p.x - 6, p.y); ctx.lineTo(p.x + 6, p.y); ctx.stroke();
-                glowDot(p.x, p.y, 2, busy ? COL.amber : COL.cyan);
-                if (!small && (busy || p.z > 0.6)) text(s.id, p.x + 7, p.y - 5, busy ? COL.amber : COL.dim, 8);
-            });
-
-            // packets in flight
-            packets.forEach((pk) => {
-                const a = pk.fromFn(), b = pk.toFn();
-                const t = clamp(pk.t, 0, 1);
-                ctx.strokeStyle = pk.color;
-                ctx.globalAlpha = 0.5;
-                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-                ctx.globalAlpha = 1;
-                glowDot(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, 2.6, pk.color);
-            });
-        };
-
-        scene.stats = function () {
-            return [
-                ['SPACECRAFT', `${sats.length} · 3 PLANES`],
-                ['ACTIVE EVENTS', `${events.length}`],
-                ['IN FLIGHT', `${packets.length} MSG`],
-                ['ALERTS SENT', `${alerts}`]
-            ];
-        };
-
-        return scene;
-    })();
 
     /* Land mask: Natural Earth 110m land (public domain) via world-atlas, decoded from TopoJSON,
      * rasterised to an equirectangular mask and sampled into evenly spaced dots. */
@@ -1112,11 +1411,12 @@
             .catch(() => { /* graticule-only globe is fine */ });
     }
 
+
     /* =====================================================================
      * Pinned scene viewer: one full-screen canvas inside a sticky wrapper. The text panel
      * crossing the middle of the screen picks the scene; the rail ticks jump to a panel.
      * ===================================================================== */
-    const scenes = [mars, gnc, earth];
+    const scenes = [agents, rpo, earth, mars];
     let current = 0, trans = null, running = false, last = 0, inView = false;
 
     function layout() {
@@ -1130,13 +1430,26 @@
         canvas.style.width = `${W}px`;
         canvas.style.height = `${H}px`;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        // Desktop: scene sits right of the text column. Phone: upper part of the screen.
-        const top = 84;
-        stage = small
-            ? { x: 12, y: top, w: W - 24, h: Math.max(260, H * 0.62 - top) }
-            : { x: Math.round(W * 0.4), y: top, w: Math.round(W * 0.6) - 130, h: H - top - 28 };
         stars = Array.from({ length: Math.round((W * H) / 6000) }, () => ({ x: rand(0, W), y: rand(0, H), r: rand(0.3, 1.2), p: rand(0, TAU) }));
+        stage = stageFor(current);
         scenes.forEach((sc) => sc.resize());
+    }
+
+    /* Desktop: a wide stage shifted away from the caption, which alternates left (even scenes)
+     * and right (odd scenes). Phone: the upper part of the screen, caption below. */
+    function stageFor(i) {
+        const top = 84;
+        if (small) return { x: 12, y: top, w: W - 24, h: Math.max(260, H * 0.62 - top) };
+        const shift = Math.round(W * 0.2);
+        const w = W - 64 - shift;
+        return { x: i % 2 === 0 ? 32 + shift : 32, y: top, w, h: H - top - 64 };
+    }
+
+    function showScene(i) {
+        current = i;
+        stage = stageFor(i);
+        scenes[i].resize();
+        if (scenes[i] === rpo || scenes[i] === agents) scenes[i].reset(); // these tell a story from the start
     }
 
     function drawBackdrop() {
@@ -1215,10 +1528,7 @@
         if (trans) {
             const before = trans.t;
             trans.t += fadeDt === undefined ? dt : fadeDt;
-            if (before < FADE_SECONDS && trans.t >= FADE_SECONDS) {
-                current = trans.to;
-                if (scenes[current] === gnc) gnc.reset(); // launch always plays from liftoff
-            }
+            if (before < FADE_SECONDS && trans.t >= FADE_SECONDS) showScene(trans.to);
             if (trans.t >= FADE_SECONDS * 2) trans = null;
         }
         scenes[current].update(dt);
@@ -1227,8 +1537,9 @@
     function setScene(i) {
         if (i === (trans ? trans.to : current)) return;
         if (reduceMotion || !running) {
-            current = i;
             trans = null;
+            showScene(i);
+            if (reduceMotion) for (let k = 0; k < 240; k++) scenes[i].update(1 / 30);
             render();
             return;
         }
@@ -1284,7 +1595,7 @@
     if (new URLSearchParams(location.search).has('simdebug')) window.__hero = { step, render, scenes, setScene };
     if (reduceMotion) {
         // Still frames: advance each simulation a few seconds so every scene has something to show.
-        scenes.forEach((sc) => { for (let k = 0; k < 240; k++) sc.update(1 / 30); });
+        for (let k = 0; k < 240; k++) scenes[current].update(1 / 30);
         render();
     } else {
         render();

@@ -406,12 +406,11 @@ body.landing {
 
 .scene-rail {
     position: absolute;
-    right: 18px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
     display: flex;
-    flex-direction: column;
-    gap: 14px;
+    gap: 18px;
     z-index: 3;
 }
 
@@ -419,10 +418,10 @@ body.landing {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.3rem 0 0.3rem 0.6rem;
+    padding: 0.3rem 0.2rem;
     background: none;
     border: 0;
-    border-left: 2px solid var(--line);
+    border-bottom: 2px solid var(--line);
     color: var(--muted);
     font-family: var(--mono);
     font-size: 0.68rem;
@@ -438,7 +437,7 @@ body.landing {
 .scene-rail button:focus-visible,
 .scene-rail button.active {
     color: #fff;
-    border-left-color: var(--cyan);
+    border-bottom-color: var(--cyan);
     outline: none;
 }
 
@@ -461,9 +460,11 @@ body.landing {
 
 .scene-panel:first-child { min-height: 100vh; }
 
+.scene-panel.right { justify-content: flex-end; }
+
 .scene-card {
     pointer-events: auto;
-    width: min(32rem, 34vw);
+    width: min(26rem, 28vw);
     padding: 1.8rem 1.8rem 1.6rem;
     background: rgba(5, 8, 13, 0.78);
     border: 1px solid var(--line);
@@ -510,9 +511,9 @@ main {
 }
 
 @media (max-width: 900px) {
-    .scene-rail { right: 10px; top: auto; bottom: 14px; transform: none; flex-direction: row; gap: 10px; }
-    .scene-rail button { border-left: 0; border-bottom: 2px solid var(--line); padding: 0.2rem 0.1rem; }
-    .scene-rail button.active { border-bottom-color: var(--cyan); }
+    .scene-rail { left: auto; right: 10px; bottom: 14px; transform: none; gap: 10px; }
+    .scene-rail button { padding: 0.2rem 0.1rem; font-size: 0.6rem; }
+    .scene-panel.right { justify-content: flex-start; }
     .scene-panels { padding: 0 12px 20vh; }
     .scene-panel { align-items: flex-end; padding-bottom: 12vh; min-height: 110vh; }
     .scene-card { width: 100%; padding: 1.2rem; }
@@ -780,6 +781,8 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 18px;
 }
+
+.focus-grid-five { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 
 .focus-card {
     padding: 1.2rem 1.2rem 1.25rem;
