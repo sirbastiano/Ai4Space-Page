@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Program - AI4Space @ CVPR 2027</title>
+    <title>Program - AI4Space @ CVPR 2026</title>
     <link rel="stylesheet" href="style.css?v=20260604b">
     <link rel="stylesheet" href="countdown-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -248,6 +248,8 @@
     </style>
 </head>
 <body>
+<a href="2027/index.html" style="position:fixed;right:16px;bottom:16px;z-index:10000;padding:0.6em 1.1em;border-radius:999px;background:#ff3b3b;color:#fff;font-family:Roboto,sans-serif;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,0.35);">Coming next: AI4Space @ CVPR 2027 &rarr;</a>
+
     <div id="app">
         <header style="max-height: 10em;">
             <nav class="navbar">
@@ -275,15 +277,15 @@
             <section id="program-schedule" class="content-section">
 
                 <div class="event-info">
-                    <span>CVPR 2027</span>&middot;
-                    <span>Full-day workshop</span>&middot;
-                    <span>Date and room TBA</span>
+                    <span>June 4, 2026</span>&middot;
+                    <span>1:00&ndash;6:00 PM PST</span>&middot;
+                    <span>Room 710</span>
                 </div>
 
                 <div class="schedule">
 
                     <div class="sched-row">
-                        <div class="sched-time">8:45&ndash;9:00</div>
+                        <div class="sched-time">1:00&ndash;1:10</div>
                         <div class="sched-body">
                             <div class="sched-label">Opening</div>
                             <p class="sched-title">Welcome &amp; Opening Remarks</p>
@@ -291,148 +293,353 @@
                     </div>
 
                     <div class="sched-row">
-                        <div class="sched-time">9:00&ndash;9:40</div>
+                        <div class="sched-time">1:10&ndash;1:40</div>
                         <div class="sched-body">
                             <div class="sched-label">Keynote 1</div>
-                            <p class="sched-title">Distributed Autonomy in Space Operations and Earth Observation</p>
+                            <p class="sched-title">Invited Talk</p>
                             <div class="sched-speaker">
-                                <strong>Dr. Steve Chien</strong> &mdash; NASA Jet Propulsion Laboratory
+                                <strong>David Rijlaarsdam</strong> &mdash; Director of Space System Engineering, Ubotica Technologies
                             </div>
                         </div>
                     </div>
 
                     <div class="sched-row">
-                        <div class="sched-time">9:40&ndash;10:10</div>
+                        <div class="sched-time">1:45&ndash;2:15</div>
                         <div class="sched-body">
-                            <div class="sched-label">Papers</div>
-                            <p class="sched-title">First Paper Presentation Slot</p>
+                            <div class="sched-label">Spotlight 1</div>
+                            <p class="sched-title">Paper Presentations</p>
+                            <div class="papers">
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=kmY7apKxqe" target="_blank" rel="noopener">
+                                        Flight Demonstration of On-Orbit Model Adaptation on the SpIRIT Nanosatellite
+                                    </a>
+                                    <div class="paper-authors">
+                                        Zaher Joukhadar, Miguel Ortiz del Castillo, Jonathan Morgan, Lachlan Cowley,
+                                        Robert Mearns, Simon Barraclough, Krista A. Ehinger, Benjamin I. P. Rubinstein,
+                                        Richard Sinnott, Michele Trenti, James Bailey
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        AI models launched on spacecraft are often frozen at deployment, yet sensing
+                                        conditions and operational demands in orbit change. In-orbit updates are hard
+                                        because the standard loop (e.g., downlinking new in-orbit data, such as
+                                        full-resolution images, labelling them on Earth, retraining models on Earth,
+                                        uplinking new weights) is constrained by bandwidth, power, thermal limits,
+                                        and short operations windows. We show that meaningful in-mission adaptation is
+                                        possible under these constraints and introduce Telemetry-First In-orbit
+                                        Fine-Tuning (TFiT), an operations-first framework for fine-tuning AI models
+                                        in space. Telemetry denotes compact kilobyte-scale non-image records downlinked
+                                        from the spacecraft, including logits, timestamps, geolocation, and spacecraft
+                                        status. TFiT avoids routine image downlink: labels are produced on Earth by
+                                        fusing telemetry with Earth-based context sources, while thumbnails are
+                                        downlinked for human review only when label evidence is low-confidence or
+                                        conflicting. Crucially, in-orbit data remains onboard and only approved labels
+                                        are uplinked for bounded on-orbit updates. We demonstrate TFiT on the
+                                        flight-operated 6U SpIRIT nanosatellite by executing an in-orbit update of an
+                                        onboard cloud-detection model (OrbitBaseline to OrbitAdapted) and
+                                        evaluating pre/post-update behavior with a same-image audit protocol. Under
+                                        the recovered same-image audit, OrbitAdapted improves ROC AUC by +0.510 and
+                                        F1 score by +0.871 over the pre-update baseline. These results demonstrate
+                                        in-mission adaptation without routine full image downlink, widening the
+                                        practical scope of AI in space.
+                                    </div>
+                                </div>
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=oEqe5V65Nm" target="_blank" rel="noopener">
+                                        AstroSplat: Physics-Based Gaussian Splatting for Rendering and Reconstruction of Small Celestial Bodies
+                                    </a>
+                                    <div class="paper-authors">
+                                        Jennifer Nolan, Travis Driver, John A Christian
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        Image-based surface reconstruction and characterization are crucial for missions
+                                        to small celestial bodies (e.g., asteroids), as it informs mission planning,
+                                        navigation, and scientific analysis. Recent advances in Gaussian splatting enable
+                                        high-fidelity neural scene representations but typically rely on a spherical
+                                        harmonic intensity parameterization that is strictly appearance-based and does
+                                        not explicitly model material properties or light-surface interactions. We
+                                        introduce AstroSplat, a physics-based Gaussian splatting framework that
+                                        integrates planetary reflectance models to improve the autonomous reconstruction
+                                        and photometric characterization of small-body surfaces from in-situ imagery.
+                                        The proposed framework is validated on real imagery taken by NASA's Dawn
+                                        mission, where we demonstrate superior rendering performance and surface
+                                        reconstruction accuracy compared to the typical spherical harmonic
+                                        parameterization.
+                                    </div>
+                                </div>
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=Kc91iE7vih" target="_blank" rel="noopener">
+                                        LUMEN: Language-guided Unified Memory for ENcoding Hyperspectral Images for Mars Mineral Identification
+                                    </a>
+                                    <div class="paper-authors">
+                                        Abhiroop Chatterjee, Susmita Ghosh, Ashish Ghosh, Emmett Ientilucci
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        Identifying Martian minerals from sparse hyperspectral observations is
+                                        fundamentally constrained by extreme label scarcity and the absence of
+                                        large-scale hyperspectral pretraining. To this end, we introduce LUMEN
+                                        (Language-guided Unified Memory for ENcoding hyperspectral images), a
+                                        memory-augmented cross-modal framework that formulates hyperspectral
+                                        recognition tasks as structured relational alignment between spectral
+                                        embeddings and language-derived semantic prototypes. LUMEN employs an
+                                        ultralight 3D spectral encoder to distill spatial&ndash;spectral structure
+                                        into a compact latent manifold, which is softly aligned to textual embeddings
+                                        through a learnable bilinear projection. To reconcile linguistic priors with
+                                        spectral evidence, semantic prototypes are refined via learnable offsets and a
+                                        confidence-aware gating mechanism that adaptively regulates the contribution of
+                                        language priors and visual memory. A unified momentum-updated memory bank
+                                        further stabilizes learning by integrating exponentially smoothed visual
+                                        representations with language-anchored prototypes, reducing cross-modal drift.
+                                        Unlike prior language-guided or CLIP-style approaches, LUMEN explicitly
+                                        enforces eigenspace-level cross-modal consistency through a spectral relational
+                                        distillation objective that promotes global manifold alignment beyond pointwise
+                                        embedding matching. Extensive evaluations of three Martian hyperspectral
+                                        datasets show that LUMEN consistently exceeds strong transformer-based
+                                        approaches while requiring fewer parameters and reduced training time.
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
                     <div class="sched-row">
-                        <div class="sched-time">10:10&ndash;10:50</div>
+                        <div class="sched-time">2:20&ndash;2:50</div>
                         <div class="sched-body">
                             <div class="sched-label">Keynote 2</div>
-                            <p class="sched-title">Disruptive Computing and Sensing Paradigms for EdgeAI in Space</p>
+                            <p class="sched-title">Invited Talk</p>
                             <div class="sched-speaker">
-                                <strong>Dr. Paolo Panicucci</strong> &mdash; Politecnico di Milano
+                                <strong>Prof. Marco Pavone</strong> &mdash; Stanford University &amp; NVIDIA<br>
+                                <strong>Daniele Gammelli</strong> &mdash; Stanford University
                             </div>
                         </div>
                     </div>
 
                     <div class="sched-row">
-                        <div class="sched-time">10:50&ndash;11:30</div>
+                        <div class="sched-time">3:00&ndash;4:00</div>
                         <div class="sched-body">
                             <div class="sched-label">Break</div>
-                            <p class="sched-title">Coffee Break &amp; Poster Session</p>
+                            <p class="sched-title">Poster Session &amp; Coffee Break</p>
                         </div>
                     </div>
 
                     <div class="sched-row">
-                        <div class="sched-time">11:30&ndash;12:00</div>
+                        <div class="sched-time">4:00&ndash;4:30</div>
                         <div class="sched-body">
-                            <div class="sched-label">Papers</div>
-                            <p class="sched-title">Second Paper Presentation Slot</p>
+                            <div class="sched-label">Spotlight 2</div>
+                            <p class="sched-title">Industry Spotlight &amp; Paper Presentations</p>
+                            <div class="papers">
+
+                                <div class="paper">
+                                    <div class="paper-title">Space AI for Earth and Beyond Earth</div>
+                                    <div class="paper-authors">
+                                        Presenter: Li Zhuohe (Harry), Solution Manager, STAR.VISION AEROSPACE LIMITED
+                                    </div>
+                                </div>
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=DqW0UVn5hy" target="_blank" rel="noopener">
+                                        The Space Edge AI Computer: A Decoupled, Zero-Virtualization Payload for In-Orbit Generative AI under 12W
+                                    </a>
+                                    <div class="paper-authors">
+                                        Yufei Xie, Yizhou Leng, Longbin Wu, Haowei Lee, Jinyang Xu,
+                                        Zhaobo Zhang, Donggang Cao, Bingli Jiao, Xiaohui Duan
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        Deploying advanced cognitive capabilities on nanosatellites faces extreme Size,
+                                        Weight, and Power (SWaP) constraints, cosmic radiation, and software rigidity.
+                                        Current solutions relying on power-hungry data-center GPUs, heavy cloud-native
+                                        virtualization, or rigid monolithic cold-spares are physically and operationally
+                                        unviable for 10W-class nodes. In this paper, we propose the Space Edge AI
+                                        Computer (EAC), a deeply decoupled 12W/703.5g COTS-centric payload engineered
+                                        for the nanosatellite SWaP-C sweet spot. Hardware-wise, its physical M.2
+                                        decoupling allows for agile pre-launch accelerator swaps to resist chip
+                                        obsolescence, while a mixed-reliability, Open-Collector (OC)-driven
+                                        intervention mechanism provides granular intra-module storage switching to
+                                        prevent entire-board failure. Software-wise, we design AIOS, a
+                                        zero-virtualization spaceborne middleware that eschews heavy containers for
+                                        OS-level POSIX process derivation, achieving extreme reconfiguration
+                                        elasticity over weak telemetry links. We report a flawless initial 124-day
+                                        bare-LEO flight validation campaign. Our in-orbit evaluations validated the
+                                        first bare-LEO configurable SLM and RAG architecture for medical consultation
+                                        (achieving a 7.7&times; latency reduction), concurrent heterogeneous vision
+                                        pipelines via a strict isolated-frame protocol, and a pioneering feasibility
+                                        study of an offline Chain-of-Thought (CoT) reasoning model
+                                        (DeepSeek-R1-Distill) under strict power envelopes. This establishes a
+                                        pragmatic, flight-validated foundation for future distributed spaceborne
+                                        autonomous agents.
+                                    </div>
+                                </div>
+
+                                <div class="paper">
+                                    <a class="paper-title" href="https://openreview.net/forum?id=utGw80DCww" target="_blank" rel="noopener">
+                                        A Deep Learning Iterative Framework for Sentinel-1 Stripmap Enhancement Based on Azimuth Doppler Decomposition
+                                    </a>
+                                    <div class="paper-authors">
+                                        Juan Francisco Amieva, Christian Ayala, Roberto Del Prete, Mikel Galar
+                                    </div>
+                                    <button class="abstract-toggle" onclick="toggleAbstract(this)">
+                                        <i class="fas fa-chevron-down"></i> <span>Abstract</span>
+                                    </button>
+                                    <div class="paper-abstract">
+                                        Synthetic Aperture Radar (SAR) imagery enables all-weather, day-and-night
+                                        Earth observation; however, it remains difficult to interpret due to speckle
+                                        noise and other intrinsic imaging artifacts. Sentinel-1 (S1) constitutes one
+                                        of the most widely used spaceborne SAR missions, offering systematic global
+                                        coverage, high temporal resolution, dual-polarization imaging, and free data
+                                        availability. Among S1 modes, Stripmap (SM) provides the highest resolution,
+                                        yet speckle noise and spatial constraints often hinder applications requiring
+                                        finer spatial detail. This motivates the need for effective image enhancement
+                                        strategies. In this work, we propose a self-supervised enhancement framework
+                                        for S1 SM imagery based on azimuth subaperture decomposition. The method
+                                        exploits the physical consistency between subaperture reconstructions and the
+                                        corresponding full-aperture image to generate paired training data without
+                                        external sensors, simulated ground truth, or multi-temporal stacks. The
+                                        proposed framework integrates single- and multi-frame learning and
+                                        incorporates an iterative inference scheme that progressively refines image
+                                        quality. Experiments on real S1 SM data show that the proposed approach
+                                        consistently outperforms the widely adopted self-supervised deep learning
+                                        baseline MERLIN, in terms of PSNR and SSIM, while MERLIN attains higher ENL,
+                                        highlighting a trade-off between structural fidelity and speckle smoothing.
+                                        Overall, the results demonstrate that subaperture-based supervision provides a
+                                        physically grounded, reproducible, and operationally viable approach for SAR
+                                        image enhancement using S1 data.
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
                     <div class="sched-row">
-                        <div class="sched-time">12:00&ndash;12:40</div>
+                        <div class="sched-time">4:30&ndash;5:00</div>
                         <div class="sched-body">
                             <div class="sched-label">Keynote 3</div>
-                            <p class="sched-title">Automating Satellite Manufacturing and Design</p>
+                            <p class="sched-title">Invited Talk</p>
                             <div class="sched-speaker">
-                                <strong>Al Tadros</strong> &mdash; CTO, Redwire
+                                <strong>Ethan Rublee</strong> &mdash; CEO &amp; Co-Founder, Space-ng
                             </div>
                         </div>
                     </div>
 
                     <div class="sched-row">
-                        <div class="sched-time">12:40&ndash;13:40</div>
-                        <div class="sched-body">
-                            <div class="sched-label">Break</div>
-                            <p class="sched-title">Lunch Break</p>
-                        </div>
-                    </div>
-
-                    <div class="sched-row">
-                        <div class="sched-time">13:40&ndash;14:10</div>
-                        <div class="sched-body">
-                            <div class="sched-label">Papers</div>
-                            <p class="sched-title">Third Paper Presentation Slot</p>
-                        </div>
-                    </div>
-
-                    <div class="sched-row">
-                        <div class="sched-time">14:10&ndash;14:50</div>
-                        <div class="sched-body">
-                            <div class="sched-label">Keynote 4</div>
-                            <p class="sched-title">AI for Risk-Aware Decision Making in Space Robotics</p>
-                            <div class="sched-speaker">
-                                <strong>Dr. Hiro Ono</strong> &mdash; Georgia Tech
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sched-row">
-                        <div class="sched-time">14:50&ndash;15:50</div>
-                        <div class="sched-body">
-                            <div class="sched-label">Break</div>
-                            <p class="sched-title">Coffee Break &amp; Poster Session</p>
-                        </div>
-                    </div>
-
-                    <div class="sched-row">
-                        <div class="sched-time">15:50&ndash;16:20</div>
-                        <div class="sched-body">
-                            <div class="sched-label">Keynote 5</div>
-                            <p class="sched-title">To be announced</p>
-                        </div>
-                    </div>
-
-                    <div class="sched-row">
-                        <div class="sched-time">16:20&ndash;17:20</div>
+                        <div class="sched-time">5:00&ndash;5:30</div>
                         <div class="sched-body">
                             <div class="sched-label">Discussion</div>
-                            <p class="sched-title">Fishbowl Session</p>
+                            <p class="sched-title">Panel &amp; Unconferences</p>
                             <div class="panel-details">
-                                <p><strong>Dr. Roberto Del Prete</strong> &mdash; Chief Technology Officer, Setanta Space</p>
-                                <p><strong>Prof. Marco Pavone</strong> &mdash; Stanford University &amp; NVIDIA</p>
-                                <p><strong>Prof. Simone D'Amico</strong> &mdash; Stanford University</p>
+                                <p><strong>Chaired by Gabriele Meoni and Tat-Jun Chin.</strong></p>
+                                <p><strong>Ethan Rublee</strong> &mdash; CEO and Co-Founder, Space-ng</p>
+                                <p><strong>STAR.VISION</strong></p>
+                                <p><strong>Manos Koumandakis</strong> &mdash; Chief Scientist and Co-founder, Infinite Orbits</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="sched-row">
-                        <div class="sched-time">17:20&ndash;17:35</div>
+                        <div class="sched-time">5:30&ndash;5:50</div>
                         <div class="sched-body">
                             <div class="sched-label">Awards</div>
-                            <p class="sched-title">Challenge Awards Ceremony</p>
+                            <p class="sched-title">Challenge &amp; Award Ceremony</p>
                         </div>
                     </div>
 
                     <div class="sched-row">
-                        <div class="sched-time">17:35&ndash;17:45</div>
+                        <div class="sched-time">5:50&ndash;6:00</div>
                         <div class="sched-body">
                             <div class="sched-label">Closing</div>
-                            <p class="sched-title">Closing Remarks</p>
-                        </div>
-                    </div>
-
-                    <div class="sched-row">
-                        <div class="sched-time">17:45&ndash;18:30</div>
-                        <div class="sched-body">
-                            <div class="sched-label">Posters</div>
-                            <p class="sched-title">Extra Poster Session</p>
+                            <p class="sched-title">Conclusion of the Workshop</p>
                         </div>
                     </div>
 
                 </div>
             </section>
+
+            <section id="accepted-papers" class="content-section accepted-papers">
+                <h2>Accepted Papers</h2>
+                <p class="accepted-note">
+                    The full list includes 47 accepted papers from the AI4Space 2026 submissions.
+                </p>
+                <div class="accepted-table-wrap">
+                    <table class="accepted-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Accepted paper</th>
+                                <th>Authors</th>
+                                <th>OpenReview</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td>Efficient Onboard Spacecraft Pose Estimation with Event Cameras and Neuromorphic Hardware</td><td>Arunkumar Rathinam, Jules Lecomte, Jost Reelsen, Gregor Lenz, Axel von Arnim, Djamila Aouada</td><td><a href="https://openreview.net/forum?id=PKxT4xUzcj" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>2</td><td>Autonomous Perception and Onboard Intelligence for Space Missions: A Survey</td><td>Kaveh Safavigerdini, Juan Mogollon, Amirreza Daghighi, Kannappan Palaniappan</td><td><a href="https://openreview.net/forum?id=XEpodVDRUV" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>3</td><td>Towards Event-Based Visual Sensing for Spacecraft Pose Estimation: Baselines and Analysis</td><td>Mysore supreeth</td><td><a href="https://openreview.net/forum?id=7HjNpm74a5" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>4</td><td>Reward Shaping for Safe Spacecraft Proximity Operations: A Comparative Study</td><td>Mysore supreeth</td><td><a href="https://openreview.net/forum?id=yycJBc47Ni" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>5</td><td>Vision-Guided Deep Reinforcement Learning for Autonomous Spacecraft Rendezvous and Docking</td><td>Mysore supreeth</td><td><a href="https://openreview.net/forum?id=ASWnou9kLe" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>6</td><td>SpaceGym: A Gymnasium-Based Benchmark for Deep Reinforcement Learning in Spacecraft Proximity Operations</td><td>Mysore supreeth, Manish Mehta</td><td><a href="https://openreview.net/forum?id=eHHDzzYt1F" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>7</td><td>SwarmSAT Agent: A Tool-Grounded Autonomous Multi-Agent LLM Framework for Rapid Satellite Constellation Retasking of Pop-Up Events</td><td>Adib Bazgir, Yuwen Zhang</td><td><a href="https://openreview.net/forum?id=uxnfFxqcCk" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>8</td><td>ArcticBench and SmartTransfer: Benchmarking and Enabling Continual Learning of Atmosphere Generative Foundation Model</td><td>Fu-Ming Guo, fengwei guo, Yingfang Fan</td><td><a href="https://openreview.net/forum?id=M4Rv8VEi0x" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>9</td><td>Neural 3D Reconstruction of Planetary Surfaces from Descent-Phase Wide-Angle Imagery</td><td>Melonie de Almeida, George Brydon, Divya M Persaud, John H. Williamson, Paul Henderson</td><td><a href="https://openreview.net/forum?id=hW08zgTa8H" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>10</td><td>A Comparative Analysis of Forecasting Foundation Models for Spacecraft Multivariate Time Series Anomaly Detection</td><td>Alexandre Olive, Sundip R. Desai, Richard H. Foster, Moses Chan, Mary Comer, Edward Delp</td><td><a href="https://openreview.net/forum?id=WROJYqwVVp" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>11</td><td>PIKing Neural Networks: Parallel Inference via Kernelizing. A Comparative Study of Tandem-Deployed Space AI Models Across Heterogeneous Hardware</td><td>Muhammad Deedahwar Mazhar Qureshi, James Murphy, Jake O'Brien, Roberto Del Prete</td><td><a href="https://openreview.net/forum?id=gFLAOyyFhD" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>12</td><td>Towards Onboard Multi-View Analysis of Satellite Imagery: Monocular 2D Motion Estimation and 3D Reconstruction</td><td>Alberto Candela, Evan Davis, Andrew Branch, Joseph Russino, Steve Chien, Becca Bonham-Carter, Luis Chavier, Alexis Pascual, Tim Heydrich, Shannon Paul, Saleh Abdelrahman, Andrew J Macdonald, Michele Faragalli</td><td><a href="https://openreview.net/forum?id=CaGna9Lt50" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>13</td><td>SPACE-HOP: Spacecraft 6-DoF Pose Estimation using Embedding-Predictive Pretraining and Hopf Map</td><td>Arnabi Dutta, Arsh Abbas Naqvi, Kavinder Singh, Lavendra Gautam, Anil Singh Parihar, Shakti Bangare, Ravi Kumar Lagisetty</td><td><a href="https://openreview.net/forum?id=t9LTeubtto" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>14</td><td>AstroSplat: Physics-Based Gaussian Splatting for Rendering and Reconstruction of Small Celestial Bodies</td><td>Jennifer Nolan, Travis Driver, John A Christian</td><td><a href="https://openreview.net/forum?id=oEqe5V65Nm" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>15</td><td>GeoSwin: Hierarchical Representation Learning and a Large-Scale Earth Observation Benchmark</td><td>Muhammad Fayaz, Zulfiqar Ahmad Khan, Lien Minh Dang, Hyeonjoon Moon</td><td><a href="https://openreview.net/forum?id=yvDnWfXRsM" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>16</td><td>The Space Edge AI Computer: A Decoupled, Zero-Virtualization Payload for In-Orbit Generative AI under 12W</td><td>Yufei Xie, Yizhou Leng, Longbin Wu, Haowei Lee, Jinyang Xu, Zhaobo Zhang, Donggang Cao, Bingli Jiao, Xiaohui Duan</td><td><a href="https://openreview.net/forum?id=DqW0UVn5hy" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>17</td><td>VAD4Space: Visual Anomaly Detection for Planetary Surface Imagery</td><td>Fabrizio Genilotti, Arianna Stropeni, Francesco Borsatti, Manuel Barusco, Davide Dalle Pezze, Gian Antonio Susto</td><td><a href="https://openreview.net/forum?id=t8k69isQRg" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>18</td><td>LUMEN: Language-guided Unified Memory for ENcoding Hyperspectral Images for Mars Mineral Identification</td><td>Abhiroop Chatterjee, Susmita Ghosh, Ashish Ghosh, Emmett Ientilucci</td><td><a href="https://openreview.net/forum?id=Kc91iE7vih" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>19</td><td>Deployable Neuromorphic AI in Space: Taxonomy and Architecture</td><td>Giannis Panagiotopoulos, Luca Macchiaiolo, Priyadarshini Kannan, Evgenios Tsigkanos, Axel von Arnim</td><td><a href="https://openreview.net/forum?id=VB8cU8a5Hu" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>20</td><td>Thermal Anomaly Detection using Physics Aware Neuromorphic Networks: Comparison between Raw and L1C Sentinel-2 Data</td><td>Stephen Smith, Cormac Purcell, Gabriele Meoni, Roberto Del Prete, Zdenka Kuncic</td><td><a href="https://openreview.net/forum?id=KftvooI3VD" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>21</td><td>YOOLO: You Only Orbit and Look Once</td><td>Vincenzo Mariano Scarrica, Antonio Vanzanella, Antonino Staiano</td><td><a href="https://openreview.net/forum?id=666TQVkWw2" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>22</td><td>Deployment-Aligned Low-Precision Neural Architecture Search for Spaceborne Edge AI</td><td>Parampuneet Kaur Thind, Vaibhav Kumar Katturu, Giacomo Zema, Roberto Del Prete</td><td><a href="https://openreview.net/forum?id=yFVPHTAnX7" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>23</td><td>A Systematic Evaluation of Retrieval-Augmented Generation and Language Models for Space Operations</td><td>Ruben Catarino Belo, Marta Guimaraes, Claudia Soares</td><td><a href="https://openreview.net/forum?id=hLv173CNNk" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>24</td><td>Semantic Constraint Synthesis for Adaptive Trajectory Optimization via Large Language Models</td><td>Eleanor Brosius, Yuji Takubo, Daniele Gammelli, Simone D'Amico, Marco Pavone</td><td><a href="https://openreview.net/forum?id=774K6D5Ttn" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>25</td><td>Post-Launch Capability Expansion of Vision-Language Models via Prompting for On-Orbit Spacecraft Inspection</td><td>Nicholas Welsh, Lennon J. Shikhman, Monty Nehru Attzs, Seemanthini Kusha Putane, Van Minh Nguyen, Ryan T. White</td><td><a href="https://openreview.net/forum?id=w7pVSkgHRa" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>26</td><td>Intent-aligned Autonomous Spacecraft Guidance via Reasoning Models</td><td>Yuji Takubo, Simone D'Amico</td><td><a href="https://openreview.net/forum?id=ijgMoAtE8J" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>27</td><td>GUIDE: Guided Updates for In-context Decision Evolution in LLM-Driven Spacecraft Operations</td><td>Alejandro Carrasco, Mariko Storey-Matsutani, Victor Rodriguez-Fernandez, Richard Linares</td><td><a href="https://openreview.net/forum?id=AsCCctx5gv" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>28</td><td>A Deep Learning Iterative Framework for Sentinel-1 Stripmap Enhancement Based on Azimuth Doppler Decomposition</td><td>Juan Francisco Amieva, Christian Ayala, Roberto Del Prete, Mikel Galar</td><td><a href="https://openreview.net/forum?id=utGw80DCww" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>29</td><td>OWLS: Open-World Language-driven Servoing for Zero-Shot Traversability</td><td>Chahyon Ku, Erica Tevere, Georgios Georgakis, Rudranarayan Mukherjee, Bernadette Bucher</td><td><a href="https://openreview.net/forum?id=sCGgRkBvwc" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>30</td><td>LuMon: A Comprehensive Benchmark and Development Suite with Novel Datasets for Lunar Monocular Depth Estimation</td><td>Aytac Sekmen, Fatih Emre Gunes, Furkan Horoz, Huseyin Umut Isik, Mehmet Alp Ozaydin, Onur Altay Topaloglu, Sahin Umutcan Ustundas, Yurdasen Alp Yeni, Halil Ersin Soken, Erol Sahin, Ramazan Gokberk Cinbis, Sinan Kalkan</td><td><a href="https://openreview.net/forum?id=DdYoK1gc0n" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>31</td><td>Raw-to-Processed in Orbit: Fast Onboard Image Reconstruction for EO</td><td>Gabriele Inzerillo, Lorenzo Papa, Gabriele Meoni, Diego Valsesia, Enrico Magli</td><td><a href="https://openreview.net/forum?id=iZvIp5z3Ty" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>32</td><td>Rethinking Satellite Image Restoration for Onboard AI: A Lightweight Learning-Based Approach</td><td>Adrien Dorise, Marjorie Bellizzi, Omar Hlimi</td><td><a href="https://openreview.net/forum?id=itJGxOewG8" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>33</td><td>LLaVA-LE: Large Language-and-Vision Assistant for Lunar Exploration</td><td>Gokce Inal, Pouyan Navard, Alper Yilmaz</td><td><a href="https://openreview.net/forum?id=xn9g0ysIDv" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>34</td><td>Optimizing Latent Representations for Robust Building Damage Assessment Onboard Earth Observation Satellites</td><td>Thomas Goudemant, Benjamin Francesconi</td><td><a href="https://openreview.net/forum?id=vzN9SpVn4g" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>35</td><td>Onboard-Targeted Segmentation of Broken Pixels, Lines, and Dust on Optics Faults in Space Camera Sensors</td><td>Riccardo Gallon, Alessandra Menicucci, Edoardo Caroselli</td><td><a href="https://openreview.net/forum?id=VStcS1VXxo" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>36</td><td>Flight Demonstration of On-Orbit Model Adaptation on a Nanosatellite</td><td>Zaher Joukhadar, Miguel Ortiz del Castillo, Jonathan Morgan, Lachlan Cowley, Robert Mearns, Simon Barraclough, Krista A. Ehinger, Benjamin I. P. Rubinstein, Richard Sinnott, Michele Trenti, James Bailey</td><td><a href="https://openreview.net/forum?id=kmY7apKxqe" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>37</td><td>Why Not? Solver-Grounded Certificates for Explainable Mission Planning</td><td>Najeeb Khan</td><td><a href="https://openreview.net/forum?id=Zs7hOAsgmh" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>38</td><td>Onboard Latent Kalman Filtering for Robust Spacecraft Pose Estimation</td><td>Junghwan Park, Woojin Cho</td><td><a href="https://openreview.net/forum?id=7yYcqe9l8a" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>39</td><td>Uncertainty-Guided Edge Learning for Deep Image Regression in Remote Sensing</td><td>Anh Vu Nguyen, Dino Sejdinovic, Tat-Jun Chin</td><td><a href="https://openreview.net/forum?id=YEq3szKlc9" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>40</td><td>Retrocausal Influence and Agentic Consensus: Theoretically Grounded Interpretability for Long-Horizon Autonomous Space Systems</td><td>Srikanth Vemula</td><td><a href="https://openreview.net/forum?id=VwvbMEC9Lg" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>41</td><td>MMLSv2: A Multimodal Dataset for Martian Landslide Detection in Remote Sensing Imagery</td><td>Sidike Paheding, Abel Reyes-Angulo, Leo Thomas Ramos, Angel Domingo Sappa, Rajaneesh A., Hiral P. B., Sajin Kumar K. S., Thomas Oommen</td><td><a href="https://openreview.net/forum?id=KVwDhIS1hn" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>42</td><td>Learning Normalcy: Self-Supervised Anomaly Discovery in Spacecraft Sensor Streams</td><td>Mahule Roy, Subhas Roy</td><td><a href="https://openreview.net/forum?id=9f5Y2g4rhx" target="_blank" rel="noopener">OpenReview</a></td></tr>
+                            <tr><td>43</td><td>A Cascaded Architecture for Illumination-Robust 6-DoF Spacecraft Pose Estimation Using Event Cameras</td><td>Xiaolei Zhang, Ziyang Xu, Boyuan Teng, Yichen Wang, Yuxuan Liu, Tianhui Zhang, Han Zhang, Jincheng Jia, Peng Han, Chunjiang Bian</td><td>CMT 3</td></tr>
+                            <tr><td>44</td><td>From Spatiotemporal Decoupling to Kinematic Smoothing: A Robust Pipeline for Event-Based Spacecraft Pose Estimation</td><td>Yuteng Zeng, Yuyang Xiong, Xiaoxiong Wang, Xiaoran Zhang, Haoyue Liu, Yi Chang, Luxin Yan</td><td>CMT 4</td></tr>
+                            <tr><td>45</td><td>GABI: Geometry-Aware Boundary Integration for spacecraft segmentation</td><td>Iason Georgios Velentzas, Dhruv Ahuja, Panagiotis Tsiotras</td><td>CMT 11</td></tr>
+                            <tr><td>46</td><td>Segmentation-based Detection for Efficient Multi-Task Spacecraft Perception</td><td>Sivaperuman Muniyasamy, Surendar Devasundaram</td><td>CMT 12</td></tr>
+                            <tr><td>47</td><td>Class Decomposition for Lightweight Spacecraft Perception</td><td>Saint Unnikrishnan, Derin Jacob, Emmanuel V</td><td>CMT 13</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </main>
 
         <footer>
-            <p>&copy; 2027 AI4Space Workshop @ CVPR. All rights reserved. Charting new territories in AI.</p>
+            <p>&copy; 2026 AI4Space Workshop @ CVPR. All rights reserved. Charting new territories in AI.</p>
         </footer>
     </div>
 

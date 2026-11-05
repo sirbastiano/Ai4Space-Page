@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program - AI4Space @ CVPR 2027</title>
+    <link rel="stylesheet" href="style.css?v=20260604b">
+    <link rel="stylesheet" href="countdown-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <style>
+        .event-info {
+            text-align: center;
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 40px;
+            letter-spacing: 0.02em;
+        }
+        .event-info span {
+            margin: 0 10px;
+        }
+
+        .schedule {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .sched-row {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 0 24px;
+            padding: 18px 0;
+            border-top: 1px solid #eee;
+        }
+        .sched-row:last-child {
+            border-bottom: 1px solid #eee;
+        }
+
+        .sched-time {
+            font-size: 0.78em;
+            font-weight: 600;
+            color: #999;
+            padding-top: 2px;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
+
+        .sched-label {
+            font-size: 0.68em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #aaa;
+            margin-bottom: 3px;
+        }
+
+        .sched-title {
+            font-size: 0.97em;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 2px 0;
+        }
+
+        .sched-speaker {
+            font-size: 0.85em;
+            color: #555;
+            margin-top: 4px;
+        }
+        .sched-speaker strong {
+            color: #333;
+        }
+
+        .panel-details {
+            margin-top: 6px;
+            color: #555;
+            font-size: 0.85em;
+            line-height: 1.55;
+        }
+
+        .panel-details p {
+            margin: 0 0 6px;
+        }
+
+        .panel-details p:last-child {
+            margin-bottom: 0;
+        }
+
+        .panel-details strong {
+            color: #333;
+        }
+
+        /* Papers */
+        .papers {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .paper {
+            padding: 12px 0 0 0;
+            border-top: 1px solid #f0f0f0;
+        }
+        .papers .paper:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .paper-title {
+            font-size: 0.88em;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-decoration: none;
+            line-height: 1.45;
+        }
+        .paper-title:hover {
+            color: #23a6d5;
+        }
+
+        .paper-authors {
+            font-size: 0.78em;
+            color: #888;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        .abstract-toggle {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-top: 5px;
+            font-size: 0.78em;
+            color: #23a6d5;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .abstract-toggle:hover {
+            color: #1a7fa8;
+        }
+        .abstract-toggle i {
+            font-size: 0.8em;
+            transition: transform 0.2s ease;
+        }
+        .abstract-toggle.open i {
+            transform: rotate(180deg);
+        }
+
+        .paper-abstract {
+            display: none;
+            font-size: 0.82em;
+            color: #555;
+            line-height: 1.65;
+            margin-top: 8px;
+        }
+        .paper-abstract.visible {
+            display: block;
+        }
+
+        .accepted-papers {
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        .accepted-papers h2 {
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .accepted-note {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+            max-width: 760px;
+            margin: 0 auto 24px;
+            text-align: center;
+        }
+
+        .accepted-table-wrap {
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .accepted-table {
+            width: 100%;
+            min-width: 920px;
+            border-collapse: collapse;
+            color: #333;
+            font-size: 0.82em;
+        }
+
+        .accepted-table th,
+        .accepted-table td {
+            padding: 11px 12px;
+            border-bottom: 1px solid #eef0f3;
+            vertical-align: top;
+            text-align: left;
+            line-height: 1.45;
+        }
+
+        .accepted-table th {
+            background: #f8f9fa;
+            color: #1a1a1a;
+            font-size: 0.78em;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .accepted-table td:first-child {
+            width: 44px;
+            color: #777;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .accepted-table td:nth-child(2) {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .accepted-table td:last-child {
+            white-space: nowrap;
+        }
+
+        .accepted-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .accepted-table a {
+            color: #23a6d5;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .accepted-table a:hover {
+            color: #1a7fa8;
+        }
+
+        @media (max-width: 560px) {
+            .sched-row { grid-template-columns: 64px 1fr; gap: 0 14px; }
+            .sched-time { font-size: 0.72em; }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header style="max-height: 10em;">
+            <nav class="navbar">
+                <div class="navbar-container">
+                    <a href="index.html" class="navbar-logo">AI4Space</a>
+                    <button class="menu-icon" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <ul class="nav-menu" id="primary-navigation" aria-hidden="true">
+                        <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                        <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                        <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Papers</a></li>
+                        <li class="nav-item"><a href="challenge.html" class="nav-links">Challenge</a></li>
+                        <li class="nav-item"><a href="committee.html" class="nav-links">Organizing Committee</a></li>
+                        <li class="nav-item"><a href="index.html#contact" class="nav-links">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="hero">
+                <h1>Workshop Program</h1>
+            </div>
+        </header>
+
+        <main>
+            <section id="program-schedule" class="content-section">
+
+                <div class="event-info">
+                    <span>CVPR 2027</span>&middot;
+                    <span>Full-day workshop</span>&middot;
+                    <span>Date and room TBA</span>
+                </div>
+
+                <div class="schedule">
+
+                    <div class="sched-row">
+                        <div class="sched-time">8:45&ndash;9:00</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Opening</div>
+                            <p class="sched-title">Welcome &amp; Opening Remarks</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">9:00&ndash;9:40</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Keynote 1</div>
+                            <p class="sched-title">Distributed Autonomy in Space Operations and Earth Observation</p>
+                            <div class="sched-speaker">
+                                <strong>Dr. Steve Chien</strong> &mdash; NASA Jet Propulsion Laboratory
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">9:40&ndash;10:10</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Papers</div>
+                            <p class="sched-title">First Paper Presentation Slot</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">10:10&ndash;10:50</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Keynote 2</div>
+                            <p class="sched-title">Disruptive Computing and Sensing Paradigms for EdgeAI in Space</p>
+                            <div class="sched-speaker">
+                                <strong>Dr. Paolo Panicucci</strong> &mdash; Politecnico di Milano
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">10:50&ndash;11:30</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Break</div>
+                            <p class="sched-title">Coffee Break &amp; Poster Session</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">11:30&ndash;12:00</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Papers</div>
+                            <p class="sched-title">Second Paper Presentation Slot</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">12:00&ndash;12:40</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Keynote 3</div>
+                            <p class="sched-title">Automating Satellite Manufacturing and Design</p>
+                            <div class="sched-speaker">
+                                <strong>Al Tadros</strong> &mdash; CTO, Redwire
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">12:40&ndash;13:40</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Break</div>
+                            <p class="sched-title">Lunch Break</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">13:40&ndash;14:10</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Papers</div>
+                            <p class="sched-title">Third Paper Presentation Slot</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">14:10&ndash;14:50</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Keynote 4</div>
+                            <p class="sched-title">AI for Risk-Aware Decision Making in Space Robotics</p>
+                            <div class="sched-speaker">
+                                <strong>Dr. Hiro Ono</strong> &mdash; Georgia Tech
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">14:50&ndash;15:50</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Break</div>
+                            <p class="sched-title">Coffee Break &amp; Poster Session</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">15:50&ndash;16:20</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Keynote 5</div>
+                            <p class="sched-title">To be announced</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">16:20&ndash;17:20</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Discussion</div>
+                            <p class="sched-title">Fishbowl Session</p>
+                            <div class="panel-details">
+                                <p><strong>Dr. Roberto Del Prete</strong> &mdash; Chief Technology Officer, Setanta Space</p>
+                                <p><strong>Prof. Marco Pavone</strong> &mdash; Stanford University &amp; NVIDIA</p>
+                                <p><strong>Prof. Simone D'Amico</strong> &mdash; Stanford University</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">17:20&ndash;17:35</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Awards</div>
+                            <p class="sched-title">Challenge Awards Ceremony</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">17:35&ndash;17:45</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Closing</div>
+                            <p class="sched-title">Closing Remarks</p>
+                        </div>
+                    </div>
+
+                    <div class="sched-row">
+                        <div class="sched-time">17:45&ndash;18:30</div>
+                        <div class="sched-body">
+                            <div class="sched-label">Posters</div>
+                            <p class="sched-title">Extra Poster Session</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2027 AI4Space Workshop @ CVPR. All rights reserved. Charting new territories in AI.</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleAbstract(btn) {
+            var abstract = btn.closest('.paper').querySelector('.paper-abstract');
+            var span = btn.querySelector('span');
+            var isOpen = abstract.classList.contains('visible');
+            abstract.classList.toggle('visible', !isOpen);
+            btn.classList.toggle('open', !isOpen);
+            span.textContent = isOpen ? 'Abstract' : 'Hide abstract';
+        }
+    </script>
+    <script src="animation.js"></script>
+    <script src="countdown.js"></script>
+    <script src="app.js?v=20260604c"></script>
+</body>
+</html>
