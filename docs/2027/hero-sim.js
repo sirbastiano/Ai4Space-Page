@@ -1,4 +1,4 @@
-/* AI4Space landing scenes: four simulations drawn as HUD displays on one pinned canvas.
+/* AI4Space landing scenes: four simulations drawn as HUD displays on one carousel canvas.
  * 01 vision-based rendezvous (Clohessy-Wiltshire approach, pose estimation, event camera),
  * 02 Earth tip-and-cue (onboard segmentation cueing a SAR satellite), 03 agentic mission design
  * (multi-agent trade-space exploration), 04 cooperative Mars exploration with terrain segmentation.
@@ -6,7 +6,7 @@
 (function () {
     'use strict';
 
-    const block = document.querySelector('.scenes');
+    const block = document.getElementById('scenes');
     const pin = document.querySelector('.scenes-pin');
     const canvas = document.getElementById('hero-canvas');
     if (!block || !pin || !canvas || !canvas.getContext) return;
@@ -14,12 +14,13 @@
     const ctx = canvas.getContext('2d');
     const panels = Array.from(document.querySelectorAll('.scene-panel'));
     const ticks = Array.from(document.querySelectorAll('.scene-rail button'));
+    const arrows = Array.from(document.querySelectorAll('.scene-arrow'));
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const COL = {
-        cyan: '#5ad1ff',
-        cyanDim: 'rgba(90, 209, 255, 0.16)',
-        cyanMid: 'rgba(90, 209, 255, 0.45)',
+        cyan: '#667eea',
+        cyanDim: 'rgba(102, 126, 234, 0.16)',
+        cyanMid: 'rgba(102, 126, 234, 0.45)',
         amber: '#ffb14a',
         red: '#ff5a4f',
         blue: '#3d8bff',
@@ -31,6 +32,7 @@
     const TAU = Math.PI * 2;
     const DEG = Math.PI / 180;
     const FADE_SECONDS = 0.35;
+    const AUTO_SECONDS = 12;           // carousel advances on its own until the visitor picks a scene
 
     let W = 0, H = 0, dpr = 1, small = false;
     let stage = { x: 0, y: 0, w: 0, h: 0 };
@@ -43,12 +45,12 @@
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
     const hyp = (v) => Math.hypot(v[0], v[1]);
 
-    function mono(size, weight) {
-        return `${weight || 500} ${size}px "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace`;
+    function hudFont(size, weight) {
+        return `${weight || 500} ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;   // same family as the page body
     }
 
     function text(str, x, y, color, size, align, weight) {
-        ctx.font = mono(size || 11, weight);
+        ctx.font = hudFont(size || 11, weight);
         ctx.fillStyle = color;
         ctx.textAlign = align || 'left';
         ctx.textBaseline = 'alphabetic';
@@ -122,82 +124,10 @@
         return sum / 0.875;
     }
 
-    /* A small low-resolution scene: optical (SWIR false colour) and SAR (speckled backscatter)
-     * renderings of the same ground, plus the mask a segmentation model should find. */
-    function makeTile(kind, seed) {
-        const w = 48, h = 34;
-        const opt = [], sar = [], mask = new Uint8Array(w * h);
-        const fx = w * rand(0.4, 0.6), fy = h * rand(0.4, 0.6), fr = rand(7, 10);
-        for (let y = 0; y < h; y++) {
-            const river = w * 0.5 + Math.sin(y / 6 + seed) * 7;
-            for (let x = 0; x < w; x++) {
-                const n = tileNoise(x / 9, y / 9, seed);
-                let rgb = [34 + 70 * n, 58 + 40 * n, 38 + 26 * n];
-                let back = 70 + 90 * n;
-                let m = 0;
-                if (kind === 'FLOOD') {
-                    const d = Math.abs(x - river);
-                    const extent = 2 + 7 * tileNoise(x / 5, y / 5, seed + 3);
-                    if (d < 1.6) { rgb = [18, 40, 70]; back = 18; }
-                    else if (d < extent) { rgb = [24, 52, 88]; back = 22; m = 1; }
-                } else if (kind === 'WILDFIRE') {
-                    const d = Math.hypot(x - fx, (y - fy) * 1.2) + 3 * tileNoise(x / 4, y / 4, seed + 5);
-                    if (d < fr - 1.6) { rgb = [32, 26, 22]; back = 40; m = 1; }
-                    else if (d < fr) { rgb = [255, 160 + 60 * n, 60]; back = 55; m = 1; }
-                    if (x > fx && Math.abs(y - fy + (x - fx) * 0.35) < 3 + (x - fx) * 0.25) {
-                        const smoke = clamp(1 - (x - fx) / (w - fx), 0, 1) * 0.6;
-                        rgb = rgb.map((c) => c * (1 - smoke) + 170 * smoke);   // smoke hides it optically, not for SAR
-                    }
-                }
-                opt.push(rgb);
-                sar.push(clamp(back + rand(-35, 35), 0, 255));
-                mask[y * w + x] = m;
-            }
-        }
-        let x0 = w, y0 = h, x1 = -1, y1 = -1;
-        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (mask[y * w + x]) {
-            x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
-        }
-        return { w, h, opt, sar, mask, box: x1 >= 0 ? [x0, y0, x1 + 1, y1 + 1] : null, score: rand(0.88, 0.97) };
-    }
-
-    /* Draw a tile into a box; sweep in [0, 1] reveals the segmentation mask row by row. */
-    function drawTile(tile, ix, iy, iw, ih, mode, sweep, maskRgb, label) {
-        const pw = iw / tile.w, ph = ih / tile.h;
-        for (let y = 0; y < tile.h; y++) {
-            for (let x = 0; x < tile.w; x++) {
-                const k = y * tile.w + x;
-                if (mode === 'sar') { const g = tile.sar[k]; ctx.fillStyle = `rgb(${g},${g},${g})`; }
-                else { const c = tile.opt[k]; ctx.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; }
-                ctx.fillRect(ix + x * pw, iy + y * ph, pw + 0.5, ph + 0.5);
-            }
-        }
-        const rows = Math.floor(clamp(sweep, 0, 1) * tile.h);
-        ctx.fillStyle = `rgba(${maskRgb}, 0.5)`;
-        for (let y = 0; y < rows; y++) {
-            for (let x = 0; x < tile.w; x++) if (tile.mask[y * tile.w + x]) ctx.fillRect(ix + x * pw, iy + y * ph, pw + 0.5, ph + 0.5);
-        }
-        if (sweep > 0 && sweep < 1) {
-            ctx.strokeStyle = COL.cyan;
-            ctx.beginPath(); ctx.moveTo(ix, iy + rows * ph); ctx.lineTo(ix + iw, iy + rows * ph); ctx.stroke();
-        }
-        if (sweep >= 1 && tile.box && label) {
-            const [x0, y0, x1, y1] = tile.box;
-            ctx.strokeStyle = `rgb(${maskRgb})`;
-            ctx.lineWidth = 1.4;
-            ctx.strokeRect(ix + x0 * pw, iy + y0 * ph, (x1 - x0) * pw, (y1 - y0) * ph);
-            ctx.lineWidth = 1;
-            const tx = ix + x0 * pw, ty = Math.max(iy + 10, iy + y0 * ph - 3);
-            ctx.fillStyle = 'rgba(2, 4, 8, 0.8)';
-            ctx.fillRect(tx, ty - 9, label.length * 5.6 + 6, 11);
-            text(label, tx + 3, ty, `rgb(${maskRgb})`, 8, 'left', 600);
-        }
-    }
-
     function insetBox(ix, iy, iw, ih, title) {
         ctx.fillStyle = 'rgba(2, 4, 8, 0.92)';
         ctx.fillRect(ix - 1, iy - 1, iw + 2, ih + 2);
-        ctx.strokeStyle = 'rgba(90, 209, 255, 0.45)';
+        ctx.strokeStyle = 'rgba(102, 126, 234, 0.45)';
         ctx.strokeRect(ix - 0.5, iy - 0.5, iw + 1, ih + 1);
         text(title, ix + 2, iy - 6, COL.cyan, small ? 8 : 9, 'left', 600);
     }
@@ -327,7 +257,7 @@
             const r = small ? Math.min(w * 0.3, h * 0.17) : Math.min(w * 0.15, h * 0.28);
 
             // links
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.22)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.22)';
             ctx.setLineDash([3, 5]);
             for (let i = 1; i <= AGENTS.length; i++) {
                 const [ax, ay] = nodePos(i, gx, gy, r);
@@ -339,7 +269,7 @@
                 if (i === 1) ctx.moveTo(ax, ay); else ctx.lineTo(ax, ay);
             }
             ctx.closePath();
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.08)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.08)';
             ctx.stroke();
             ctx.setLineDash([]);
 
@@ -394,7 +324,7 @@
                 const dx = X(clamp(d.mass, MASS[0], MASS[1])), dy = Y(clamp(d.cost, COST[0], COST[1]));
                 const fresh = clamp(1 - d.age / 0.6, 0, 1);
                 if (d.feasible) {
-                    ctx.fillStyle = `rgba(90, 209, 255, ${0.45 + 0.5 * fresh})`;
+                    ctx.fillStyle = `rgba(102, 126, 234, ${0.45 + 0.5 * fresh})`;
                     ctx.beginPath(); ctx.arc(dx, dy, 2.2 + 2 * fresh, 0, TAU); ctx.fill();
                 } else {
                     ctx.strokeStyle = 'rgba(255, 90, 79, 0.55)';
@@ -637,7 +567,7 @@
         function insetFrame(ix, iy, iw, ih, title) {
             ctx.fillStyle = 'rgba(2, 4, 8, 0.92)';
             ctx.fillRect(ix, iy, iw, ih);
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.4)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.4)';
             ctx.strokeRect(ix + 0.5, iy + 0.5, iw, ih);
             text(title, ix + 6, iy - 6, COL.cyan, small ? 8 : 9, 'left', 600);
         }
@@ -684,7 +614,7 @@
                 const reveal = clamp(s.t / 0.9, 0, 1);
                 s.candidates.forEach((c) => {
                     const isBest = c === s.best && s.t > 1.0;
-                    ctx.strokeStyle = isBest ? COL.amber : 'rgba(90, 209, 255, 0.28)';
+                    ctx.strokeStyle = isBest ? COL.amber : 'rgba(102, 126, 234, 0.28)';
                     ctx.lineWidth = isBest ? 1.6 : 1;
                     ctx.setLineDash(isBest ? [] : [2, 4]);
                     polyline(c.path.map(P), Math.ceil(reveal * c.path.length));
@@ -698,7 +628,7 @@
                 ctx.setLineDash([]);
             }
 
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.75)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.75)';
             ctx.lineWidth = 1.4;
             polyline(s.trail.map(P));
             ctx.lineWidth = 1;
@@ -838,7 +768,7 @@
         let land = [];
         let sats = [], events = [], packets = [], tasks = [];
         let lon0 = 0, spin = 0, spawnT = 0, nextEvent = 0, alerts = 0, cues = 0;
-        let cx = 0, cy = 0, R = 0, idleTile = null;
+        let cx = 0, cy = 0, R = 0;
 
         scene.setLand = function (points) { land = points; };
 
@@ -903,7 +833,6 @@
                 }
             });
             events = [];
-            idleTile = makeTile('NONE', rand(0, 100));
             packets = [];
             tasks = [];
             nextEvent = Math.floor(rand(0, EVENTS.length));
@@ -934,7 +863,7 @@
             if (spawnT <= 0 && events.filter((e) => e.state !== 'done').length < 4) {
                 const proto = EVENTS[nextEvent % EVENTS.length];
                 nextEvent++;
-                if (!events.some((e) => e.where === proto.where)) events.push(Object.assign({ state: 'active', age: 0, tile: makeTile(proto.kind, rand(0, 100)) }, proto));
+                if (!events.some((e) => e.where === proto.where)) events.push(Object.assign({ state: 'active', age: 0 }, proto));
                 spawnT = rand(1.8, 3.2);
             }
 
@@ -944,9 +873,6 @@
                     const tip = sats.find((s) => s.kind === 'OPT' && angDist(s.lat, s.lon, ev.lat, ev.lon) < 14);
                     if (!tip) return;
                     ev.state = 'tipped';
-                    ev.tipAge = ev.age;
-                    ev.tipAt = met;
-                    ev.tipSat = tip.id;
                     pushLog(scene, `${tip.id} ▸ ${ev.kind} DETECTED ONBOARD · ${ev.where} ${fmtLL(ev.lat, ev.lon)}`);
                     cue(ev, tip);
                 } else if (ev.state === 'cued') {
@@ -954,9 +880,6 @@
                     const sar = ev.sar;
                     if (angDist(sar.lat, sar.lon, ev.lat, ev.lon) < 22) {
                         ev.state = 'imaged';
-                        ev.sarAge = ev.age;
-                        ev.sarAt = met;
-                        ev.sarSat = sar.id;
                         tasks.push({ sat: sar, ev, t: 0 });
                         pushLog(scene, `${sar.id} ▸ RADAR ACQUISITION · ${ev.kind === 'FLOOD' ? 'FLOOD EXTENT MAPPED THROUGH CLOUD' : 'BURN SCAR MAPPED THROUGH SMOKE'}`);
                         const gs = STATIONS.reduce((p, q) => (angDist(q.lat, q.lon, sar.lat, sar.lon) < angDist(p.lat, p.lon, sar.lat, sar.lon) ? q : p));
@@ -1008,11 +931,11 @@
             ctx.beginPath(); ctx.arc(cx, cy, R * 1.18, 0, TAU); ctx.fill();
             ctx.fillStyle = 'rgba(4, 12, 24, 0.95)';
             ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.fill();
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.5)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.5)';
             ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke();
 
             // graticule
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.12)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.12)';
             ctx.beginPath();
             for (let lat = -60; lat <= 60; lat += 30) {
                 let started = false;
@@ -1037,7 +960,7 @@
             for (let k = 0; k < land.length; k++) {
                 const p = project(land[k][0], land[k][1]);
                 if (p.z <= 0) continue;
-                ctx.fillStyle = `rgba(90, 209, 255, ${0.15 + 0.55 * p.z})`;
+                ctx.fillStyle = `rgba(102, 126, 234, ${0.15 + 0.55 * p.z})`;
                 ctx.fillRect(p.x - dot / 2, p.y - dot / 2, dot, dot);
             }
 
@@ -1092,8 +1015,8 @@
                     });
                     ctx.stroke();
                 };
-                if (s.kind === 'OPT') draw(small ? 5 : 8, 'rgba(90, 209, 255, 0.07)');
-                draw(1, s.kind === 'OPT' ? 'rgba(90, 209, 255, 0.45)' : 'rgba(255, 177, 74, 0.45)');
+                if (s.kind === 'OPT') draw(small ? 5 : 8, 'rgba(102, 126, 234, 0.07)');
+                draw(1, s.kind === 'OPT' ? 'rgba(102, 126, 234, 0.45)' : 'rgba(255, 177, 74, 0.45)');
             });
             ctx.lineWidth = 1;
 
@@ -1134,31 +1057,6 @@
                 ctx.globalAlpha = 1;
                 glowDot(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, 2.6, pk.color);
             });
-
-            // onboard camera: what the satellite actually sees, and what the model segments
-            const iw = small ? Math.min(150, stage.w * 0.42) : Math.min(250, stage.w * 0.24);
-            const ih = iw * (34 / 48);
-            const ix = small ? stage.safeX : stage.safeR - iw;
-            const iy = small ? stage.y + 52 : stage.y + stage.h - ih - 44;
-            const ev = events.filter((e) => e.state !== 'active').sort((a, b) => Math.max(b.tipAt, b.sarAt || 0) - Math.max(a.tipAt, a.sarAt || 0))[0];
-            if (!ev) {
-                insetBox(ix, iy, iw, ih, 'OPT · ONBOARD SWIR · SCANNING');
-                drawTile(idleTile, ix, iy, iw, ih, 'opt', 0, '0, 0, 0', null);
-                const sy = iy + ((met * 0.4) % 1) * ih;
-                ctx.strokeStyle = COL.cyan;
-                ctx.beginPath(); ctx.moveTo(ix, sy); ctx.lineTo(ix + iw, sy); ctx.stroke();
-            } else {
-                const fire = ev.kind === 'WILDFIRE';
-                const radar = ev.sarAge !== undefined;
-                const maskRgb = radar ? '255, 177, 74' : fire ? '255, 90, 79' : '61, 139, 255';
-                const sweep = radar ? (ev.age - ev.sarAge) / 1.2 : (ev.age - ev.tipAge) / 1.2;
-                const label = radar
-                    ? `${fire ? 'BURN SCAR' : 'FLOOD EXTENT'} · CHANGE ${(ev.tile.score - 0.03).toFixed(2)}`
-                    : `${fire ? 'FIRE' : 'WATER'} ${ev.tile.score.toFixed(2)}`;
-                insetBox(ix, iy, iw, ih, radar ? `${ev.sarSat} · SAR CHANGE MAP` : `${ev.tipSat} · ONBOARD SWIR · SEGMENTATION`);
-                drawTile(ev.tile, ix, iy, iw, ih, radar ? 'sar' : 'opt', sweep, maskRgb, label);
-                text(ev.where, ix + 4, iy + ih - 5, COL.text, 8, 'left', 600);
-            }
         };
 
         scene.stats = function () {
@@ -1442,7 +1340,7 @@
             for (let j = 0; j < FY; j++) {
                 for (let i = 0; i < FX; i++) if (!cells[j][i]) ctx.fillRect(x + i * cw - 0.5, y + j * ch - 0.5, cw + 1, ch + 1);
             }
-            ctx.fillStyle = 'rgba(90, 209, 255, 0.18)';
+            ctx.fillStyle = 'rgba(102, 126, 234, 0.18)';
             for (let j = 0; j < FY; j += 2) {
                 for (let i = 0; i < FX; i += 2) if (!cells[j][i]) ctx.fillRect(x + (i + 0.5) * cw - 1, y + (j + 0.5) * ch - 1, 2, 2);
             }
@@ -1458,7 +1356,7 @@
             });
 
             // comm links and packets
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.35)';
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.35)';
             ctx.setLineDash([3, 5]);
             links.forEach(([a, b]) => {
                 ctx.beginPath(); ctx.moveTo(x + a.x, y + a.y); ctx.lineTo(x + b.x, y + b.y); ctx.stroke();
@@ -1472,9 +1370,9 @@
             // agents
             agents.forEach((a) => {
                 const ax = x + a.x, ay = y + a.y;
-                ctx.fillStyle = a.kind === 'heli' ? 'rgba(255, 177, 74, 0.55)' : 'rgba(90, 209, 255, 0.55)';
+                ctx.fillStyle = a.kind === 'heli' ? 'rgba(255, 177, 74, 0.55)' : 'rgba(102, 126, 234, 0.55)';
                 a.trail.forEach((p, i) => { if (i % 2 === 0) ctx.fillRect(x + p[0] - 0.7, y + p[1] - 0.7, 1.4, 1.4); });
-                ctx.strokeStyle = 'rgba(90, 209, 255, 0.15)';
+                ctx.strokeStyle = 'rgba(102, 126, 234, 0.15)';
                 ctx.beginPath(); ctx.arc(ax, ay, a.sense, 0, TAU); ctx.stroke();
                 if (a.kind === 'heli') {
                     ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
@@ -1490,7 +1388,7 @@
                     ctx.save();
                     ctx.translate(ax, ay);
                     ctx.rotate(a.heading);
-                    ctx.fillStyle = 'rgba(90, 209, 255, 0.25)';
+                    ctx.fillStyle = 'rgba(102, 126, 234, 0.25)';
                     ctx.strokeStyle = COL.cyan;
                     ctx.fillRect(-6, -4, 12, 8);
                     ctx.strokeRect(-6, -4, 12, 8);
@@ -1533,7 +1431,7 @@
                         const k = 0.55 + 0.6 * n;
                         ctx.fillStyle = `rgb(${(170 * k * (1 - haze) + 150 * haze) | 0}, ${(105 * k * (1 - haze) + 105 * haze) | 0}, ${(70 * k * (1 - haze) + 80 * haze) | 0})`;
                     } else {
-                        ctx.fillStyle = n < 0.45 ? 'rgba(255, 177, 74, 0.75)' : n < 0.68 ? 'rgba(90, 209, 255, 0.6)' : 'rgba(255, 90, 79, 0.7)';
+                        ctx.fillStyle = n < 0.45 ? 'rgba(255, 177, 74, 0.75)' : n < 0.68 ? 'rgba(102, 126, 234, 0.6)' : 'rgba(255, 90, 79, 0.7)';
                     }
                     ctx.fillRect(ix + c * cw2, hz + r * rh, cw2 + 0.5, rh + 0.5);
                 }
@@ -1628,11 +1526,12 @@
 
 
     /* =====================================================================
-     * Pinned scene viewer: one full-screen canvas inside a sticky wrapper. The text panel
-     * crossing the middle of the screen picks the scene; the rail ticks jump to a panel.
+     * Carousel scene viewer: one canvas in a framed slide. The rail buttons, arrows and
+     * horizontal swipes pick the scene; it advances on its own until the visitor does.
      * ===================================================================== */
     const scenes = [rpo, earth, agents, mars];
     let current = 0, trans = null, running = false, last = 0, inView = false;
+    let autoplay = !reduceMotion, autoClock = 0;
 
     function layout() {
         const r = pin.getBoundingClientRect();
@@ -1646,28 +1545,21 @@
         canvas.style.height = `${H}px`;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         stars = Array.from({ length: Math.round((W * H) / 6000) }, () => ({ x: rand(0, W), y: rand(0, H), r: rand(0.3, 1.2), p: rand(0, TAU) }));
-        stage = stageFor(current);
+        stage = stageFor();
         scenes.forEach((sc) => sc.resize());
     }
 
-    /* Desktop: a wide stage shifted away from the caption, which alternates left (even scenes)
-     * and right (odd scenes). Phone: the upper part of the screen, caption below. */
-    function stageFor(i) {
-        const top = 84;
-        if (small) return { x: 12, y: top, w: Math.max(200, W - 24), h: Math.max(260, H * 0.62 - top), safeX: 26, safeR: W - 26 };
-        const shift = Math.round(W * 0.2);
-        const w = Math.max(320, W - 64 - shift);
-        const x = i % 2 === 0 ? 32 + shift : 32;
-        // safeX: first x not covered by the caption card (cards are min(26rem, 28vw) wide, 24px from the edge)
-        const card = 24 + Math.min(416, W * 0.28) + 24;
-        const safeX = i % 2 === 0 ? Math.max(x + 14, card) : x + 14;
-        const safeR = i % 2 === 0 ? x + w - 14 : Math.min(x + w - 14, W - card);
-        return { x, y: top, w, h: Math.max(320, H - top - 64), safeX, safeR };
+    /* The stage fills the frame with a small margin; captions sit below the canvas, so the
+     * whole width is free (safeX/safeR are the inner edges for HUD text and insets). */
+    function stageFor() {
+        const m = small ? 10 : 16;
+        const w = Math.max(200, W - 2 * m), h = Math.max(240, H - 2 * m);
+        return { x: m, y: m, w, h, safeX: m + 14, safeR: m + w - 14 };
     }
 
     function showScene(i) {
         current = i;
-        stage = stageFor(i);
+        stage = stageFor();
         scenes[i].resize();
         if (scenes[i] === rpo || scenes[i] === agents) scenes[i].reset(); // these tell a story from the start
     }
@@ -1680,7 +1572,7 @@
             ctx.fillRect(st.x, st.y, st.r, st.r);
         }
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = 'rgba(90, 209, 255, 0.06)';
+        ctx.strokeStyle = 'rgba(102, 126, 234, 0.06)';
         ctx.beginPath();
         const gs = small ? 40 : 64;
         for (let gx = gs; gx < W; gx += gs) { ctx.moveTo(gx, 0); ctx.lineTo(gx, H); }
@@ -1690,7 +1582,7 @@
 
     function drawHudOverlay(scene) {
         const { x, y, w, h } = stage;
-        brackets(x, y, w, h, 18, 'rgba(90, 209, 255, 0.55)');
+        brackets(x, y, w, h, 18, 'rgba(102, 126, 234, 0.55)');
         const lx = stage.safeX;               // left edge not covered by a caption card
         text(scene.title, lx, y + 24, COL.cyan, small ? 11 : 13, 'left', 600);
         if (!small) text(scene.subtitle, lx, y + 41, COL.dim, 10);
@@ -1700,7 +1592,7 @@
         const px = x + w - pw - 12, py = small ? y + 36 : y + 12;
         ctx.fillStyle = 'rgba(5, 8, 13, 0.72)';
         ctx.fillRect(px, py, pw, ph);
-        ctx.strokeStyle = 'rgba(90, 209, 255, 0.3)';
+        ctx.strokeStyle = 'rgba(102, 126, 234, 0.3)';
         ctx.strokeRect(px + 0.5, py + 0.5, pw, ph);
         stats.forEach(([k, v], i) => {
             text(k, px + 8, py + 19 + i * 16, COL.dim, small ? 9 : 10);
@@ -1735,11 +1627,14 @@
             ctx.fillStyle = `rgba(5, 8, 13, ${clamp(a, 0, 1)})`;
             ctx.fillRect(0, 0, W, H);
         }
-        const shown = trans ? trans.to : current;
-        ticks.forEach((b, i) => {
-            b.classList.toggle('active', i === shown);
-            b.setAttribute('aria-current', i === shown ? 'step' : 'false');
+    }
+
+    function markActive(i) {
+        ticks.forEach((b, k) => {
+            b.classList.toggle('active', k === i);
+            b.setAttribute('aria-current', k === i ? 'step' : 'false');
         });
+        panels.forEach((p, k) => { p.hidden = k !== i; });
     }
 
     /* dt drives the simulations (clamped); fadeDt is real elapsed time so a slow device
@@ -1757,6 +1652,8 @@
 
     function setScene(i) {
         if (i === (trans ? trans.to : current)) return;
+        markActive(i);
+        autoClock = 0;
         if (reduceMotion || !running) {
             trans = null;
             showScene(i);
@@ -1772,6 +1669,7 @@
         const elapsed = (now - last) / 1000;
         last = now;
         step(Math.min(0.05, elapsed), Math.min(FADE_SECONDS, elapsed));
+        if (autoplay && !trans && (autoClock += elapsed) >= AUTO_SECONDS) setScene((current + 1) % scenes.length);
         render();
         requestAnimationFrame(frame);
     }
@@ -1787,9 +1685,27 @@
         }
     }
 
-    ticks.forEach((b, i) => b.addEventListener('click', () => {
-        if (panels[i]) panels[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-    }));
+    /* Any choice by the visitor stops the autoplay for good. */
+    function pick(i) {
+        autoplay = false;
+        setScene((i + scenes.length) % scenes.length);
+    }
+    const target = () => (trans ? trans.to : current);
+
+    ticks.forEach((b, i) => b.addEventListener('click', () => pick(i)));
+    arrows.forEach((b) => b.addEventListener('click', () => pick(target() + (b.classList.contains('prev') ? -1 : 1))));
+    block.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') pick(target() + (e.key === 'ArrowLeft' ? -1 : 1));
+    });
+    let swipeX = null, swipeY = 0;
+    pin.addEventListener('pointerdown', (e) => { swipeX = e.clientX; swipeY = e.clientY; });
+    pin.addEventListener('pointerup', (e) => {
+        if (swipeX === null) return;
+        const dx = e.clientX - swipeX, dy = e.clientY - swipeY;
+        swipeX = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) pick(target() + (dx < 0 ? 1 : -1));
+    });
+    pin.addEventListener('pointercancel', () => { swipeX = null; });
 
     let resizeTimer = 0;
     window.addEventListener('resize', () => {
@@ -1802,18 +1718,13 @@
             inView = entries[0].isIntersecting;
             updateRunning();
         }).observe(block);
-        // A panel becomes active when it crosses the horizontal middle of the viewport.
-        const picker = new IntersectionObserver((entries) => {
-            entries.forEach((e) => { if (e.isIntersecting) setScene(panels.indexOf(e.target)); });
-        }, { rootMargin: '-50% 0px -50% 0px' });
-        panels.forEach((p) => picker.observe(p));
     } else {
         inView = true;
         updateRunning();
     }
 
     layout(); // each scene's resize() also seeds it on first call
-    if (new URLSearchParams(location.search).has('simdebug')) window.__hero = { step, render, scenes, setScene };
+    if (new URLSearchParams(location.search).has('simdebug')) window.__hero = { step, render, scenes, setScene, pick };
     if (reduceMotion) {
         // Still frames: advance each simulation a few seconds so every scene has something to show.
         for (let k = 0; k < 240; k++) scenes[current].update(1 / 30);

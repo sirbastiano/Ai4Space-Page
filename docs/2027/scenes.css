@@ -1,0 +1,294 @@
+/* 2027 additions to the 2026 layout: the mission-scene carousel, the tentative banner,
+ * keynote talk titles and the Areas of Focus cards. */
+
+/* ---------- tentative banner (hero) ---------- */
+.tentative-banner {
+    margin: -0.4em auto 1.4em;
+    padding: 0.45em 1.1em;
+    width: fit-content;
+    max-width: calc(100% - 32px);
+    border: 1px solid rgba(255, 177, 74, 0.7);
+    border-radius: 999px;
+    background: rgba(255, 177, 74, 0.12);
+    color: #ffcf8a;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 0.85em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* ---------- hero buttons: smaller, in the countdown's pink ---------- */
+.hero .cta-button {
+    padding: 10px 22px;
+    font-size: 0.95em;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    background: rgb(251, 96, 135);    /* --color-red from countdown-style.css */
+    border: 2px solid transparent;
+    box-shadow: 0 4px 14px rgba(251, 96, 135, 0.35);
+    margin-bottom: 1em;
+}
+
+.hero .cta-button:hover {
+    background: #fff;
+    color: rgb(251, 96, 135);
+    border-color: rgb(251, 96, 135);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(251, 96, 135, 0.45);
+}
+
+/* ---------- mission-scene carousel ---------- */
+.scenes-section {
+    padding: 4em 1em 3em;
+    color: #fff;
+}
+
+.scenes-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.scenes-section h2 {
+    text-align: center;
+    font-size: 2em;
+    margin: 0 0 0.4em;
+    color: #fff;
+}
+
+.scenes-lead {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0 auto 2em;
+    max-width: 40rem;
+}
+
+.scenes-stage {
+    position: relative;
+}
+
+.scenes-pin {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #05080d;
+    border: 1px solid rgba(102, 126, 234, 0.25);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+    touch-action: pan-y;               /* vertical scroll stays native, horizontal swipes switch scenes */
+}
+
+.scenes-pin canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.scene-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(102, 126, 234, 0.5);
+    background: rgba(5, 8, 13, 0.75);
+    color: #667eea;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.scene-arrow:hover,
+.scene-arrow:focus-visible {
+    background: #667eea;
+    color: #fff;
+}
+
+.scene-arrow.prev { left: -22px; }
+.scene-arrow.next { right: -22px; }
+
+.scene-rail {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    margin: 1.5em 0 1.2em;
+}
+
+.scene-rail button {
+    padding: 0.35em 0.9em;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.8);
+    font: 600 0.8em 'Roboto', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.scene-rail button span {
+    font-family: inherit;
+    color: #667eea;
+    margin-right: 0.3em;
+}
+
+.scene-rail button:hover { border-color: #667eea; }
+
+.scene-rail button.active {
+    background: rgb(251, 96, 135);
+    border-color: transparent;
+    color: #fff;
+}
+
+.scene-rail button.active span { color: #fff; }
+
+.scene-panels {
+    max-width: 46rem;
+    margin: 0 auto;
+    text-align: center;
+    min-height: 11em;                  /* keeps the page from jumping as captions change length */
+}
+
+.scene-panel { animation: scene-caption-in 0.4s ease; }
+.scene-panel[hidden] { display: none; }
+
+@keyframes scene-caption-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+}
+
+.scene-label {
+    font-family: inherit;
+    font-size: 0.8em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #667eea;
+    margin: 0 0 0.4em;
+}
+
+.scene-panel h3 {
+    font-size: 1.5em;
+    margin: 0 0 0.5em;
+    color: #fff;
+}
+
+.scene-panel p {
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.6;
+    margin: 0 0 0.6em;
+}
+
+.scene-panel .scene-topics {
+    color: #ffd700;
+    font-size: 0.9em;
+}
+
+@media (max-width: 1290px) {
+    .scene-arrow.prev { left: 10px; }
+    .scene-arrow.next { right: 10px; }
+}
+
+@media (max-width: 700px) {
+    .scenes-section { padding: 3em 16px 2em; }
+    .scenes-pin { aspect-ratio: 4 / 5; }    /* phones get a taller frame so the HUD stays readable */
+    .scene-arrow { display: none; }    /* phones swipe instead; the arrows would cover the HUD log */
+    .scene-panel h3 { font-size: 1.25em; }
+}
+
+/* ---------- keynote talk titles ---------- */
+.speaker-card .speaker-talk {
+    font-style: italic;
+    font-weight: 700;
+    margin: 0 0 0.8em;
+}
+
+/* ---------- areas of focus ---------- */
+.focus-section h2 { text-align: center; }
+
+.focus-intro {
+    text-align: center;
+    max-width: 46rem;
+    margin: 1em auto 2em;
+    line-height: 1.6;
+}
+
+.focus-spotlights {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5em;
+}
+
+.focus-spotlight {
+    padding: 1.6em 1.8em;
+    border-top: 4px solid rgb(251, 96, 135);
+}
+
+main .focus-spotlight .focus-tag {
+    align-self: flex-start;
+    padding: 0.15em 0.7em;
+    border-radius: 999px;
+    background: rgb(251, 96, 135);
+    color: #fff;
+    font-size: 0.7em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.focus-spotlight h3 {
+    font-size: 1.35em;
+    margin: 0.7em 0 0.4em;
+}
+
+.focus-spotlight p,
+.focus-card p {
+    line-height: 1.6;
+    margin: 0;
+}
+
+.focus-subhead {
+    text-align: center;
+    font-size: 1.3em;
+    margin: 2.2em 0 1.2em;
+}
+
+.focus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5em;
+}
+
+.focus-card { padding: 1.4em 1.6em; }
+
+main .focus-card .focus-num {
+    font-family: inherit;
+    font-weight: 600;
+    color: #23a6d5;
+}
+
+.focus-card h3 {
+    font-size: 1.1em;
+    margin: 0.4em 0 0.5em;
+}
+
+.focus-cta {
+    display: block;
+    width: fit-content;
+    margin: 2em auto 0;
+    padding: 8px 20px;
+    border-radius: 30px;
+    background: rgb(251, 96, 135);
+    font-size: 0.95em;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+main a.focus-cta,
+main a.focus-cta:hover { color: #fff; }
+
+@media (max-width: 760px) {
+    .focus-spotlights { grid-template-columns: 1fr; }
+    .focus-grid { grid-template-columns: 1fr; }
+}
