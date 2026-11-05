@@ -53,15 +53,8 @@
 .scenes-section h2 {
     text-align: center;
     font-size: 2em;
-    margin: 0 0 0.4em;
+    margin: 0 0 1em;
     color: #fff;
-}
-
-.scenes-lead {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.75);
-    margin: 0 auto 2em;
-    max-width: 40rem;
 }
 
 .scenes-stage {

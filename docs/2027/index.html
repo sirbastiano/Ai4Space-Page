@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet"> <!-- Added Montserrat font -->
-    <link rel="stylesheet" href="scenes.css?v=car5">
+    <link rel="stylesheet" href="scenes.css?v=car6">
     <style>
         .main-hero-title {
             text-align: center;
@@ -448,7 +448,6 @@
         <section id="scenes" class="scenes-section" aria-roledescription="carousel" aria-label="Simulated mission scenes">
             <div class="scenes-inner">
                 <h2><i class="fas fa-satellite"></i> AI4Space in Action</h2>
-                <p class="scenes-lead">Four simulated missions, each showing a topic of the workshop and what the onboard vision sees.</p>
 
                 <div class="scenes-stage">
                     <div class="scenes-pin">
@@ -460,34 +459,34 @@
 
                 <nav class="scene-rail" aria-label="Scenes">
                     <button type="button" class="active" aria-current="step"><span>01</span> Rendezvous</button>
-                    <button type="button" aria-current="false"><span>02</span> Earth</button>
-                    <button type="button" aria-current="false"><span>03</span> Design</button>
-                    <button type="button" aria-current="false"><span>04</span> Mars</button>
+                    <button type="button" aria-current="false"><span>02</span> Earth Observation</button>
+                    <button type="button" aria-current="false"><span>03</span> System Design</button>
+                    <button type="button" aria-current="false"><span>04</span> Robotic Exploration</button>
                 </nav>
 
                 <div class="scene-panels" aria-live="polite">
                     <article class="scene-panel active">
                         <p class="scene-label">01 / Vision-based rendezvous</p>
                         <h3>Docking guided by what the camera sees</h3>
-                        <p>A chaser approaches a tumbling target through hold points at 250, 100 and 30 m, estimating its 6-DoF pose with a frame camera and an event camera that only reports change.</p>
+                        <p>Computer vision lets a spacecraft estimate the pose of another object and approach it safely, from autonomous docking to on-orbit servicing.</p>
                         <p class="scene-topics">Vision and learning for GNC · Emerging computing and sensing</p>
                     </article>
                     <article class="scene-panel" hidden>
                         <p class="scene-label">02 / Earth tip-and-cue</p>
                         <h3>Satellites that cue each other</h3>
-                        <p>An optical satellite spots a wildfire or flood onboard and cues a radar satellite, which retargets, images through smoke and cloud, and downlinks the alert.</p>
+                        <p>Satellites that detect events onboard and coordinate with each other, turning Earth observation into a fast, autonomous response.</p>
                         <p class="scene-topics">Distributed AI for mission operations and adaptive sensing</p>
                     </article>
                     <article class="scene-panel" hidden>
                         <p class="scene-label">03 / Agentic mission design</p>
                         <h3>AI agents that design the mission</h3>
-                        <p>Requirements, orbit, power and communications agents negotiate a spacecraft design, explore the trade space and trace every requirement before an engineer signs off.</p>
+                        <p>AI agents that help engineers design missions and spacecraft, from requirements and trade studies to verification.</p>
                         <p class="scene-topics">Agentic AI for mission and space system design</p>
                     </article>
                     <article class="scene-panel" hidden>
                         <p class="scene-label">04 / Mars surface ops</p>
                         <h3>Robots that explore together</h3>
-                        <p>Three rovers and a scout helicopter share one map, split the unexplored frontier between them and send the nearest rover to every promising sample site.</p>
+                        <p>Robots that perceive their surroundings, plan together and explore planetary surfaces with little help from Earth.</p>
                         <p class="scene-topics">AI for space robotics and autonomous operations</p>
                     </article>
                 </div>
