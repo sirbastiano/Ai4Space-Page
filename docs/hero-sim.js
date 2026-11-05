@@ -1,6 +1,6 @@
 /* AI4Space hero "mission console": three simulated channels drawn as HUD displays on one canvas.
- * CH-1 relative-orbit rendezvous planning (Clohessy-Wiltshire), CH-2 cooperative Mars exploration
- * (frontier allocation on a shared map), CH-3 Earth-observation constellation relaying flood and
+ * CH-1 cooperative Mars exploration (frontier allocation on a shared map), CH-2 launch with hot
+ * staging, booster return and transfer-orbit insertion, CH-3 Earth-observation constellation relaying flood and
  * wildfire alerts over inter-satellite links. Plain JS, no dependencies. */
 (function () {
     'use strict';
@@ -100,261 +100,330 @@
     }
 
     /* =====================================================================
-     * CH-1  Autonomous GNC: rendezvous with a target in its local orbital frame.
-     * Relative motion follows the Clohessy-Wiltshire equations (n = 1, time = orbital phase).
-     * Index 0 = radial (R-bar, up), index 1 = along-track (V-bar, right). Units: km.
+     * CH-2  Autonomous GNC: launch with hot staging. The upper stage ignites while still
+     * attached, the booster flips, burns back and lands near the pad, and the upper stage
+     * reaches a parking orbit before burning into a transfer orbit. Side view of Earth with
+     * altitudes exaggerated so the whole profile fits; the transfer orbit coasts with
+     * constant angular momentum (r² dθ/dt = const) and speed from vis-viva.
      * ===================================================================== */
     const gnc = (function () {
-        const MEAN_MOTION = 0.00113;            // rad/s, ~LEO; converts km per rad of phase to m/s
-        const MS_PER_UNIT = MEAN_MOTION * 1000;
-        const SIM_RATE = 0.5;                   // orbital phase (rad) advanced per wall-clock second
-        const HOLDS = [{ y: -5, name: 'H1' }, { y: -2.2, name: 'H2' }, { y: -0.7, name: 'H3' }];
         const scene = {
             id: 'gnc',
-            title: 'CH-1 // AUTONOMOUS GNC',
-            subtitle: 'RELATIVE ORBIT PLANNING · CLOHESSY-WILTSHIRE FRAME',
+            title: 'CH-2 // AUTONOMOUS GNC',
+            subtitle: 'HOT STAGING · BOOSTER RETURN · TRANSFER ORBIT INSERTION',
             logs: []
         };
-        let s = null;
+        // event times in scene seconds
+        const T = {
+            liftoff: 0.6, maxQ: 2.3, hot: 4.3, sep: 4.65, flip: 5.0, boostback: [5.5, 6.6], seco: 8.6,
+            entry: [9.0, 9.6], landing: [10.6, 11.3], transfer: [10.0, 11.0], end: 15.5
+        };
+        const PARK_KM = 200;
+        const SEP_KM = 70;
+        const ECC = 0.85;                       // transfer orbit eccentricity
+        const RISE = 6;                         // visual exaggeration of the transfer orbit's climb
+        const MET_SCALE = 50;                   // scene seconds -> mission seconds
+        const EVENTS = [
+            [T.liftoff, 'LIFTOFF · ALL ENGINES NOMINAL'],
+            [T.maxQ, 'MAX-Q · THROTTLE BUCKET'],
+            [T.hot, 'HOT STAGING · S2 IGNITION BEFORE SEPARATION'],
+            [T.sep, 'STAGE SEPARATION CONFIRMED'],
+            [T.boostback[0], 'S1 FLIP COMPLETE · BOOSTBACK BURN → LZ-1'],
+            [T.seco, `S2 ENGINE CUTOFF · PARKING ORBIT ${PARK_KM} km`],
+            [T.entry[0], 'S1 ENTRY BURN'],
+            [T.transfer[0], 'S2 TRANSFER BURN · GTO INSERTION'],
+            [T.landing[0], 'S1 LANDING BURN · LEGS DEPLOYED'],
+            [T.transfer[1], 'S2 COASTING TO APOGEE 35 786 km'],
+            [T.landing[1], 'S1 TOUCHDOWN AT LZ-1']
+        ];
+        let s = null, g = null;
 
-        function stm(t) {
-            const c = Math.cos(t), sn = Math.sin(t);
-            return {
-                rr: [[4 - 3 * c, 0], [6 * (sn - t), 1]],
-                rv: [[sn, 2 * (1 - c)], [-2 * (1 - c), 4 * sn - 3 * t]],
-                vr: [[3 * sn, 0], [6 * (c - 1), 0]],
-                vv: [[c, 2 * sn], [-2 * sn, 4 * c - 3]]
+        const pos = (phi, r) => [g.cx + r * Math.sin(phi), g.cy - r * Math.cos(phi)];
+        const transferR = (nu) => (g.rp * (1 + ECC)) / (1 + ECC * Math.cos(nu));
+        const transferShown = (nu) => g.rp + (transferR(nu) - g.rp) * RISE;
+        const within = (t, span) => t >= span[0] && t <= span[1];
+
+        function geometry() {
+            const { x, y, w, h } = stage;
+            const R = Math.max(w, h) * 1.05;
+            const ang = (frac) => Math.asin(clamp(((frac - 0.5) * w) / R, -1, 1));
+            const hp = h * 0.42;
+            g = {
+                R, cx: x + w * 0.5, cy: y + h * 0.7 + R, hp, hs: (hp * SEP_KM) / PARK_KM,
+                pad: ang(0.12), lz: ang(0.19), sep: ang(0.3), seco: ang(0.46)
             };
-        }
-        const mv = (m, v) => [m[0][0] * v[0] + m[0][1] * v[1], m[1][0] * v[0] + m[1][1] * v[1]];
-
-        function propagate(r, v, t) {
-            const P = stm(t);
-            const a = mv(P.rr, r), b = mv(P.rv, v), c = mv(P.vr, r), d = mv(P.vv, v);
-            return { r: [a[0] + b[0], a[1] + b[1]], v: [c[0] + d[0], c[1] + d[1]] };
-        }
-
-        /* Velocity needed at r0 to reach rf after phase T (two-impulse targeting). */
-        function solveTransfer(r0, rf, T) {
-            const P = stm(T);
-            const m = P.rv;
-            const det = m[0][0] * m[1][1] - m[0][1] * m[1][0];
-            if (Math.abs(det) < 1e-3) return null;
-            const a = mv(P.rr, r0);
-            const dx = rf[0] - a[0], dy = rf[1] - a[1];
-            return [(m[1][1] * dx - m[0][1] * dy) / det, (-m[1][0] * dx + m[0][0] * dy) / det];
+            g.omegaPark = ((g.seco - g.sep) / (T.seco - T.sep)) * 1.15;
+            g.burn = g.seco + g.omegaPark * (T.transfer[0] - T.seco);
+            g.rp = g.R + g.hp;
+            // altitude-per-angle at the end of the ascent, expressed for the post-separation segment
+            const ascentSlope = (g.hs * 1.25) / (2.2 * (g.sep - g.pad));
+            g.climbSlope = clamp((ascentSlope * (g.seco - g.sep)) / (g.hp - g.hs), 0, 3);
         }
 
-        function startPlan() {
-            const hold = HOLDS[s.leg];
-            const rf = [0, hold.y];
-            s.phase = 'plan';
-            s.t = 0;
-            s.candidates = [];
-            for (let k = 0; k < 9; k++) {
-                const T = (0.45 + k * 0.09) * Math.PI;
-                const v0 = solveTransfer(s.r, rf, T);
-                if (!v0) continue;
-                const path = [];
-                for (let i = 0; i < 48; i++) path.push(propagate(s.r, v0, T * i / 47).r);
-                const vf = propagate(s.r, v0, T).v;
-                const dv = hyp([v0[0] - s.v[0], v0[1] - s.v[1]]) + hyp(vf);
-                s.candidates.push({ T, v0, path, dv });
+        function ascent(t) {
+            const u = clamp((t - T.liftoff) / (T.sep - T.liftoff), 0, 1);
+            return [g.pad + (g.sep - g.pad) * Math.pow(u, 2.2), g.R + g.hs * Math.pow(u, 1.25)];
+        }
+
+        function upperPolar(t) {
+            if (t <= T.sep) return ascent(t);
+            if (t <= T.seco) {
+                // cubic Hermite climb: matches the ascent's flight-path angle at separation, levels off at SECO
+                const u = (t - T.sep) / (T.seco - T.sep);
+                const m = g.climbSlope;
+                const f = m * u + (3 - 2 * m) * u * u + (m - 2) * u * u * u;
+                return [g.sep + (g.seco - g.sep) * u, g.R + g.hs + (g.hp - g.hs) * f];
             }
-            s.best = s.candidates.reduce((a, b) => (b.dv < a.dv ? b : a));
-            pushLog(scene, `PLAN → ${hold.name} · ${s.candidates.length} CANDIDATES · BEST Δv ${(s.best.dv * MS_PER_UNIT).toFixed(2)} m/s`);
+            if (t <= T.transfer[0]) return [g.seco + g.omegaPark * (t - T.seco), g.rp];
+            return [g.burn + s.nu, transferShown(s.nu)];
+        }
+
+        /* Return-to-launch-site arc: quadratic Bezier in (angle, radius), slowing toward touchdown. */
+        function boosterPolar(t) {
+            if (t <= T.sep) return ascent(t);
+            const u0 = clamp((t - T.sep) / (T.landing[1] - T.sep), 0, 1);
+            const u = 1 - Math.pow(1 - u0, 1.7);
+            const p0 = [g.sep, g.R + g.hs];
+            const p1 = [g.sep + 0.45 * (g.sep - g.pad), g.R + g.hs * 2.2];
+            const p2 = [g.lz, g.R];
+            const a = (1 - u) * (1 - u), b = 2 * u * (1 - u), c = u * u;
+            return [a * p0[0] + b * p1[0] + c * p2[0], a * p0[1] + b * p1[1] + c * p2[1]];
+        }
+
+        function upperSpeed(t, r) {
+            const table = [[0, 0], [T.liftoff, 0], [T.sep, 2.1], [T.seco, 7.8], [T.transfer[0], 7.8], [T.transfer[1], 10.2]];
+            if (t >= T.transfer[1]) {
+                const a = g.rp / (1 - ECC);
+                return 10.2 * Math.sqrt((2 / r - 1 / a) / (2 / g.rp - 1 / a));
+            }
+            for (let i = 1; i < table.length; i++) {
+                if (t <= table[i][0]) {
+                    const [t0, v0] = table[i - 1], [t1, v1] = table[i];
+                    return v0 + ((v1 - v0) * (t - t0)) / Math.max(1e-6, t1 - t0);
+                }
+            }
+            return 7.8;
         }
 
         scene.reset = function () {
-            const x0 = rand(0.7, 1.5) * (Math.random() < 0.5 ? -1 : 1);
-            s = {
-                r: [x0, rand(-9.6, -8.6)],
-                v: [0, -1.5 * x0 * 0.4],
-                leg: 0, phase: 'plan', t: 0, legT: 0,
-                trail: [], dvUsed: 0, burn: null, candidates: [], best: null
-            };
-            startPlan();
+            s = { t: 0, nu: 0, fired: 0, trailA: [], trailU: [], trailB: [], headU: -Math.PI / 2, headB: -Math.PI / 2 };
+            scene.logs = [];
+            pushLog(scene, 'T-0 · GUIDANCE INTERNAL · TARGET GTO');
         };
 
-        scene.resize = function () { if (!s) scene.reset(); };
+        scene.resize = function () {
+            geometry();
+            if (!s) scene.reset();
+        };
 
         scene.update = function (dt) {
+            const prevU = pos(...upperPolar(s.t));
+            const prevB = pos(...boosterPolar(s.t));
             s.t += dt;
-            if (s.burn) { s.burn.t += dt; if (s.burn.t > 0.9) s.burn = null; }
-            if (s.phase === 'plan' && s.t > 1.7) {
-                const dv1 = [s.best.v0[0] - s.v[0], s.best.v0[1] - s.v[1]];
-                s.dvUsed += hyp(dv1);
-                s.v = s.best.v0.slice();
-                s.r0 = s.r.slice();
-                s.v0 = s.v.slice();
-                s.legT = 0;
-                s.burn = { dir: dv1, t: 0 };
-                s.phase = 'coast';
-                pushLog(scene, `BURN · Δv ${(hyp(dv1) * MS_PER_UNIT).toFixed(2)} m/s · TOF ${(s.best.T / TAU * 92).toFixed(0)} min`);
-            } else if (s.phase === 'coast') {
-                s.legT += dt * SIM_RATE;
-                const done = s.legT >= s.best.T;
-                const st = propagate(s.r0, s.v0, Math.min(s.legT, s.best.T));
-                s.r = st.r;
-                s.v = st.v;
-                if (done) {
-                    const hold = HOLDS[s.leg];
-                    s.dvUsed += hyp(s.v);
-                    s.burn = { dir: [-s.v[0], -s.v[1]], t: 0 };
-                    s.r = [0, hold.y];
-                    s.v = [0, 0];
-                    s.phase = 'hold';
-                    s.t = 0;
-                    pushLog(scene, `BRAKE · HOLDING AT ${hold.name} (${Math.abs(hold.y).toFixed(1)} km)`);
-                }
-            } else if (s.phase === 'hold' && s.t > 1.4) {
-                s.leg++;
-                if (s.leg < HOLDS.length) startPlan();
-                else { s.phase = 'capture'; s.t = 0; pushLog(scene, 'FINAL APPROACH · SOFT CAPTURE CONFIRMED'); }
-            } else if (s.phase === 'capture' && s.t > 3) {
-                scene.reset();
+            if (s.t > T.transfer[0]) {
+                const r = transferR(s.nu);
+                s.nu += g.omegaPark * Math.sqrt(1 + ECC) * (g.rp / r) * (g.rp / r) * dt;
             }
-            s.trail.push(s.r.slice());
-            if (s.trail.length > 600) s.trail.shift();
+            while (s.fired < EVENTS.length && s.t >= EVENTS[s.fired][0]) pushLog(scene, EVENTS[s.fired++][1]);
+
+            const pu = pos(...upperPolar(s.t));
+            const pb = pos(...boosterPolar(s.t));
+            if (Math.hypot(pu[0] - prevU[0], pu[1] - prevU[1]) > 0.01) s.headU = Math.atan2(pu[1] - prevU[1], pu[0] - prevU[0]);
+            if (Math.hypot(pb[0] - prevB[0], pb[1] - prevB[1]) > 0.01) s.headB = Math.atan2(pb[1] - prevB[1], pb[0] - prevB[0]);
+
+            if (s.t > T.liftoff && s.t <= T.sep) s.trailA.push(pu);
+            if (s.t > T.sep) { s.trailU.push(pu); if (s.t <= T.landing[1]) s.trailB.push(pb); }
+            if (s.trailU.length > 900) s.trailU.shift();
+            if (s.t > T.end) scene.reset();
         };
+
+        /* Booster attitude: along velocity, flipping to engine-first after separation. */
+        function boosterAttitude(t) {
+            if (t <= T.liftoff) return g.pad - Math.PI / 2;
+            if (t <= T.flip) return s.headB;
+            if (t >= T.landing[1]) return g.lz - Math.PI / 2;
+            const k = clamp((t - T.flip) / 0.5, 0, 1);
+            return s.headB + Math.PI * k;
+        }
+
+        function plume(len, width) {
+            const flick = 0.75 + Math.random() * 0.45;
+            ctx.fillStyle = 'rgba(255, 177, 74, 0.85)';
+            ctx.beginPath(); ctx.moveTo(0, -width); ctx.lineTo(-len * flick, 0); ctx.lineTo(0, width); ctx.closePath(); ctx.fill();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.beginPath(); ctx.moveTo(0, -width * 0.45); ctx.lineTo(-len * 0.4 * flick, 0); ctx.lineTo(0, width * 0.45); ctx.closePath(); ctx.fill();
+        }
+
+        /* Draw a stage in its own frame: nose toward +x, engine at x = from. */
+        function body(from, to, wd, nose, fins) {
+            ctx.fillStyle = 'rgba(216, 227, 236, 0.18)';
+            ctx.strokeStyle = COL.text;
+            ctx.lineWidth = 1;
+            ctx.fillRect(from, -wd / 2, to - from, wd);
+            ctx.strokeRect(from, -wd / 2, to - from, wd);
+            if (nose) {
+                ctx.beginPath(); ctx.moveTo(to, -wd / 2); ctx.lineTo(to + wd * 1.4, 0); ctx.lineTo(to, wd / 2); ctx.stroke();
+            }
+            if (fins) {
+                ctx.strokeStyle = COL.cyan;
+                ctx.beginPath(); ctx.moveTo(to - 1, -wd / 2); ctx.lineTo(to - 1, -wd / 2 - 3); ctx.moveTo(to - 1, wd / 2); ctx.lineTo(to - 1, wd / 2 + 3); ctx.stroke();
+            }
+        }
 
         scene.draw = function () {
             const { x, y, w, h } = stage;
-            const tx = x + w * (small ? 0.84 : 0.8);
-            const ty = y + h * 0.48;
-            const sc = Math.min(w * 0.78 / 10.2, h / 7.2);
-            const P = (r) => [tx + r[1] * sc, ty - r[0] * sc];
+            const t = s.t;
+            const scale = small ? 0.85 : 1;
+            const LB = 24 * scale, LU = 12 * scale, WD = 4.5 * scale;
 
-            // Earth limb below (nadir is -R)
-            const er = w * 1.9;
-            const ex = x + w * 0.45, ey = y + h + er - h * 0.12;
-            const grd = ctx.createRadialGradient(ex, ey, er * 0.96, ex, ey, er * 1.02);
-            grd.addColorStop(0, 'rgba(61, 139, 255, 0.10)');
-            grd.addColorStop(1, 'rgba(61, 139, 255, 0)');
-            ctx.fillStyle = grd;
-            ctx.beginPath(); ctx.arc(ex, ey, er * 1.02, 0, TAU); ctx.fill();
-            ctx.strokeStyle = 'rgba(61, 139, 255, 0.35)';
-            ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.arc(ex, ey, er, Math.PI * 1.25, Math.PI * 1.75); ctx.stroke();
-            text('NADIR ↓ EARTH', x + 16, y + h - 70, 'rgba(61, 139, 255, 0.7)', 10);
-
-            // Axes and ticks
-            ctx.strokeStyle = COL.cyanDim;
-            ctx.setLineDash([3, 6]);
-            ctx.beginPath();
-            ctx.moveTo(x, ty); ctx.lineTo(x + w, ty);
-            ctx.moveTo(tx, y + 50); ctx.lineTo(tx, y + h - 40);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            for (let k = -10; k <= 1; k++) {
-                const [px] = P([0, k]);
-                if (px < x + 8) continue;
-                ctx.strokeStyle = COL.cyanMid;
-                ctx.beginPath(); ctx.moveTo(px, ty - 3); ctx.lineTo(px, ty + 3); ctx.stroke();
-                if (k % 2 === 0 && k !== 0) text(`${k}`, px, ty + 16, COL.dim, 9, 'center');
+            // Earth, atmosphere and reference altitudes
+            const atm = ctx.createRadialGradient(g.cx, g.cy, g.R, g.cx, g.cy, g.R + g.hp * 0.45);
+            atm.addColorStop(0, 'rgba(61, 139, 255, 0.28)');
+            atm.addColorStop(1, 'rgba(61, 139, 255, 0)');
+            ctx.fillStyle = atm;
+            ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R + g.hp * 0.45, 0, TAU); ctx.fill();
+            ctx.fillStyle = 'rgba(4, 12, 24, 0.96)';
+            ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R, 0, TAU); ctx.fill();
+            ctx.strokeStyle = 'rgba(90, 209, 255, 0.6)';
+            ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R, 0, TAU); ctx.stroke();
+            ctx.strokeStyle = 'rgba(90, 209, 255, 0.1)';
+            for (let k = 1; k < 7; k++) {
+                ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R - k * 26, 0, TAU); ctx.stroke();
             }
-            text('V-BAR  km', x + 16, ty - 8, COL.cyanMid, 10);
-            text('R-BAR', tx + 8, y + 62, COL.cyanMid, 10);
+            ctx.setLineDash([2, 6]);
+            ctx.strokeStyle = 'rgba(216, 227, 236, 0.18)';
+            ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R + g.hp * 0.5, 0, TAU); ctx.stroke();
+            const karman = pos(g.lz - 0.02, g.R + g.hp * 0.5);
+            text('100 km', karman[0], karman[1] - 4, COL.dim, 9);
 
-            // Approach corridor and keep-out zone
-            ctx.strokeStyle = 'rgba(255, 177, 74, 0.25)';
-            ctx.beginPath();
-            ctx.moveTo(tx, ty); ctx.lineTo(...P([0.9, -5.2]));
-            ctx.moveTo(tx, ty); ctx.lineTo(...P([-0.9, -5.2]));
-            ctx.stroke();
-            ctx.strokeStyle = 'rgba(255, 90, 79, 0.6)';
-            ctx.setLineDash([4, 4]);
-            ctx.beginPath(); ctx.ellipse(tx, ty, 0.5 * sc, 0.3 * sc, 0, 0, TAU); ctx.stroke();
-            ctx.setLineDash([]);
-            text('KOZ 500 m', tx + 0.5 * sc + 4, ty - 0.3 * sc - 4, 'rgba(255, 90, 79, 0.8)', 9);
-
-            // Hold points
-            HOLDS.forEach((hp, i) => {
-                const [hx, hy] = P([0, hp.y]);
-                const reached = s.leg > i || (s.leg === i && (s.phase === 'hold'));
-                ctx.strokeStyle = reached ? COL.amber : COL.cyanMid;
+            // parking orbit and transfer orbit predictions
+            if (t > T.hot) {
+                ctx.strokeStyle = 'rgba(90, 209, 255, 0.35)';
+                ctx.beginPath(); ctx.arc(g.cx, g.cy, g.rp, 0, TAU); ctx.stroke();
+                const lab = pos(g.seco - 0.05, g.rp);
+                text(`PARKING ORBIT ${PARK_KM} km`, lab[0], lab[1] - 8, COL.cyanMid, 9, 'center');
+            }
+            if (t > T.transfer[0] - 0.4) {
+                ctx.strokeStyle = 'rgba(255, 177, 74, 0.6)';
                 ctx.beginPath();
-                ctx.moveTo(hx, hy - 5); ctx.lineTo(hx + 5, hy); ctx.lineTo(hx, hy + 5); ctx.lineTo(hx - 5, hy); ctx.closePath();
+                let lastIn = null;
+                for (let k = 0; k <= 90; k++) {
+                    const nu = (k / 90) * Math.PI;
+                    const p = pos(g.burn + nu, transferShown(nu));
+                    if (k === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
+                    if (p[0] > x + 20 && p[0] < x + w - 20 && p[1] > y + 60 && p[1] < y + h - 20) lastIn = p;
+                }
                 ctx.stroke();
-                text(hp.name, hx, hy - 9, reached ? COL.amber : COL.dim, 9, 'center');
+                if (lastIn) text('TRANSFER ORBIT → APOGEE 35 786 km', lastIn[0] - 6, lastIn[1] + 14, COL.amber, 9, 'right');
+            }
+            ctx.setLineDash([]);
+
+            // pads
+            [[g.pad, 'LC-1'], [g.lz, 'LZ-1']].forEach(([phi, name]) => {
+                const p = pos(phi, g.R);
+                ctx.save();
+                ctx.translate(p[0], p[1]);
+                ctx.rotate(phi);
+                ctx.strokeStyle = COL.amber;
+                ctx.beginPath(); ctx.moveTo(-9, 0); ctx.lineTo(9, 0); ctx.stroke();
+                if (name === 'LZ-1') { ctx.beginPath(); ctx.arc(0, -0.5, 5, Math.PI, TAU); ctx.stroke(); }
+                ctx.restore();
+                text(name, p[0], p[1] + 16, COL.amber, 9, 'center');
             });
 
-            // Candidate trajectories
-            if (s.phase === 'plan') {
-                const reveal = clamp(s.t / 0.9, 0, 1);
-                s.candidates.forEach((c) => {
-                    const isBest = c === s.best && s.t > 1.0;
-                    ctx.strokeStyle = isBest ? COL.amber : 'rgba(90, 209, 255, 0.28)';
-                    ctx.lineWidth = isBest ? 1.6 : 1;
-                    ctx.setLineDash(isBest ? [] : [2, 4]);
-                    polyline(c.path.map(P), Math.ceil(reveal * c.path.length));
-                    if (isBest) {
-                        const end = P(c.path[c.path.length - 1]);
-                        const mid = P(c.path[Math.floor(c.path.length / 2)]);
-                        text(`J* = ${(c.dv * MS_PER_UNIT).toFixed(2)} m/s`, mid[0], mid[1] - 8, COL.amber, 10, 'center');
-                        glowDot(end[0], end[1], 2, COL.amber);
-                    }
-                });
-                ctx.setLineDash([]);
-                ctx.lineWidth = 1;
-                if (s.t < 1.0) {
-                    const [cx, cy] = P(s.r);
-                    const spin = s.t * 8;
-                    ctx.strokeStyle = COL.cyan;
-                    ctx.beginPath(); ctx.arc(cx, cy, 14, spin, spin + 1.2); ctx.stroke();
-                    text('SOLVING…', cx, cy + 28, COL.cyan, 9, 'center');
-                }
-            } else if (s.phase === 'coast') {
-                ctx.strokeStyle = 'rgba(255, 177, 74, 0.55)';
-                ctx.setLineDash([5, 5]);
-                polyline(s.best.path.map(P));
-                ctx.setLineDash([]);
-            }
-
-            // Trail
-            ctx.strokeStyle = 'rgba(90, 209, 255, 0.75)';
+            // trails
             ctx.lineWidth = 1.4;
-            polyline(s.trail.map(P));
+            ctx.strokeStyle = 'rgba(90, 209, 255, 0.85)';
+            polyline(s.trailA);
+            polyline(s.trailU);
+            ctx.strokeStyle = 'rgba(255, 177, 74, 0.7)';
+            ctx.setLineDash([3, 4]);
+            polyline(s.trailB);
+            ctx.setLineDash([]);
             ctx.lineWidth = 1;
 
-            // Target station
-            ctx.strokeStyle = COL.text;
-            ctx.fillStyle = 'rgba(216, 227, 236, 0.12)';
-            ctx.fillRect(tx - 8, ty - 4, 16, 8);
-            ctx.strokeRect(tx - 8, ty - 4, 16, 8);
-            ctx.strokeStyle = COL.cyan;
-            ctx.strokeRect(tx - 4, ty - 15, 8, 9);
-            ctx.strokeRect(tx - 4, ty + 6, 8, 9);
-            text('TGT', tx, ty + 30, COL.text, 9, 'center');
-
-            // Chaser and burns
-            const [cx, cy] = P(s.r);
-            if (s.burn) {
-                const m = hyp(s.burn.dir) || 1;
-                const len = 34 * (1 - s.burn.t / 0.9);
-                ctx.strokeStyle = COL.amber;
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(cx, cy);
-                ctx.lineTo(cx - (s.burn.dir[1] / m) * len, cy + (s.burn.dir[0] / m) * len);
-                ctx.stroke();
-                ctx.lineWidth = 1;
+            // liftoff exhaust cloud
+            if (t > T.liftoff - 0.2 && t < T.liftoff + 1.6) {
+                const p = pos(g.pad, g.R);
+                const k = clamp((t - T.liftoff + 0.2) / 1.8, 0, 1);
+                ctx.fillStyle = `rgba(216, 227, 236, ${0.25 * (1 - k)})`;
+                ctx.beginPath(); ctx.ellipse(p[0], p[1] - 3, 10 + 26 * k, 5 + 8 * k, g.pad, 0, TAU); ctx.fill();
             }
-            glowDot(cx, cy, 3.2, s.phase === 'capture' ? COL.amber : COL.cyan);
-            ctx.strokeStyle = COL.cyanMid;
-            ctx.strokeRect(cx - 8, cy - 8, 16, 16);
-            text('CHASER', cx + 12, cy - 10, COL.cyan, 9);
+
+            if (t <= T.sep) {
+                // stacked vehicle
+                const p = pos(...upperPolar(t));
+                const a = t <= T.liftoff ? -Math.PI / 2 + g.pad : s.headU;
+                ctx.save();
+                ctx.translate(p[0], p[1]);
+                ctx.rotate(a);
+                if (t > T.liftoff && t < T.hot + 0.1) { ctx.save(); ctx.translate(-LB, 0); plume(26 * scale, WD * 0.9); ctx.restore(); }
+                body(-LB, 0, WD, false, false);
+                body(1, LU, WD * 0.9, true, false);
+                if (t > T.hot) {
+                    // hot-staging flash through the open interstage
+                    const f = 0.6 + Math.random() * 0.4;
+                    ctx.fillStyle = `rgba(255, 177, 74, ${0.8 * f})`;
+                    ctx.beginPath(); ctx.arc(0.5, 0, 6 * f * scale, 0, TAU); ctx.fill();
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+                    ctx.beginPath(); ctx.arc(0.5, 0, 2.5 * scale, 0, TAU); ctx.fill();
+                }
+                ctx.restore();
+                if (t > T.hot) text('HOT STAGING', p[0] + 14, p[1] - 14, COL.amber, 10, 'left', 600);
+                else if (t > T.liftoff) text('S1+S2', p[0] + 12, p[1] - 10, COL.cyan, 9);
+            } else {
+                // upper stage
+                const pu = pos(...upperPolar(t));
+                ctx.save();
+                ctx.translate(pu[0], pu[1]);
+                ctx.rotate(s.headU);
+                const s2Burn = (t > T.sep && t < T.seco) || within(t, T.transfer);
+                if (s2Burn) { ctx.save(); ctx.translate(-LU / 2, 0); plume(18 * scale, WD * 0.75); ctx.restore(); }
+                body(-LU / 2, LU / 2, WD * 0.9, true, false);
+                ctx.restore();
+                glowDot(pu[0], pu[1], 1.6, COL.cyan);
+                text('S2', pu[0] + 10, pu[1] - 10, COL.cyan, 10, 'left', 600);
+
+                // booster
+                const pb = pos(...boosterPolar(t));
+                const ab = boosterAttitude(t);
+                ctx.save();
+                ctx.translate(pb[0], pb[1]);
+                ctx.rotate(ab);
+                const s1Burn = within(t, T.boostback) || within(t, T.entry) || within(t, T.landing);
+                if (s1Burn) { ctx.save(); ctx.translate(-LB / 2, 0); plume(16 * scale, WD * 0.85); ctx.restore(); }
+                body(-LB / 2, LB / 2, WD, false, true);
+                if (t > T.landing[0] + 0.2) {
+                    ctx.strokeStyle = COL.text;
+                    ctx.beginPath();
+                    ctx.moveTo(-LB / 2 + 3, -WD / 2); ctx.lineTo(-LB / 2 - 3, -WD / 2 - 5);
+                    ctx.moveTo(-LB / 2 + 3, WD / 2); ctx.lineTo(-LB / 2 - 3, WD / 2 + 5);
+                    ctx.stroke();
+                }
+                ctx.restore();
+                text('S1', pb[0] + 10, pb[1] - 10, COL.amber, 10, 'left', 600);
+                if (t >= T.landing[1]) text('LANDED ✓', pb[0] + 10, pb[1] + 2, COL.amber, 9);
+            }
         };
 
         scene.stats = function () {
-            const range = hyp(s.r);
-            const rr = range > 1e-6 ? (s.r[0] * s.v[0] + s.r[1] * s.v[1]) / range : 0;
-            const phase = { plan: 'PLANNING', coast: 'COAST', hold: 'HOLD', capture: 'CAPTURE' }[s.phase];
+            const t = s.t;
+            const r = t > T.transfer[0] ? transferR(s.nu) : upperPolar(t)[1];
+            const met = Math.max(0, (t - T.liftoff) * MET_SCALE);
+            const mm = String(Math.floor(met / 60)).padStart(2, '0');
+            const ss = String(Math.floor(met % 60)).padStart(2, '0');
+            let s1 = 'ON PAD';
+            if (t >= T.landing[1]) s1 = 'LANDED';
+            else if (within(t, T.landing)) s1 = 'LANDING BURN';
+            else if (within(t, T.entry)) s1 = 'ENTRY BURN';
+            else if (within(t, T.boostback)) s1 = 'BOOSTBACK';
+            else if (t > T.sep) s1 = 'COAST';
+            else if (t > T.liftoff) s1 = 'ASCENT';
             return [
-                ['RANGE', `${range.toFixed(2)} km`],
-                ['RANGE-RATE', `${(rr * MS_PER_UNIT).toFixed(2)} m/s`],
-                ['Δv USED', `${(s.dvUsed * MS_PER_UNIT).toFixed(2)} m/s`],
-                ['MODE', phase]
+                ['T+', `${mm}:${ss}`],
+                ['S2 ALTITUDE', `${Math.max(0, ((r - g.R) / g.hp) * PARK_KM).toFixed(0)} km`],
+                ['S2 VELOCITY', `${upperSpeed(t, r).toFixed(2)} km/s`],
+                ['S1 BOOSTER', s1]
             ];
         };
 
@@ -362,13 +431,13 @@
     })();
 
     /* =====================================================================
-     * CH-2  Mars: three rovers and a helicopter share one map and split the
+     * CH-1  Mars: three rovers and a helicopter share one map and split the
      * unexplored frontier between them; found sample sites get a rover assigned.
      * ===================================================================== */
     const mars = (function () {
         const scene = {
             id: 'mars',
-            title: 'CH-2 // MARS SURFACE OPS',
+            title: 'CH-1 // MARS SURFACE OPS',
             subtitle: 'MULTI-ROBOT EXPLORATION · SHARED MAP · FRONTIER ALLOCATION',
             logs: []
         };
@@ -1046,7 +1115,7 @@
     /* =====================================================================
      * Console: layout, starfield, shared HUD, channel switching, loop.
      * ===================================================================== */
-    const scenes = [gnc, mars, earth];
+    const scenes = [mars, gnc, earth];
     let current = 0, chanT = 0, trans = null, running = false, last = 0, heroVisible = true;
 
     function layout() {
