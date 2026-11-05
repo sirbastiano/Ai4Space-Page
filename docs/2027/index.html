@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="landing.css?v=v2b">
+    <link rel="stylesheet" href="landing.css?v=vis7">
 </head>
 <body class="landing">
 
@@ -65,35 +65,35 @@
             <canvas id="hero-canvas" aria-hidden="true"></canvas>
             <div class="hero-scanlines" aria-hidden="true"></div>
             <nav class="scene-rail" aria-label="Scenes">
-                <button type="button" class="active" aria-current="step"><span>01</span> Design</button>
-                <button type="button" aria-current="false"><span>02</span> Rendezvous</button>
-                <button type="button" aria-current="false"><span>03</span> Earth</button>
+                <button type="button" class="active" aria-current="step"><span>01</span> Rendezvous</button>
+                <button type="button" aria-current="false"><span>02</span> Earth</button>
+                <button type="button" aria-current="false"><span>03</span> Design</button>
                 <button type="button" aria-current="false"><span>04</span> Mars</button>
             </nav>
         </div>
         <div class="scene-panels">
             <article class="scene-panel">
                 <div class="scene-card">
-                    <p class="sec-label">01 / Agentic mission design</p>
-                    <h2>AI agents that <em>design the mission</em>.</h2>
-                    <p>Requirements, orbit, power and communications agents negotiate a spacecraft design, explore the trade space and trace every requirement before an engineer signs off.</p>
-                    <p class="scene-topics">Agentic AI for mission and space system design</p>
-                </div>
-            </article>
-            <article class="scene-panel right">
-                <div class="scene-card">
-                    <p class="sec-label">02 / Vision-based rendezvous</p>
+                    <p class="sec-label">01 / Vision-based rendezvous</p>
                     <h2>Docking guided by <em>what the camera sees</em>.</h2>
                     <p>A chaser approaches a tumbling target through hold points at 250, 100 and 30 m, estimating its 6-DoF pose with a frame camera and an event camera that only reports change.</p>
                     <p class="scene-topics">Vision and learning for GNC · Emerging computing and sensing</p>
                 </div>
             </article>
-            <article class="scene-panel">
+            <article class="scene-panel right">
                 <div class="scene-card">
-                    <p class="sec-label">03 / Earth tip-and-cue</p>
+                    <p class="sec-label">02 / Earth tip-and-cue</p>
                     <h2>Satellites that <em>cue each other</em>.</h2>
                     <p>An optical satellite spots a wildfire or flood onboard and cues a radar satellite, which retargets, images through smoke and cloud, and downlinks the alert.</p>
                     <p class="scene-topics">Distributed AI for mission operations and adaptive sensing</p>
+                </div>
+            </article>
+            <article class="scene-panel">
+                <div class="scene-card">
+                    <p class="sec-label">03 / Agentic mission design</p>
+                    <h2>AI agents that <em>design the mission</em>.</h2>
+                    <p>Requirements, orbit, power and communications agents negotiate a spacecraft design, explore the trade space and trace every requirement before an engineer signs off.</p>
+                    <p class="scene-topics">Agentic AI for mission and space system design</p>
                 </div>
             </article>
             <article class="scene-panel right">
@@ -325,7 +325,7 @@
 
     <script src="app.js?v=20260604c"></script>
     <script src="countdown.js"></script>
-    <script src="hero-sim.js?v=v2f"></script>
+    <script src="hero-sim.js?v=vis6"></script>
     <script>
         document.querySelectorAll('.bio-toggle').forEach(btn => {
             btn.addEventListener('click', () => {

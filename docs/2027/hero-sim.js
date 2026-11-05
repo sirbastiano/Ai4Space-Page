@@ -1,7 +1,7 @@
 /* AI4Space landing scenes: four simulations drawn as HUD displays on one pinned canvas.
- * 01 agentic mission design (multi-agent trade-space exploration), 02 vision-based rendezvous
- * (Clohessy-Wiltshire approach, pose estimation, event camera), 03 Earth tip-and-cue (optical
- * detection cueing a SAR satellite), 04 cooperative Mars exploration (frontier allocation).
+ * 01 vision-based rendezvous (Clohessy-Wiltshire approach, pose estimation, event camera),
+ * 02 Earth tip-and-cue (onboard segmentation cueing a SAR satellite), 03 agentic mission design
+ * (multi-agent trade-space exploration), 04 cooperative Mars exploration with terrain segmentation.
  * Plain JS, no dependencies. */
 (function () {
     'use strict';
@@ -100,8 +100,110 @@
         return `${hh}:${mm}:${ss}`;
     }
 
+    /* ---------- synthetic image tiles (what an onboard camera would see) ---------- */
+
+    function tileHash(ix, iy, seed) {
+        const v = Math.sin(ix * 127.1 + iy * 311.7 + seed * 74.7) * 43758.5453;
+        return v - Math.floor(v);
+    }
+
+    function tileNoise(px, py, seed) {
+        let sum = 0, amp = 0.5, f = 1;
+        for (let o = 0; o < 3; o++) {
+            const x = px * f, y = py * f;
+            const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+            const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+            const a = tileHash(xi, yi, seed), b = tileHash(xi + 1, yi, seed);
+            const c = tileHash(xi, yi + 1, seed), d = tileHash(xi + 1, yi + 1, seed);
+            sum += amp * (a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v);
+            f *= 2;
+            amp *= 0.5;
+        }
+        return sum / 0.875;
+    }
+
+    /* A small low-resolution scene: optical (SWIR false colour) and SAR (speckled backscatter)
+     * renderings of the same ground, plus the mask a segmentation model should find. */
+    function makeTile(kind, seed) {
+        const w = 48, h = 34;
+        const opt = [], sar = [], mask = new Uint8Array(w * h);
+        const fx = w * rand(0.4, 0.6), fy = h * rand(0.4, 0.6), fr = rand(7, 10);
+        for (let y = 0; y < h; y++) {
+            const river = w * 0.5 + Math.sin(y / 6 + seed) * 7;
+            for (let x = 0; x < w; x++) {
+                const n = tileNoise(x / 9, y / 9, seed);
+                let rgb = [34 + 70 * n, 58 + 40 * n, 38 + 26 * n];
+                let back = 70 + 90 * n;
+                let m = 0;
+                if (kind === 'FLOOD') {
+                    const d = Math.abs(x - river);
+                    const extent = 2 + 7 * tileNoise(x / 5, y / 5, seed + 3);
+                    if (d < 1.6) { rgb = [18, 40, 70]; back = 18; }
+                    else if (d < extent) { rgb = [24, 52, 88]; back = 22; m = 1; }
+                } else if (kind === 'WILDFIRE') {
+                    const d = Math.hypot(x - fx, (y - fy) * 1.2) + 3 * tileNoise(x / 4, y / 4, seed + 5);
+                    if (d < fr - 1.6) { rgb = [32, 26, 22]; back = 40; m = 1; }
+                    else if (d < fr) { rgb = [255, 160 + 60 * n, 60]; back = 55; m = 1; }
+                    if (x > fx && Math.abs(y - fy + (x - fx) * 0.35) < 3 + (x - fx) * 0.25) {
+                        const smoke = clamp(1 - (x - fx) / (w - fx), 0, 1) * 0.6;
+                        rgb = rgb.map((c) => c * (1 - smoke) + 170 * smoke);   // smoke hides it optically, not for SAR
+                    }
+                }
+                opt.push(rgb);
+                sar.push(clamp(back + rand(-35, 35), 0, 255));
+                mask[y * w + x] = m;
+            }
+        }
+        let x0 = w, y0 = h, x1 = -1, y1 = -1;
+        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (mask[y * w + x]) {
+            x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+        }
+        return { w, h, opt, sar, mask, box: x1 >= 0 ? [x0, y0, x1 + 1, y1 + 1] : null, score: rand(0.88, 0.97) };
+    }
+
+    /* Draw a tile into a box; sweep in [0, 1] reveals the segmentation mask row by row. */
+    function drawTile(tile, ix, iy, iw, ih, mode, sweep, maskRgb, label) {
+        const pw = iw / tile.w, ph = ih / tile.h;
+        for (let y = 0; y < tile.h; y++) {
+            for (let x = 0; x < tile.w; x++) {
+                const k = y * tile.w + x;
+                if (mode === 'sar') { const g = tile.sar[k]; ctx.fillStyle = `rgb(${g},${g},${g})`; }
+                else { const c = tile.opt[k]; ctx.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; }
+                ctx.fillRect(ix + x * pw, iy + y * ph, pw + 0.5, ph + 0.5);
+            }
+        }
+        const rows = Math.floor(clamp(sweep, 0, 1) * tile.h);
+        ctx.fillStyle = `rgba(${maskRgb}, 0.5)`;
+        for (let y = 0; y < rows; y++) {
+            for (let x = 0; x < tile.w; x++) if (tile.mask[y * tile.w + x]) ctx.fillRect(ix + x * pw, iy + y * ph, pw + 0.5, ph + 0.5);
+        }
+        if (sweep > 0 && sweep < 1) {
+            ctx.strokeStyle = COL.cyan;
+            ctx.beginPath(); ctx.moveTo(ix, iy + rows * ph); ctx.lineTo(ix + iw, iy + rows * ph); ctx.stroke();
+        }
+        if (sweep >= 1 && tile.box && label) {
+            const [x0, y0, x1, y1] = tile.box;
+            ctx.strokeStyle = `rgb(${maskRgb})`;
+            ctx.lineWidth = 1.4;
+            ctx.strokeRect(ix + x0 * pw, iy + y0 * ph, (x1 - x0) * pw, (y1 - y0) * ph);
+            ctx.lineWidth = 1;
+            const tx = ix + x0 * pw, ty = Math.max(iy + 10, iy + y0 * ph - 3);
+            ctx.fillStyle = 'rgba(2, 4, 8, 0.8)';
+            ctx.fillRect(tx, ty - 9, label.length * 5.6 + 6, 11);
+            text(label, tx + 3, ty, `rgb(${maskRgb})`, 8, 'left', 600);
+        }
+    }
+
+    function insetBox(ix, iy, iw, ih, title) {
+        ctx.fillStyle = 'rgba(2, 4, 8, 0.92)';
+        ctx.fillRect(ix - 1, iy - 1, iw + 2, ih + 2);
+        ctx.strokeStyle = 'rgba(90, 209, 255, 0.45)';
+        ctx.strokeRect(ix - 0.5, iy - 0.5, iw + 1, ih + 1);
+        text(title, ix + 2, iy - 6, COL.cyan, small ? 8 : 9, 'left', 600);
+    }
+
     /* =====================================================================
-     * 01  Agentic mission design: an orchestrator and five specialist agents exchange
+     * 03  Agentic mission design: an orchestrator and five specialist agents exchange
      * messages while candidate designs fill a mass-cost trade space. The Pareto front
      * tightens, a knee-point design is selected, the spec sheet fills in and the V&V agent
      * traces every requirement. Sizing relations are simple but physically motivated
@@ -110,7 +212,7 @@
     const agents = (function () {
         const scene = {
             id: 'agents',
-            title: '01 // AGENTIC MISSION DESIGN',
+            title: '03 // AGENTIC MISSION DESIGN',
             subtitle: 'MULTI-AGENT SYSTEMS ENGINEERING · TRADE-SPACE EXPLORATION',
             logs: []
         };
@@ -172,6 +274,7 @@
             s.packets.forEach((p) => { p.t += dt / 0.7; });
             s.packets = s.packets.filter((p) => p.t < 1);
             s.designs.forEach((d) => { d.age += dt; });
+
 
             if (s.t > T.explore[0] && s.t < T.explore[1]) {
                 s.nextDesign -= dt;
@@ -346,7 +449,7 @@
     })();
 
     /* =====================================================================
-     * 02  Vision-based rendezvous: a chaser approaches a tumbling target in the target's
+     * 01  Vision-based rendezvous: a chaser approaches a tumbling target in the target's
      * local orbital frame. Relative motion follows the Clohessy-Wiltshire equations (n = 1,
      * time = orbital phase, positions in metres); each leg is a two-impulse transfer chosen
      * as the lowest-Δv of nine candidates, then a straight V-bar final approach. Two insets
@@ -356,7 +459,7 @@
     const rpo = (function () {
         const scene = {
             id: 'rpo',
-            title: '02 // VISION-BASED RENDEZVOUS',
+            title: '01 // VISION-BASED RENDEZVOUS',
             subtitle: 'CLOHESSY-WILTSHIRE APPROACH · 6-DOF POSE ESTIMATION · EVENT CAMERA',
             logs: []
         };
@@ -622,7 +725,7 @@
             // camera insets
             const iw = small ? Math.min(150, (w - 40) / 2) : Math.min(230, w * 0.24);
             const ih = iw * 0.72;
-            const ix = x + 14, iy = y + (small ? 128 : 72);
+            const ix = stage.safeX, iy = y + (small ? 128 : 72);
             const k = iw * 0.16 * clamp(150 / range(), 0.5, 1.1);   // apparent size grows as the range closes
             const fcx = ix + iw / 2, fcy = iy + ih / 2;
 
@@ -699,7 +802,7 @@
     })();
 
     /* =====================================================================
-     * 03  Earth tip-and-cue: optical satellites in sun-synchronous orbits detect a wildfire
+     * 02  Earth tip-and-cue: optical satellites in sun-synchronous orbits detect a wildfire
      * or flood onboard ("tip") and cue the radar (SAR) satellite that will pass over the
      * area soonest; the SAR satellite images through smoke or cloud and downlinks the alert
      * to the nearest ground station. Ground tracks come from the orbits and Earth's rotation.
@@ -707,7 +810,7 @@
     const earth = (function () {
         const scene = {
             id: 'earth',
-            title: '03 // EARTH TIP-AND-CUE',
+            title: '02 // EARTH TIP-AND-CUE',
             subtitle: 'ONBOARD DETECTION · CUEING A RADAR SATELLITE · RAPID ALERTING',
             logs: []
         };
@@ -735,7 +838,7 @@
         let land = [];
         let sats = [], events = [], packets = [], tasks = [];
         let lon0 = 0, spin = 0, spawnT = 0, nextEvent = 0, alerts = 0, cues = 0;
-        let cx = 0, cy = 0, R = 0;
+        let cx = 0, cy = 0, R = 0, idleTile = null;
 
         scene.setLand = function (points) { land = points; };
 
@@ -800,6 +903,7 @@
                 }
             });
             events = [];
+            idleTile = makeTile('NONE', rand(0, 100));
             packets = [];
             tasks = [];
             nextEvent = Math.floor(rand(0, EVENTS.length));
@@ -810,7 +914,7 @@
         scene.resize = function () {
             cx = stage.x + stage.w / 2;
             cy = stage.y + stage.h / 2 + (small ? 10 : 6);
-            R = Math.min(stage.w, stage.h) * (small ? 0.36 : 0.37);
+            R = Math.max(40, Math.min(stage.w, stage.h) * (small ? 0.36 : 0.37));
             if (!sats.length) scene.reset();
         };
 
@@ -830,7 +934,7 @@
             if (spawnT <= 0 && events.filter((e) => e.state !== 'done').length < 4) {
                 const proto = EVENTS[nextEvent % EVENTS.length];
                 nextEvent++;
-                if (!events.some((e) => e.where === proto.where)) events.push(Object.assign({ state: 'active', age: 0 }, proto));
+                if (!events.some((e) => e.where === proto.where)) events.push(Object.assign({ state: 'active', age: 0, tile: makeTile(proto.kind, rand(0, 100)) }, proto));
                 spawnT = rand(1.8, 3.2);
             }
 
@@ -840,6 +944,9 @@
                     const tip = sats.find((s) => s.kind === 'OPT' && angDist(s.lat, s.lon, ev.lat, ev.lon) < 14);
                     if (!tip) return;
                     ev.state = 'tipped';
+                    ev.tipAge = ev.age;
+                    ev.tipAt = met;
+                    ev.tipSat = tip.id;
                     pushLog(scene, `${tip.id} ▸ ${ev.kind} DETECTED ONBOARD · ${ev.where} ${fmtLL(ev.lat, ev.lon)}`);
                     cue(ev, tip);
                 } else if (ev.state === 'cued') {
@@ -847,6 +954,9 @@
                     const sar = ev.sar;
                     if (angDist(sar.lat, sar.lon, ev.lat, ev.lon) < 22) {
                         ev.state = 'imaged';
+                        ev.sarAge = ev.age;
+                        ev.sarAt = met;
+                        ev.sarSat = sar.id;
                         tasks.push({ sat: sar, ev, t: 0 });
                         pushLog(scene, `${sar.id} ▸ RADAR ACQUISITION · ${ev.kind === 'FLOOD' ? 'FLOOD EXTENT MAPPED THROUGH CLOUD' : 'BURN SCAR MAPPED THROUGH SMOKE'}`);
                         const gs = STATIONS.reduce((p, q) => (angDist(q.lat, q.lon, sar.lat, sar.lon) < angDist(p.lat, p.lon, sar.lat, sar.lon) ? q : p));
@@ -1024,6 +1134,31 @@
                 ctx.globalAlpha = 1;
                 glowDot(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, 2.6, pk.color);
             });
+
+            // onboard camera: what the satellite actually sees, and what the model segments
+            const iw = small ? Math.min(150, stage.w * 0.42) : Math.min(250, stage.w * 0.24);
+            const ih = iw * (34 / 48);
+            const ix = small ? stage.safeX : stage.safeR - iw;
+            const iy = small ? stage.y + 52 : stage.y + stage.h - ih - 44;
+            const ev = events.filter((e) => e.state !== 'active').sort((a, b) => Math.max(b.tipAt, b.sarAt || 0) - Math.max(a.tipAt, a.sarAt || 0))[0];
+            if (!ev) {
+                insetBox(ix, iy, iw, ih, 'OPT · ONBOARD SWIR · SCANNING');
+                drawTile(idleTile, ix, iy, iw, ih, 'opt', 0, '0, 0, 0', null);
+                const sy = iy + ((met * 0.4) % 1) * ih;
+                ctx.strokeStyle = COL.cyan;
+                ctx.beginPath(); ctx.moveTo(ix, sy); ctx.lineTo(ix + iw, sy); ctx.stroke();
+            } else {
+                const fire = ev.kind === 'WILDFIRE';
+                const radar = ev.sarAge !== undefined;
+                const maskRgb = radar ? '255, 177, 74' : fire ? '255, 90, 79' : '61, 139, 255';
+                const sweep = radar ? (ev.age - ev.sarAge) / 1.2 : (ev.age - ev.tipAge) / 1.2;
+                const label = radar
+                    ? `${fire ? 'BURN SCAR' : 'FLOOD EXTENT'} · CHANGE ${(ev.tile.score - 0.03).toFixed(2)}`
+                    : `${fire ? 'FIRE' : 'WATER'} ${ev.tile.score.toFixed(2)}`;
+                insetBox(ix, iy, iw, ih, radar ? `${ev.sarSat} · SAR CHANGE MAP` : `${ev.tipSat} · ONBOARD SWIR · SEGMENTATION`);
+                drawTile(ev.tile, ix, iy, iw, ih, radar ? 'sar' : 'opt', sweep, maskRgb, label);
+                text(ev.where, ix + 4, iy + ih - 5, COL.text, 8, 'left', 600);
+            }
         };
 
         scene.stats = function () {
@@ -1053,6 +1188,12 @@
         let seed = 1, terrain = null, cells = null, FX = 0, FY = 0, cw = 0, ch = 0;
         let agents = [], sites = [], packets = [], links = [];
         let msgs = 0, explored = 0, packetT = 0, finished = -1;
+        let cam = null;                       // R1 navigation camera: ground rocks ahead of the rover (m)
+        const CAM_HEIGHT = 1.5;               // camera height above ground, m
+
+        function newRock(far) {
+            return { x: rand(-6, 6), z: far ? rand(24, 34) : rand(3, 34), r: rand(0.18, 0.7) };
+        }
 
         function hash(ix, iy) {
             const v = Math.sin(ix * 127.1 + iy * 311.7 + seed * 17.13) * 43758.5453;
@@ -1199,6 +1340,7 @@
             }));
             agents.forEach(reveal);
             agents.forEach(retarget);
+            cam = { travel: 0, rocks: Array.from({ length: 16 }, () => newRock(false)), warnT: 0, seed: rand(0, 100) };
             pushLog(scene, 'LANDED · 4 AGENTS ONLINE · MAP SYNC ESTABLISHED');
         };
 
@@ -1210,6 +1352,7 @@
                 if (finished > 3) scene.reset();
                 return;
             }
+            const r1 = agents[0], r1x = r1.x, r1y = r1.y;
             // assign rovers to newly found sites
             sites.forEach((site) => {
                 if (!site.found || site.assigned) return;
@@ -1249,6 +1392,19 @@
                 reveal(a);
                 a.trailT += dt;
                 if (a.trailT > 0.12) { a.trailT = 0; a.trail.push([a.x, a.y]); if (a.trail.length > 70) a.trail.shift(); }
+            });
+
+            // drive the navigation camera forward by the distance R1 actually moved (map px -> m)
+            const moved = Math.hypot(r1.x - r1x, r1.y - r1y) * (60 / stage.w);
+            cam.travel += moved;
+            cam.warnT -= dt;
+            cam.rocks.forEach((rk, i) => {
+                rk.z -= moved;
+                if (rk.z < 1.2) cam.rocks[i] = newRock(true);
+                else if (rk.z < 4 && Math.abs(rk.x) < 1.2 && rk.r > 0.4 && cam.warnT <= 0) {
+                    cam.warnT = 5;
+                    pushLog(scene, `R1 ▸ HAZARD ${rk.z.toFixed(1)} m AHEAD · ROCK ${(rk.r * 100).toFixed(0)} cm · PATH ADJUSTED`);
+                }
             });
 
             const range = stage.w * 0.45;
@@ -1347,7 +1503,66 @@
                 }
             });
             ctx.restore();
+            drawNavcam();
         };
+
+        /* R1 navigation camera: left half is the image, right half the per-pixel terrain classes
+         * a segmentation network would output (sand, bedrock, hazard). */
+        function drawNavcam() {
+            const iw = small ? Math.min(150, stage.w * 0.42) : Math.min(250, stage.w * 0.24);
+            const ih = iw * 0.62;
+            const ix = stage.x + 14, iy = stage.y + (small ? 52 : 70);
+            insetBox(ix, iy, iw, ih, 'R1 NAVCAM · TERRAIN SEGMENTATION');
+            const hz = iy + ih * 0.3, f = ih * 0.9, cxc = ix + iw / 2, mid = ix + iw / 2;
+            const sky = ctx.createLinearGradient(0, iy, 0, hz);
+            sky.addColorStop(0, 'rgb(70, 46, 38)');
+            sky.addColorStop(1, 'rgb(150, 105, 80)');
+            ctx.fillStyle = sky;
+            ctx.fillRect(ix, iy, iw, hz - iy);
+            const cols = 28, rows = 12;
+            const cw2 = iw / cols, rh = (iy + ih - hz) / rows;
+            for (let r = 0; r < rows; r++) {
+                const sy = hz + (r + 0.5) * rh;
+                const z = (f * CAM_HEIGHT) / (sy - hz);
+                const haze = clamp(z / 40, 0, 0.6);
+                for (let c = 0; c < cols; c++) {
+                    const sx = ix + (c + 0.5) * cw2;
+                    const wx = ((sx - cxc) * z) / f;
+                    const n = tileNoise(wx * 0.55, (z + cam.travel) * 0.45, cam.seed);
+                    if (sx < mid) {
+                        const k = 0.55 + 0.6 * n;
+                        ctx.fillStyle = `rgb(${(170 * k * (1 - haze) + 150 * haze) | 0}, ${(105 * k * (1 - haze) + 105 * haze) | 0}, ${(70 * k * (1 - haze) + 80 * haze) | 0})`;
+                    } else {
+                        ctx.fillStyle = n < 0.45 ? 'rgba(255, 177, 74, 0.75)' : n < 0.68 ? 'rgba(90, 209, 255, 0.6)' : 'rgba(255, 90, 79, 0.7)';
+                    }
+                    ctx.fillRect(ix + c * cw2, hz + r * rh, cw2 + 0.5, rh + 0.5);
+                }
+            }
+            [[ix, mid, false], [mid, ix + iw, true]].forEach(([x0, x1, seg]) => {
+                ctx.save();
+                ctx.beginPath(); ctx.rect(x0, hz, x1 - x0, iy + ih - hz); ctx.clip();
+                cam.rocks.slice().sort((a, b) => b.z - a.z).forEach((rk) => {
+                    const sy = hz + (f * CAM_HEIGHT) / rk.z;
+                    const sx = cxc + (f * rk.x) / rk.z;
+                    const rr = (f * rk.r) / rk.z;
+                    ctx.fillStyle = seg ? 'rgba(255, 90, 79, 0.95)' : 'rgb(48, 30, 24)';
+                    ctx.beginPath(); ctx.ellipse(sx, sy - rr * 0.4, rr, rr * 0.6, 0, 0, TAU); ctx.fill();
+                    if (seg && rk.z < 8 && Math.abs(rk.x) < 2) {
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.strokeRect(sx - rr - 2, sy - rr - 2, rr * 2 + 4, rr * 1.4 + 4);
+                    }
+                });
+                ctx.restore();
+            });
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.beginPath(); ctx.moveTo(mid, iy); ctx.lineTo(mid, iy + ih); ctx.stroke();
+            text('RGB', ix + 4, iy + 10, COL.text, 8, 'left', 600);
+            text('SEG', mid + 4, iy + 10, COL.text, 8, 'left', 600);
+            const ly = iy + ih + 12;
+            text('■ SAND', ix, ly, COL.amber, 8);
+            text('■ BEDROCK', ix + iw * 0.3, ly, COL.cyan, 8);
+            text('■ HAZARD', ix + iw * 0.68, ly, COL.red, 8);
+        }
 
         scene.stats = function () {
             return [
@@ -1416,7 +1631,7 @@
      * Pinned scene viewer: one full-screen canvas inside a sticky wrapper. The text panel
      * crossing the middle of the screen picks the scene; the rail ticks jump to a panel.
      * ===================================================================== */
-    const scenes = [agents, rpo, earth, mars];
+    const scenes = [rpo, earth, agents, mars];
     let current = 0, trans = null, running = false, last = 0, inView = false;
 
     function layout() {
@@ -1439,10 +1654,15 @@
      * and right (odd scenes). Phone: the upper part of the screen, caption below. */
     function stageFor(i) {
         const top = 84;
-        if (small) return { x: 12, y: top, w: W - 24, h: Math.max(260, H * 0.62 - top) };
+        if (small) return { x: 12, y: top, w: Math.max(200, W - 24), h: Math.max(260, H * 0.62 - top), safeX: 26, safeR: W - 26 };
         const shift = Math.round(W * 0.2);
-        const w = W - 64 - shift;
-        return { x: i % 2 === 0 ? 32 + shift : 32, y: top, w, h: H - top - 64 };
+        const w = Math.max(320, W - 64 - shift);
+        const x = i % 2 === 0 ? 32 + shift : 32;
+        // safeX: first x not covered by the caption card (cards are min(26rem, 28vw) wide, 24px from the edge)
+        const card = 24 + Math.min(416, W * 0.28) + 24;
+        const safeX = i % 2 === 0 ? Math.max(x + 14, card) : x + 14;
+        const safeR = i % 2 === 0 ? x + w - 14 : Math.min(x + w - 14, W - card);
+        return { x, y: top, w, h: Math.max(320, H - top - 64), safeX, safeR };
     }
 
     function showScene(i) {
@@ -1471,8 +1691,9 @@
     function drawHudOverlay(scene) {
         const { x, y, w, h } = stage;
         brackets(x, y, w, h, 18, 'rgba(90, 209, 255, 0.55)');
-        text(scene.title, x + 14, y + 24, COL.cyan, small ? 11 : 13, 'left', 600);
-        if (!small) text(scene.subtitle, x + 14, y + 41, COL.dim, 10);
+        const lx = stage.safeX;               // left edge not covered by a caption card
+        text(scene.title, lx, y + 24, COL.cyan, small ? 11 : 13, 'left', 600);
+        if (!small) text(scene.subtitle, lx, y + 41, COL.dim, 10);
 
         const stats = scene.stats();
         const pw = small ? 150 : 190, ph = stats.length * 16 + 12;
@@ -1487,15 +1708,15 @@
         });
 
         const lines = scene.logs.slice(small ? -2 : -4);
-        const lw = Math.min(w - 24, small ? w - 24 : 470);
+        const lw = Math.min(x + w - lx - 12, small ? w - 24 : 470);
         const lh = lines.length * 15 + 10;
         if (lines.length) {
             ctx.fillStyle = 'rgba(5, 8, 13, 0.72)';
-            ctx.fillRect(x + 12, y + h - lh - 12, lw, lh);
+            ctx.fillRect(lx - 2, y + h - lh - 12, lw, lh);
         }
         lines.forEach((ln, i) => {
             const alpha = 0.45 + 0.55 * ((i + 1) / lines.length);
-            text(`> ${ln}`, x + 20, y + h - lh - 12 + 19 + i * 15, `rgba(216, 227, 236, ${alpha})`, small ? 9 : 10);
+            text(`> ${ln}`, lx + 6, y + h - lh - 12 + 19 + i * 15, `rgba(216, 227, 236, ${alpha})`, small ? 9 : 10);
         });
         if (!small) text(`MET ${fmtClock(met)}`, x + w - 14, y + h - 16, COL.cyanMid, 10, 'right');
     }
