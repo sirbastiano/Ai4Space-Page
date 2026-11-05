@@ -1,0 +1,1569 @@
+html {
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+}
+
+*, *:before, *:after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    font: normal 1em/1.45em "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: #fff;
+    background: radial-gradient(ellipse at bottom, #1C2837 0%, #050608 100%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+/* Import Montserrat Black font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.description {
+    padding: 30px;
+    position: absolute;
+    top: 75%; /* Move further down */
+    right: 4vw; /* Move further to the right */
+    transform: translateY(-50%);
+    width: auto;
+    max-width: 550px;
+    z-index: 10;
+    text-align: right; /* Align text to the right */
+    /* background-color: rgba(0, 0, 0, 0.3); */
+    border-radius: 10px;
+    opacity: 1; /* Set opacity to 1 as animation is removed */
+}
+
+/* Top left description box */
+.hero-description-top-left.description {
+    top: 80px;
+    left: 2vw;
+    right: auto;
+    bottom: auto;
+    text-align: left;
+    width: auto;
+    max-width: 850px;
+    background: none;
+    box-shadow: none;
+    opacity: 1;
+    z-index: 10;
+    position: absolute;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.hero-description-top-left.description .cta-button {
+    display: none !important;
+}
+
+.description h1 {
+    font-weight: 300;
+    font-size: 2em; /* Reduced font size from 2.5em */
+    text-transform: uppercase;
+    font-family: Lato, 'Arial', sans-serif;
+    line-height: 1.6em;
+    letter-spacing: .1em;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.description p {
+    font-family: Lato, 'Arial', sans-serif;
+    font-size: .9em;
+    color: #eee;
+    margin-bottom: 20px;
+}
+
+.description .cta-button {
+    display: inline-block;
+    background-color: #e67e22;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.description .cta-button:hover {
+    background-color: #d35400;
+    transform: translateY(-2px);
+}
+
+hr {
+    margin: 26px 0;
+    border: 0;
+    border-top: 1px solid white;
+    background: transparent;
+    width: 25%;
+    opacity: .1;
+}
+
+code {
+    color: #ae94c0;
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: .9em;
+}
+
+.solar-syst {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: -10vh; /* Move further down (was -18vh) */
+    left: 30vw; /* Move further left (was 40vw) */
+    transform: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.solar-syst div {
+    transform: scale(1.5); /* Make all planets 1.5x larger */
+    border-radius: 1000px;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    z-index: 1;
+}
+
+@media (max-width: 900px) {
+    .solar-syst div {
+        transform: scale(1.1); /* Slightly larger on mobile, but not too big */
+    }
+}
+
+.solar-syst div:not(.sun) {
+    border: 1px solid rgba(102, 166, 229, 0.12);
+}
+
+.solar-syst div:not(.sun):before {
+    left: 50%;
+    border-radius: 100px;
+    content: "";
+    position: absolute;
+}
+
+.solar-syst div:not(.sun):not(.asteroids-belt):before {
+    box-shadow: inset 0 6px 0 -2px rgba(0, 0, 0, 0.25);
+    animation: zoomInPlanet 10s ease-in-out forwards;
+}
+
+.sun {
+    background: radial-gradient(ellipse at center, #ffd000 1%, #f9b700 39%, #f9b700 39%, #e06317 100%);
+    height: 40px;
+    width: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+    background-clip: padding-box;
+    border: 0 !important;
+    background-position: -28px -103px;
+    background-size: 175%;
+    box-shadow: 0 0 10px 2px rgba(255, 107, 0, 0.4), 0 0 22px 11px rgba(255, 203, 0, 0.13);
+    z-index: 2;
+    animation-duration: 3.33s !important;
+}
+
+.mercury {
+    height: 70px;
+    width: 70px;
+    margin-top: -35px;
+    margin-left: -35px;
+    animation: orb 2.396s linear infinite;
+    z-index: 10;
+}
+
+.mercury:before {
+    height: 4px;
+    width: 4px;
+    background: #9f5e26;
+    margin-top: -2px;
+    margin-left: -2px;
+    top: 0;
+}
+
+.venus {
+    height: 100px;
+    width: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+    animation: orb 6.15s linear infinite;
+    z-index: 11;
+}
+
+.venus:before {
+    height: 8px;
+    width: 8px;
+    background: #BEB768;
+    margin-top: -4px;
+    margin-left: -4px;
+    top: 0;
+}
+
+.earth {
+    height: 145px;
+    width: 145px;
+    margin-top: -72.5px;
+    margin-left: -72.5px;
+    animation: orb 10s linear infinite;
+    z-index: 12;
+}
+
+.earth:before {
+    height: 6px;
+    width: 6px;
+    background: #11abe9;
+    margin-top: -3px;
+    margin-left: -3px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.earth:after {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 100px;
+    animation: orb 2.24s linear infinite;
+}
+
+.earth:after:before {
+    content: "";
+    position: absolute;
+    height: 3px;
+    width: 3px;
+    background: grey;
+    border-radius: 50%;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%);
+}
+
+.mars {
+    height: 190px;
+    width: 190px;
+    margin-top: -95px;
+    margin-left: -95px;
+    animation: orb 18.81s linear infinite;
+    z-index: 13;
+}
+
+.mars:before {
+    height: 6px;
+    width: 6px;
+    background: #cf3921;
+    margin-top: -3px;
+    margin-left: -3px;
+    top: 0;
+}
+
+.asteroids-belt {
+    opacity: .7;
+    border-color: transparent !important;
+    height: 300px;
+    width: 300px;
+    margin-top: -150px;
+    margin-left: -150px;
+    animation: orb 60s linear infinite;
+    overflow: hidden;
+    z-index: 14;
+}
+
+.asteroids-belt:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 210px;
+    width: 210px;
+    margin-left: -105px;
+    margin-top: -105px;
+    background: transparent;
+    border-radius: 140px !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 5px 5px 0 0px rgba(255, 255, 255, 0.05),
+                -5px -10px 0 1px rgba(255, 255, 255, 0.08), 10px -5px 0 0px rgba(255, 255, 255, 0.12),
+                30px 20px 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.jupiter {
+    height: 340px;
+    width: 340px;
+    margin-top: -170px;
+    margin-left: -170px;
+    animation: orb 118.57s linear infinite;
+    z-index: 15;
+}
+
+.jupiter:before {
+    height: 18px;
+    width: 18px;
+    background: #c76e2a;
+    margin-top: -9px;
+    margin-left: -9px;
+    top: 0;
+}
+
+.saturn {
+    height: 440px;
+    width: 440px;
+    margin-top: -220px;
+    margin-left: -220px;
+    animation: orb 294.17s linear infinite;
+    z-index: 16;
+}
+
+.saturn:before {
+    height: 12px;
+    width: 12px;
+    background: #e7c194;
+    margin-top: -6px;
+    margin-left: -6px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.saturn:after {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 28px;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, -50%) rotateZ(-52deg);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #987641, 0 0 0 4px #a28256, 0 0 0 5px #7a603e;
+    transform-origin: center center;
+}
+
+.uranus {
+    height: 520px;
+    width: 520px;
+    margin-top: -260px;
+    margin-left: -260px;
+    animation: orb 837.33s linear infinite;
+    z-index: 17;
+}
+
+.uranus:before {
+    height: 10px;
+    width: 10px;
+    background: #b5e3e3;
+    margin-top: -5px;
+    margin-left: -5px;
+    top: 0;
+}
+
+.neptune {
+    height: 630px;
+    width: 630px;
+    margin-top: -315px;
+    margin-left: -315px;
+    animation: orb 1637s linear infinite;
+    z-index: 18;
+}
+
+.neptune:before {
+    height: 10px;
+    width: 10px;
+    background: #175e9e;
+    margin-top: -5px;
+    margin-left: -5px;
+    top: 0;
+}
+
+.pluto {
+    height: 780px;
+    width: 780px;
+    margin-top: -390px;
+    margin-left: -390px;
+    animation: orb 2479.67s linear infinite;
+    z-index: 19;
+}
+
+.pluto:before {
+    height: 3px;
+    width: 3px;
+    background: #fff;
+    margin-top: -1.5px;
+    margin-left: -1.5px;
+    top: 0;
+}
+
+@keyframes orb {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes zoomInPlanet {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.5);
+    }
+}
+
+/* Hero Canvas Text Enhancement */
+body #c {
+    font-family: 'Montserrat', Arial, sans-serif !important;
+}
+
+/* Optional: fallback for browsers that support ::backdrop-filter for extra glow */
+.hero-canvas-glow {
+    filter: drop-shadow(0 0 32px #00fff7) drop-shadow(0 0 16px #fff) drop-shadow(0 0 8px #00fff7);
+}
+
+/* Dramatic cosmic hero background with animated nebula and starfield overlay */
+.hero {
+    position: relative;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 350px; /* Decreased min-height */
+    flex-grow: 1;
+    width: 100%;
+}
+
+@keyframes nebulaMove {
+    0% { background-position: 0% 0%, 0% 0%; }
+    50% { background-position: 100% 100%, 50% 50%; }
+    100% { background-position: 0% 0%, 0% 0%; }
+}
+
+@keyframes starfieldMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 400px 300px; }
+}
+
+/* Animated headline container */
+.hero .animated-headline {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    z-index: 10;
+}
+
+.animated-headline .content {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    height: 80px;
+    overflow: hidden;
+    font-family: 'Montserrat', 'Lato', Arial, sans-serif;
+    font-size: 2.8em;
+    line-height: 1.2em;
+    color: #ffe082;
+    font-weight: 900;
+    text-align: center;
+    letter-spacing: 0.04em;
+    background: none;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.animated-headline .content__container {
+    font-weight: 700;
+    overflow: hidden;
+    height: 1.2em;
+    padding: 0 32px;
+    position: relative;
+    display: inline-block;
+}
+.animated-headline .content__container:before {
+    content: '[';
+    left: 0;
+    position: absolute;
+    top: 0;
+    color: #23a6d5;
+    font-size: 1.1em;
+    line-height: 1.2em;
+    animation: opacity 2s infinite;
+}
+.animated-headline .content__container:after {
+    content: ']';
+    right: 0;
+    position: absolute;
+    top: 0;
+    color: #e73c7e;
+    font-size: 1.1em;
+    line-height: 1.2em;
+    animation: opacity 2s infinite;
+}
+.animated-headline .content__container__text {
+    display: inline;
+    float: left;
+    margin: 0;
+}
+.animated-headline .content__container__list {
+    margin-top: 0;
+    padding-left: 0;
+    text-align: left;
+    list-style: none;
+    animation: change 10s infinite;
+    color: #23a6d5; /* Changed color */
+}
+.animated-headline .content__container__list__item {
+    line-height: 1.2em;
+    margin: 0;
+}
+@keyframes opacity {
+  0%, 100% {opacity:0;}
+  50% {opacity:1;}
+}
+@keyframes change {
+  0%, 12.66%, 100% {transform:translate3d(0,0,0);}
+  16.66%, 29.32% {transform:translate3d(0,-25%,0);}
+  33.32%,45.98% {transform:translate3d(0,-50%,0);}
+  49.98%,62.64% {transform:translate3d(0,-75%,0);}
+  66.64%,79.3% {transform:translate3d(0,-50%,0);}
+  83.3%,95.96% {transform:translate3d(0,-25%,0);}
+}
+
+/* Hero main text enhancements */
+.hero .hero-title {
+    display: none;
+}
+
+.hero .hero-subtitle {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 500;
+    font-size: 2em;
+    letter-spacing: 0.04em;
+    color: #fff;
+    text-shadow: 0 0 12px #23a6d5, 0 2px 8px #000a;
+    text-align: center;
+    margin-bottom: 1.2em;
+    z-index: 10;
+    position: relative;
+}
+
+/* Call for Papers button: cosmic style */
+.hero .cta-button {
+    display: block;
+    background: linear-gradient(90deg, #23a6d5 0%, #e73c7e 100%);
+    color: #fff;
+    padding: 18px 38px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 1.3em;
+    letter-spacing: 0.06em;
+    box-shadow: 0 4px 24px #23a6d588, 0 2px 8px #000a;
+    margin: 0 auto 2.2em auto;
+    text-align: center;
+    transition: background 0.3s, transform 0.2s;
+    z-index: 10;
+    position: relative;
+    border: 2px solid #fff2;
+}
+.hero .cta-button:hover {
+    background: linear-gradient(90deg, #e73c7e 0%, #23a6d5 100%);
+    color: #ffe082;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 32px #e73c7e88, 0 2px 8px #000a;
+    border: 2px solid #ffe082;
+}
+
+/* Left side countdown styling */
+.hero-countdown.left-countdown {
+    position: absolute;
+    top: 50%;
+    left: 4vw;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.45);
+    color: #ffe082;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 1.3em;
+    font-weight: 700;
+    padding: 20px 25px;
+    border-radius: 18px;
+    z-index: 20;
+    box-shadow: 0 0 25px rgba(255, 224, 130, 0.2);
+    text-align: center;
+    border: 2px solid rgba(255, 224, 130, 0.3);
+    min-width: 260px;
+    animation: pulse-countdown 2.5s alternate infinite;
+}
+
+.hero-countdown .countdown-header {
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.hero-countdown .countdown-timer {
+    font-size: 1.8em;
+    font-weight: 900;
+    margin: 5px 0;
+    letter-spacing: 0.05em;
+    line-height: 1.3;
+    color: #ffe082;
+}
+
+.hero-countdown .countdown-footer {
+    font-size: 0.85em;
+    font-weight: 500;
+    margin-top: 10px;
+    color: #e73c7e;
+}
+
+@media (max-width: 900px) {
+    .hero-countdown.left-countdown {
+        font-size: 1em;
+        padding: 12px 15px;
+        left: 3vw;
+        min-width: 200px;
+    }
+}
+
+main {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+    color: #333;
+}
+
+main h2, main h3, main p, main li, main span, main strong, main a {
+    color: #333;
+}
+
+main a {
+    color: #007bff;
+}
+
+main a:hover {
+    color: #0056b3;
+}
+
+main .topics-list li {
+    background-color: #f9f9f9;
+    border-left: 5px solid #23a6d5;
+    color: #333;
+}
+
+main .topics-list li strong {
+    color: #1a7fa8;
+}
+
+main .speaker-card .talk-type {
+    color: #e73c7e;
+}
+
+main .speaker-card .bio-preview {
+    color: #555;
+}
+
+main .btn-details-inline {
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+main .btn-details-inline:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+main .long-description-preview {
+    color: #666;
+}
+
+main .content-card .content-info h3 {
+    color: #2c3e50;
+}
+
+main .content-card .content-info .lead {
+    color: #555;
+}
+
+main .content-card .content-info .short-description {
+    color: #666;
+}
+
+main .content-card .keywords {
+    color: #777;
+}
+
+main .content-card .keywords strong {
+    color: #333;
+}
+
+main .content-card .btn-details-inline {
+    background-color: #3498db;
+    color: white;
+}
+
+main .content-card .btn-details-inline:hover {
+    background-color: #2980b9;
+    color: white;
+}
+
+main .committee-info h3 {
+    color: #333d48;
+}
+
+main .committee-info .role {
+    color: #3498db;
+}
+
+main .committee-info .affiliation {
+    color: #5a6878;
+}
+
+.program-committee-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 3em;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dbe7f0;
+}
+
+.program-committee-title span {
+    flex: 0 0 auto;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #e8f7fb;
+    color: #137b91;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.48em;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.committee-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.committee-list li {
+    position: relative;
+    min-height: 58px;
+    padding: 14px 16px 14px 44px;
+    border: 1px solid #dbe7f0;
+    border-radius: 8px;
+    background: #f8fbfd;
+    box-shadow: 0 6px 16px rgba(28, 40, 55, 0.06);
+    line-height: 1.35;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.committee-list li::before {
+    content: "\f007";
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 18px;
+    height: 18px;
+    color: #00a7c5;
+    font-family: "Font Awesome 6 Free";
+    font-size: 0.9em;
+    font-weight: 900;
+    line-height: 18px;
+    text-align: center;
+}
+
+.committee-list li:hover {
+    border-color: #00bcd4;
+    box-shadow: 0 10px 24px rgba(28, 40, 55, 0.12);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+    .program-committee-title {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .committee-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+header {
+    position: relative;
+    height: 100vh;
+    color: white;
+    background: radial-gradient(ellipse at 60% 40%, #2e3a5c 0%, #1C2837 60%, #050608 100%),
+                repeating-conic-gradient(from 0deg, #1a1a2e 0deg 10deg, #23234a 10deg 20deg, #1a1a2e 20deg 30deg);
+    background-size: 200% 200%, 300% 300%;
+    animation: heroBgMove 12s ease-in-out infinite, nebulaMove 24s linear infinite;
+    overflow: hidden;
+    box-shadow: 0 0 120px 40px #0a0a23 inset;
+    display: flex;
+    flex-direction: column;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="1.5" fill="white" opacity="0.7"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.5"/><circle cx="200" cy="120" r="2" fill="white" opacity="0.8"/><circle cx="300" cy="60" r="1.2" fill="white" opacity="0.6"/><circle cx="500" cy="200" r="1.7" fill="white" opacity="0.7"/><circle cx="700" cy="100" r="1.3" fill="white" opacity="0.5"/></svg>');
+    background-size: 400px 300px;
+    animation: starfieldMove 60s linear infinite;
+}
+
+nav {
+    display: flex;
+    justify-content: flex-start; /* Align items to the start (left) */
+    align-items: center;
+    padding: 1em 2%; /* Adjust padding as needed */
+    position: relative;
+    z-index: 1000;
+    background: transparent; /* Set background to transparent */
+}
+
+nav .logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: white;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+nav ul li {
+    margin-left: 30px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 300;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 50%;
+    background-color: #3498db;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #3498db;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+.hero-top-left-box {
+    display: none !important;
+}
+
+@media (max-width: 900px) {
+    .hero .hero-title {
+        font-size: 2.2em;
+    }
+    .hero .hero-subtitle {
+        font-size: 1.1em;
+    }
+    .hero-description-top-left.description {
+        max-width: 30vw;
+        padding: 14px;
+        top: 30px;
+    }
+}
+
+/* Custom Responsive Navbar Styles */
+.navbar {
+  background: rgba(16, 21, 34, 0.94);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  height: 80px; /* Adjust as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky; /* Makes the navbar stick to the top on scroll */
+  top: 0;
+  z-index: 999; /* Ensures navbar is above most other content */
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically align items in the container */
+  height: 80px;
+  position: relative;
+  z-index: 1; /* z-index context for children */
+  width: 100%;
+  max-width: 1300px; /* Adjust for desired max width of navbar content */
+  padding: 0 24px; /* Horizontal padding */
+}
+
+.navbar-logo {
+  color: #fff;
+  justify-self: start;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  text-align: center;
+}
+
+.nav-item {
+  height: 80px; /* Matches navbar height for consistent clickable area */
+}
+
+.nav-links {
+  color: #fff; /* White link text */
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+}
+
+.nav-links:hover {
+  border-bottom: 3px solid #00bcd4; /* Accent color for hover */
+  transition: all 0.2s ease-out;
+}
+
+.menu-icon {
+  display: none; /* Hidden on desktop, shown on mobile via media query */
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.menu-icon .fas { /* Targets both fa-bars and fa-times */
+  color: #fff; /* Ensures icon is white */
+  font-size: 1.8rem; /* Icon size */
+}
+
+/* Responsive Styles for Mobile/Tablet */
+@media screen and (max-width: 960px) {
+  .nav-menu {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    width: 100%;
+    position: absolute;
+    top: 80px; /* Position below the navbar (assuming navbar height is 80px) */
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-12px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+    background: #101522; /* Background for the mobile menu panel */
+    z-index: 998; /* Below navbar sticky z-index but above page content */
+  }
+
+  .nav-menu.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .nav-links {
+    text-align: center;
+    padding: 1.5rem; /* Adjust padding for touch targets */
+    width: 100%;
+    display: table; /* Ensure links take full width for easier clicking */
+  }
+
+  .nav-links:hover {
+    background-color: #00bcd4; /* Hover background color for mobile links */
+    color: #fff; /* Text color on hover */
+    border-bottom: none; /* Remove desktop hover border */
+    transition: all 0.2s ease-out;
+  }
+
+  .navbar-logo {
+    /* Adjust logo if needed for mobile, e.g., reduce size or adjust margin */
+    font-size: 1.8rem; /* Slightly smaller logo on mobile */
+  }
+
+  .menu-icon {
+    display: block; /* Show the hamburger icon */
+    position: relative;
+    z-index: 1000;
+    cursor: pointer;
+  }
+}
+
+/* === Added/Restored Card, Grid, and Detail Page Styles === */
+
+/* General Card and Grid Styles */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 25px;
+    margin-top: 30px; /* Spacing above the grid */
+}
+
+.content-card {
+    background-color: #ffffff; /* White background for cards */
+    color: #333; /* Dark text for readability on white background */
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    overflow: hidden; /* Ensures content like images respect border radius */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column; /* Stacks card content vertically */
+    text-decoration: none; /* Remove underline if card is a link */
+}
+
+.content-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.content-card img {
+    width: 100%;
+    height: 200px; /* Fixed height for images */
+    object-fit: cover; /* Ensures image covers the area, might crop */
+}
+
+.content-card .content-info {
+    padding: 20px;
+    flex-grow: 1; /* Allows this section to take available space */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Styles for h3, .lead, .short-description, .keywords, .btn-details-inline, .btn-details within .content-card */
+/* These were already present under main .content-card ..., so they should be fine or might need slight adjustments if specificity conflicts */
+
+.card-link-wrapper { /* If the whole card is a link */
+    text-decoration: none;
+    color: inherit; /* Inherit text color from parent */
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensure wrapper takes full card height */
+}
+
+/* Speaker Card Specifics */
+.speaker-card .content-info .talk-type {
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-style: italic;
+}
+.speaker-card .content-info .bio-preview {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+/* Workshop Objectives Cards */
+.objectives-cards {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent wrapping to new lines */
+    gap: 15px; /* Reduced gap from 20px */
+    justify-content: center;
+    margin-top: 20px;
+    max-width: 100%; /* Allow container to take full width */
+    padding: 0 12px; /* Reduced padding from 15px */
+    overflow-x: auto; /* Add horizontal scrolling if needed */
+}
+
+.card {
+    background-color: #ffffff; /* White background, consistent with .content-card */
+    color: #333;
+    border: 1px solid #e0e0e0; /* Slightly lighter border */
+    border-left: 5px solid #2c3e50; /* Accent color from .cta-button */
+    border-radius: 8px;
+    padding: 25px; /* Increased padding */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.07); /* Softer shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex-grow: 1; /* Allow cards to grow */
+    flex-basis: calc(33.333% - 40px); /* Adjust basis considering gap and container padding */
+    min-width: 280px; 
+    max-width: 450px; /* Max width for larger screens */
+    box-sizing: border-box;
+    margin-bottom: 20px; /* Ensure space when wrapping */
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 7px 15px rgba(0,0,0,0.1);
+}
+
+.card h4 {
+    margin-top: 0;
+    margin-bottom: 15px; /* More space after heading */
+    color: #2c3e50; 
+    font-size: 1.2em; /* Slightly larger heading */
+    font-weight: 600;
+}
+
+.card p {
+    font-size: 1em; /* Standard paragraph size */
+    line-height: 1.65;
+    margin-bottom: 0;
+}
+
+/* Submission Guidelines Table Styles */
+.submission-info-container {
+    margin: 2em auto;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.submission-info-table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #f9f9f9;
+}
+
+.submission-info-table th {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+}
+
+.submission-info-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.submission-info-table tr:last-child td {
+    border-bottom: none;
+}
+
+.submission-info-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.submission-info-table td:first-child {
+    width: 20%;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.submission-info-table i {
+    margin-right: 8px;
+    color: #3498db;
+}
+
+@media (max-width: 768px) {
+    .submission-info-table td {
+        padding: 10px;
+    }
+    
+    .submission-info-table td:first-child {
+        width: 30%;
+    }
+}
+
+/* Workshop Topics Cards Styles */
+.topics-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.topic-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.topic-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.topic-icon {
+    background-color: #f0f8ff; /* Light blue background */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.topic-icon i {
+    font-size: 36px;
+    color: #3498db; /* Icon color */
+}
+
+.topic-card h3 {
+    color: #2c3e50; /* Dark blue for heading */
+    margin-bottom: 10px;
+    font-size: 1.3em;
+}
+
+.topic-card p {
+    color: #666; /* Softer text color */
+    line-height: 1.5;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .topics-cards-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .topic-icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .topic-icon i {
+        font-size: 32px;
+    }
+}
+
+/* SPARK2025 Challenge Card Styles */
+.challenge-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    margin: 2em 0;
+    transition: transform 0.3s ease;
+    display: flex; /* Added for better structure */
+    flex-direction: column; /* Added for better structure */
+}
+
+.challenge-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Styles for the image within .challenge-card, not .challenge-header */
+.challenge-card > img {
+    width: 100%;
+    height: 320px; /* Adjust as needed, or use aspect-ratio */
+    object-fit: cover;
+    border-bottom: 1px solid #eee; /* Optional: if you want a separator */
+    border-radius: 0; /* Reset if it was in inline style */
+}
+
+/* Styles for the h3 title directly under .challenge-card */
+.challenge-card > h3 {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 12px 20px;
+    margin: 0;
+    font-size: 1.8em;
+    text-align: center; /* Center the title */
+    /* Removed absolute positioning to be part of the flex flow */
+}
+
+
+.challenge-content {
+    padding: 20px 25px;
+}
+
+.challenge-details {
+    margin-bottom: 20px; /* Add some space before the streams */
+}
+
+.challenge-streams {
+    display: flex;
+    gap: 20px;
+    margin: 25px 0;
+}
+
+.stream {
+    flex: 1;
+    background: #f8f9fa;
+    color: black; /* Ensure text is visible on light background */
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow for streams */
+}
+
+.stream-icon {
+    font-size: 2em;
+    color: #3498db; /* Theme color for icons */
+    margin-bottom: 10px;
+}
+
+.stream h4 {
+    margin: 10px 0 5px 0; /* Adjust spacing */
+    color: #2c3e50; /* Darker color for stream titles */
+}
+
+.stream p {
+    font-size: 0.95em;
+    color: #555; /* Slightly lighter paragraph text */
+    line-height: 1.4;
+}
+
+.challenge-footer {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* Center text in footer */
+}
+
+.challenge-footer p {
+    margin-bottom: 15px; /* Space between paragraph and button */
+}
+
+.challenge-button {
+    display: inline-block;
+    background: #3498db; /* Theme color */
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px; /* Pill shape */
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.challenge-button i {
+    margin-right: 8px;
+}
+
+.challenge-button:hover {
+    background: #2980b9; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* Responsive adjustments for challenge card */
+@media (max-width: 768px) {
+    .challenge-card > img {
+        height: 250px; /* Adjust image height for smaller screens */
+    }
+
+    .challenge-card > h3 {
+        font-size: 1.5em; /* Adjust title size */
+        padding: 10px 15px;
+    }
+
+    .challenge-streams {
+        flex-direction: column; /* Stack streams vertically */
+        gap: 15px;
+    }
+
+    .challenge-content {
+        padding: 15px 20px;
+    }
+}
+
+/* Added for scrolling fade-in effect */
+.fade-in-on-scroll {
+    opacity: 0;
+    transform: translateY(20px); /* Optional: for a slight upward movement */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Navbar styles */
+.navbar {
+    background: rgba(16, 21, 34, 0.94);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1500px;
+    padding: 0 24px;
+}
+
+.navbar-logo {
+    color: #fff; /* White logo text */
+    justify-self: start;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif; /* Use Montserrat for logo */
+    font-weight: 900; /* Black weight for logo */
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+}
+
+.nav-item {
+    height: 80px;
+}
+
+.nav-links {
+    color: #fff; /* White link text */
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    cursor: pointer;
+}
+
+.nav-links:hover {
+    border-bottom: 4px solid #fff; /* Optional: highlight on hover */
+    transition: all 0.2s ease-out;
+}
+
+.menu-icon {
+    display: none; /* Hidden on desktop */
+    background: transparent;
+    border: 0;
+    padding: 0;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 960px) {
+    .navbar-container {
+        padding: 0 20px; /* Adjust padding for smaller screens */
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto; /* Changed from 90vh to auto for dynamic height */
+        position: absolute;
+        top: 80px; /* Position below the navbar */
+        left: 0;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-12px);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+        background: rgba(28, 40, 55, 0.95); /* Semi-transparent background for dropdown */
+        padding-top: 20px; /* Add some padding at the top */
+        padding-bottom: 20px; /* Add some padding at the bottom */
+    }
+
+    .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+        z-index: 1;
+    }
+
+    .nav-links {
+        text-align: center;
+        padding: 1.5rem; /* Increased padding for touch targets */
+        width: 100%;
+        display: table;
+    }
+
+    .nav-links:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Lighter background on hover */
+        border-bottom: none; /* Remove bottom border on mobile */
+        border-radius: 0; /* Ensure no border radius if previously set */
+    }
+
+    .navbar-logo {
+        font-size: 1.8rem; /* Slightly smaller logo on mobile */
+    }
+
+    .menu-icon {
+        display: block;
+        position: relative;
+        z-index: 1000;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #fff; /* White menu icon */
+    }
+
+    .fa-times {
+        color: #fff; /* White close icon */
+        font-size: 2rem;
+    }
+}

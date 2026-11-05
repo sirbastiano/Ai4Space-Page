@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizing Committee - AI4Space @ CVPR</title>
+    <link rel="stylesheet" href="style.css?v=20260604c">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
+    <style>
+        .committee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .committee-card {
+            perspective: 1000px;
+            height: 400px;
+        }
+        .flipper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .committee-card:hover .flipper {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            background-color: #fff;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+        .committee-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: block;
+        }
+        .bio-detail {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+<a href="../index.html" style="position:fixed;right:16px;bottom:16px;z-index:10000;padding:0.6em 1.1em;border-radius:999px;background:#ff3b3b;color:#fff;font-family:Roboto,sans-serif;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,0.35);">You're viewing the 2026 edition &middot; Go to CVPR 2027 &rarr;</a>
+
+    <div id="committee-app"> <!-- Ensure this ID matches the Vue mount point -->
+        <header style="max-height: 10em;"> <!-- Adjusted max-height -->
+            <nav class="navbar">
+                <div class="navbar-container">
+                    <a href="index.html" class="navbar-logo">AI4Space</a>
+                    <button class="menu-icon" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <ul class="nav-menu" id="primary-navigation" aria-hidden="true">
+                        <li class="nav-item"><a href="index.html" class="nav-links">Overview</a></li>
+                        <li class="nav-item"><a href="program.html" class="nav-links">Program</a></li>
+                        <li class="nav-item"><a href="call4paper.html" class="nav-links">Call for Papers</a></li>
+                        <li class="nav-item"><a href="challenge.html" class="nav-links">Challenge</a></li>
+                        <li class="nav-item"><a href="committee.html" class="nav-links">Organizing Committee</a></li>
+                        <li class="nav-item"><a href="index.html#contact" class="nav-links">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="hero">
+                <h1>Meet the Workshop Architects</h1>
+                <p>The dedicated team bringing AI4Space to CVPR.</p>
+            </div>
+        </header>
+
+        <main>
+            <section id="committee-members" class="committee-section">
+                <h2>Organizing Committee</h2>
+                <!-- Updated v-if condition to check for committeeMembers array and its length -->
+                <div v-if="committeeMembers && committeeMembers.length > 0" class="committee-grid">
+                    <div class="committee-card" v-for="member in committeeMembers" :key="member.name">
+                        <div class="flipper">
+                            <div class="card-front">
+                                <img :src="member.imageUrl" :alt="member.name + ' photo'" class="committee-img">
+                                <h3>{{ member.name }}</h3>
+                                <p class="role">{{ member.role }}</p>
+                                <p class="affiliation">{{ member.affiliation }}</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>{{ member.name }}</h4>
+                                <p class="role">{{ member.role }}</p>
+                                <p class="affiliation">{{ member.affiliation }}</p>
+                                <hr>
+                                <p class="bio-detail">{{ member.bio }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Added a loading state message -->
+                <div v-else-if="loading">
+                    <p>Loading committee members...</p>
+                </div>
+                <!-- Message for when no members are available after loading -->
+                <div v-else>
+                    <p>No committee members to display at this time. Please check back later.</p>
+                </div>
+            </section>
+
+        <section id="mentorship-program" class="committee-section" style="margin-top: 3em;">
+            <h2><i class="fas fa-handshake"></i> Mentorship Program</h2>
+            <div class="program-description" style="background: #f8f9fa; padding: 2em; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 1em;">
+                    The AI4Space workshop will feature a dedicated <strong>mentorship program</strong> designed to connect early-career researchers, students, and practitioners with senior experts in the AI and space research community.
+                </p>
+                <p style="font-size: 1.05em; line-height: 1.8; margin-bottom: 1.5em;">
+                    This program aims to foster meaningful connections and provide guidance on research directions, career development, and navigating the unique challenges of applying AI to space missions.
+                </p>
+                <h3 style="margin-top: 1.5em; color: #667eea;"><i class="fas fa-bullseye"></i> Program Objectives</h3>
+                <ul style="font-size: 1.05em; line-height: 2; margin-left: 1.5em;">
+                    <li><strong>Research Guidance:</strong> One-on-one discussions on project ideas, technical challenges, and research methodology</li>
+                    <li><strong>Career Development:</strong> Insights on academic and industry career paths in AI for space</li>
+                    <li><strong>Networking:</strong> Building lasting connections with leaders in the field</li>
+                    <li><strong>Collaboration Opportunities:</strong> Exploring potential research collaborations and project partnerships</li>
+                </ul>
+                <p style="margin-top: 1.5em; font-size: 1.05em; line-height: 1.8;">
+                    Mentorship sessions will take place during <strong>coffee breaks and lunch periods</strong>, providing an informal yet structured environment for engaging conversations.
+                </p>
+                <div style="background: #fff3cd; padding: 1.5em; border-left: 4px solid #ffc107; margin-top: 2em; border-radius: 5px;">
+                    <p style="margin: 0; font-size: 1.05em;"><strong><i class="fas fa-user-plus"></i> Call for Mentors:</strong> We actively invite senior researchers in the space-AI community to volunteer as mentors. If you're interested in contributing to the next generation of researchers, please <a href="index.html#contact" style="color: #00bcd4;">contact the organizing team</a>.</p>
+                </div>
+            </div>
+
+            <h2 class="program-committee-title">Program Committee <span>49 members</span></h2>
+            <ul class="committee-list">
+                    <li>Agata Wijata, KP Labs</li>
+                    <li>Felix Toffa, University of Sapienza Roma</li>
+                    <li>Francescopaolo Sica, University of the Bundeswehr Munich</li>
+                    <li>James Murphy, Réaltra Space Systems Engineering</li>
+                    <li>Cristopher Castro Traba, Ubotica</li>
+                    <li>Marcus Martens, University of Adelaide</li>
+                    <li>Ethan Elms, University of Adelaide</li>
+                    <li>Jakub Nalepa, KP Labs</li>
+                    <li>Carlos Collado Capell, EPFL</li>
+                    <li>Andrew Patrick Du, University of Adelaide</li>
+                    <li>Sofia Mcleod, University of Adelaide</li>
+                    <li>Chee Kheng Chng, University of Adelaide</li>
+                    <li>Mohsi Jawaid, University of Adelaide</li>
+                    <li>Sarah Dickinson, University of Adelaide</li>
+                    <li>Anh Vu Nguyen, University of Adelaide</li>
+                    <li>Yasir Latif, University of Adelaide</li>
+                    <li>Stefano Maurogiovanni</li>
+                    <li>Christian Ayala Lauroba</li>
+                    <li>Nikoloaos Dionelis, ESA</li>
+                    <li>Francesca Razzano, University of Napoli Parthenope</li>
+                    <li>Francesco Bosso</li>
+                    <li>Sanna Sandberg, ESA</li>
+                    <li>Manuel Delgado Blasck, ESA</li>
+                    <li>Andrea Mazzeo</li>
+                    <li>Nermine Hendy, RMIT</li>
+                    <li>Lorenzo Papa, ESA</li>
+                    <li>Luca Ostrogovich, University of Naples Federico II</li>
+                    <li>Matthew Whitley, Little Place Labs</li>
+                    <li>Parampuneet Kaur Thind, Little Place Labs</li>
+                    <li>Valerio Marsocci, ESA</li>
+                    <li>Alfredo Renga, University of Naples Federico II</li>
+                    <li>Silvia Ullo, University degli Studi del Sannio</li>
+                    <li>Nicole Rosi, ESA</li>
+                    <li>Luca Marini, Delft University of Technology</li>
+                    <li>Jian Guo, Delft University of Technology</li>
+                    <li>Pietro Nannipieri, University of Pisa</li>
+                    <li>Tobia Armando La Marca, Scuola Superiore Meridionale</li>
+                    <li>Domenico Barretta, University of Campania Studies "Luigi Vanvitelli"</li>
+                    <li>Federica Biancucci, TAS-I</li>
+                    <li>Alessio Auddino, TAS-I</li>
+                    <li>Gioele Zardini, MIT</li>
+                    <li>Matt Foutter, Stanford University</li>
+                    <li>James Harrison, Google Deepmind</li>
+                    <li>Daniel Morton, Stanford University</li>
+                    <li>Yuji Takubo, Stanford University</li>
+                    <li>Ali Jamali, Simon Fraser University</li>
+                    <li>Inder Pal Singh, University of Luxembourg</li>
+                    <li>Jose Angel Sosa Martinez, University of Luxembourg</li>
+                    <li>Vincent Gaudillière, Université de Lorraine</li>
+                    </ul>
+        </section>
+
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AI4Space Workshop @ CVPR. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Embedded Committee Data -->
+    <script>
+        const staticCommitteeData = [
+            {
+              "name": "Daniele Gammelli",
+              "affiliation": "Stanford University",
+              "role": "Primary Organizer",
+              "imageUrl": "https://stanfordasl.github.io//img/people/DanieleGammelli.jpg",
+              "bio": "Dr. Daniele Gammelli is a Postdoctoral Scholar in the Autonomous Systems Lab at Stanford University and a Research Fellow at the Center for Aerospace Autonomy Research at Stanford (CAESAR). He received his Ph.D. in Machine Learning and Mathematical Optimization from the Department of Technology, Management and Economics at the Technical University of Denmark.  Dr. Gammelli's research focuses on developing learning-based solutions that enable the deployment of future autonomous systems in complex environments, with an emphasis on large-scale robotic networks, aerospace systems, and future mobility systems.  His research interests include deep reinforcement learning, imitation learning, foundation models, graph representation learning, and control techniques leveraging these tools."
+            },
+          {
+            "name": "Gabriele Meoni",
+            "affiliation": "ESRIN, European Space Agency",
+            "role": "Secondary Organizer",
+            "imageUrl": "https://0.academia-photos.com/42414807/11430474/34762757/s200_gabriele.meoni.jpg",
+            "bio": "Gabriele Meoni is an Innovation Officer at the European Centre for Earth Observation (ESRIN), European Space Agency. He is part of the Advanced Concepts and Studies Office and the Φ-lab divisions. Gabriele received his Master\'s degree in Electronic Engineering and his PhD in information engineering from University of Pisa. His research interests include satellite onboard processing, orbital edge computing, AI for EO, and neuromorphic computing. He is currently Associate Editor of Astrodynamics (Springer) and was part of the program and scientific committees of various international conferences, including the 1st, 2nd, 3rd Workshop in AI for space -- of which he was also co-organizer for the 3rd edition-- FOSS4G 2022, Living Planet Symposium 2022, and Living Planet Symposium 2025. Gabriele received the ESA Corporate Team Award for his contribution to the Φ-Sat-1 mission, the PRIME 2018 Bronze Leaf paper Award, and DATE 2019 - University Booth - Best Demonstrator Award. He is also organized an ESA Workshop on Cognitive Cloud Computing in Space."
+          },
+          {
+            "name": "Roberto Del Prete",
+            "affiliation": "ESRIN, European Space Agency",
+            "role": "Organizer",
+            "imageUrl": "https://avatars.githubusercontent.com/u/71963566?v=4",
+            "bio": "Roberto Del Prete is Post Doc specializing in TinyML and edge computing. Expert in Piking Neural Netorks, he focuses on enhancing time-critical decision-making through cutting-edge AI solutions for both space missions and Earth monitoring. Currently Internal Research Fellow at Φ-Lab, his work focuses on developing innovative systems such as vision-based navigation and onboard AI solutions for analyzing Synthetic Aperture Radar (SAR) raw data. Del Prete\'s professional journey includes roles as a Visiting Researcher at both the European Space Agency\'s Φ-Lab and SmartSat CRC in Australia. Notably, he won the best presentation award at the AI4Space@CVPR workshop in 2024, and he has been a key contributor to high-impact projects like the Kanyini Mission. With more than 30 scientific publications, Del Prete\'s dedication to leveraging AI and remote sensing technologies aims to address global challenges in EO and space exploration."
+          },
+          {
+            "name": "Tat-Jun Chin",
+            "affiliation": "The University of Adelaide",
+            "role": "Organizer",
+            "imageUrl": "https://dtb.solutions/wp-content/uploads/2025/02/AIML_TJ_Chin-480x480.jpg",
+            "bio": "Tat-Jun Chin is SmartSat CRC Professorial Chair of Sentient Satellites at The University of Adelaide. His research interests include optimization for vision and learning, robotic vision and AI for space. His team won the Kelvins Satellite Pose Estimation Challenge twice (2019, 2021), and also placed 3rd in the NASA Space Robotics Challenge 2021 (autonomous rovers for space mining). Tat-Jun has significant experience in professional activities; major roles include Program Chair (ACCV\'22), Special Sessions Chair (ICIP\'23) and Tutorial Chair (CVPR\'21, ACCV\'18). He has also organized workshops/tutorials at CVPR (2021, 2020, 2018), RSS (2020, 2023), ICCV 2019, and ICRA 2020. Tat-Jun also pioneered the AI4Space workshop series, having led the event in 2021, 2022, and 2024."
+          },
+          {
+            "name": "Djamila Aouada",
+            "affiliation": "University of Luxembourg",
+            "role": "Organizer",
+            "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRJ6AhowCONcmMsWetxi2oG5ZpGN84eW1VgXDu3DJjv9QxEYKzzmEIok-Ir7ejiJk2pkocpB4&s=10",
+            "bio": "Djamila Aouada is Senior Research Scientist and Assistant Professor at the Interdisciplinary Centre for Security, Reliability, and Trust (SnT) of the University of Luxembourg. She is Head of the Computer Vision, Imaging and Machine Intelligence (CVI2) research group, and co-head of the Zero-G Space Lab. Her research interests include 3D vision (shape modelling, RGB-D data) and multi-sensor fusion. Djamila served as Chair of SHARP Workshops (ECCV\'20, CVPR\'21, CVPR\'22, ICCV\'23), Chair of SPARK at ICIP\'21, Area Chair at 3DV\'20 and 3DV\'22, Program Chair at 3DV\'21, General Chair at RTIP2R\'22, Co-organizer of AI4Space at ECCV\'22, and Program Chair at EUVIP\'23."
+          },
+          {
+            "name": "Rajat Talak",
+            "affiliation": "Massachusetts Institute of Technology",
+            "role": "Organizer",
+            "imageUrl": "https://www.rajattalak.com/images/9707561918.jpg",
+            "bio": "Rajat Talak is a Research Scientist in the Department of Aeronautics and Astronautics at the Massachusetts Institute of Technology. Prior to this, he was a Postdoctoral Associate in the Department of Aeronautics and Astronautics, at the Massachusetts Institute Technology. He received his PhD from the Laboratory of Information and Decision Systems at the Massachusetts Institute Technology in 2020. His research interests are spatial robot perception, certifiable models, domain adaptation, and networked autonomy. He is the recipient of ACM MobiHoc 2018 Best Paper award, Gold medal for his master\'s thesis, and also co-authored a monograph on the topic of information freshness. He is actively engaged on the topic of safe autonomy and has recently organized a workshop on the topic (Towards Safe Autonomy: New Challenges and Trends in Robot Perception) at the Robotics: Science and Systems Conference in 2023."
+          },
+          {
+            "name": "Arunkumar Rathinam",
+            "affiliation": "University of Luxembourg",
+            "role": "Organizer",
+            "imageUrl": "https://media.licdn.com/dms/image/v2/C5603AQEXyHGZAwZlhw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1521003185275?e=2147483647&v=beta&t=uEfZeNiWqmPxghrvoQQfP1tInk1VN_eEEKBMLx6IAuk",
+            "bio": "Arunkumar Rathinam is a Research Scientist at the Interdisciplinary Centre for Security, Reliability, and Trust (SnT) at the University of Luxembourg. He is a member of the Computer Vision, Imaging and Machine Intelligence (CVI2) research group within SnT. Before joining SnT, he was a Postdoctoral Associate at the Surrey Space Center, University of Surrey, UK. He earned his PhD from the University of New South Wales, Sydney, Australia, in 2019. His research focuses on developing machine learning algorithms for vision-based navigation for proximity operations in space. He has also created several open-source benchmark datasets, including SPARK 2022, SPARK 2024, and SPADES, aimed at advancing data driven approaches for space applications. He has also served as a co-organizer of the previous edition of AI4Space/SPARK challenge at ECCV 2022 and CVPR 2024."
+          }
+        ];
+    </script>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- committee_app.js will now use staticCommitteeData -->
+    <script src="committee_app.js"></script>
+    <script src="app.js?v=20260604c"></script> <!-- Added app.js -->
+</body>
+</html>

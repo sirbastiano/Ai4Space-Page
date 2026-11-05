@@ -1,0 +1,39 @@
+[
+  {
+    "name": "Gabriele Meoni",
+    "affiliation": "ESRIN, European Space Agency",
+    "role": "Primary Organizer",
+    "bio": "Gabriele Meoni is an Innovation Officer at the European Centre for Earth Observation (ESRIN), European Space Agency. He is part of the Advanced Concepts and Studies Office and the Φ-lab divisions. Gabriele received his Master's degree in Electronic Engineering and his PhD in information engineering from University of Pisa. His research interests include satellite onboard processing, orbital edge computing, AI for EO, and neuromorphic computing. He is currently Associate Editor of Astrodynamics (Springer) and was part of the program and scientific committees of various international conferences, including the 1st, 2nd, 3rd Workshop in AI for space -- of which he was also co-organizer for the 3rd edition-- FOSS4G 2022, Living Planet Symposium 2022, and Living Planet Symposium 2025. Gabriele received the ESA Corporate Team Award for his contribution to the Φ-Sat-1 mission, the PRIME 2018 Bronze Leaf paper Award, and DATE 2019 - University Booth - Best Demonstrator Award. He is also organized an ESA Workshop on Cognitive Cloud Computing in Space."
+  },
+  {
+    "name": "Daniele Gammelli",
+    "affiliation": "Stanford University",
+    "role": "Primary Organizer",
+    "bio": "Dr. Daniele Gammelli is a Postdoctoral Scholar at Stanford University and a Research Fellow at both the Center for Aerospace Autonomy Research (CAESAR) and the Center for Automotive Research (CARS) at Stanford. He received his Ph.D. in Machine Learning and Mathematical Optimization from the Department of Technology, Management and Economics at the Technical University of Denmark. Dr. Gammelli's research focuses on developing algorithmic foundations and system-level methodologies that enable AI-powered autonomous systems to operate safely, efficiently, and reliably in complex, unstructured, and high-stakes environments, with a particular emphasis on aerospace autonomy and large-scale robotic networks. He has served as a workshop program chair at Robotics: Science and Systems and at conferences in cyber-physical systems and the Internet of Things, and has co-organized workshops and tutorials at major venues, including the IEEE Intelligent Transportation Systems Conference. At Stanford, Dr. Gammelli has led the organization of the Annual Meeting of the Center for Aerospace Autonomy Research in 2024 and 2025, bringing together experts from academia, industry, and government to advance research and collaboration in aerospace autonomy."
+  },
+  {
+    "name": "Tat-Jun Chin",
+    "affiliation": "The University of Adelaide",
+    "bio": "Tat-Jun Chin is SmartSat CRC Professorial Chair of Sentient Satellites at The University of Adelaide. His research interests include optimization for vision and learning, robotic vision and AI for space. His team won the Kelvins Satellite Pose Estimation Challenge twice (2019, 2021), and also placed 3rd in the NASA Space Robotics Challenge 2021 (autonomous rovers for space mining). Tat-Jun has significant experience in professional activities; major roles include Program Chair (ACCV'22), Special Sessions Chair (ICIP'23) and Tutorial Chair (CVPR'21, ACCV'18). He has also organized workshops/tutorials at CVPR (2021, 2020, 2018), RSS (2020, 2023), ICCV 2019, and ICRA 2020. Tat-Jun also pioneered the AI4Space workshop series, having led the event in 2021, 2022, and 2024."
+  },
+  {
+    "name": "Djamila Aouada",
+    "affiliation": "University of Luxembourg",
+    "bio": "Djamila Aouada is Senior Research Scientist and Assistant Professor at the Interdisciplinary Centre for Security, Reliability, and Trust (SnT) of the University of Luxembourg. She is Head of the Computer Vision, Imaging and Machine Intelligence (CVI2) research group, and co-head of the Zero-G Space Lab. Her research interests include 3D vision (shape modelling, RGB-D data) and multi-sensor fusion. Djamila served as Chair of SHARP Workshops (ECCV'20, CVPR'21, CVPR'22, ICCV'23), Chair of SPARK at ICIP'21, Area Chair at 3DV'20 and 3DV'22, Program Chair at 3DV'21, General Chair at RTIP2R'22, Co-organizer of AI4Space at ECCV'22, and Program Chair at EUVIP'23."
+  },
+  {
+    "name": "Rajat Talak",
+    "affiliation": "Massachusetts Institute of Technology",
+    "bio": "Rajat Talak is a Research Scientist in the Department of Aeronautics and Astronautics at the Massachusetts Institute of Technology. Prior to this, he was a Postdoctoral Associate in the Department of Aeronautics and Astronautics, at the Massachusetts Institute Technology. He received his PhD from the Laboratory of Information and Decision Systems at the Massachusetts Institute Technology in 2020. His research interests are spatial robot perception, certifiable models, domain adaptation, and networked autonomy. He is the recipient of ACM MobiHoc 2018 Best Paper award, Gold medal for his master's thesis, and also co-authored a monograph on the topic of information freshness. He is actively engaged on the topic of safe autonomy and has recently organized a workshop on the topic (Towards Safe Autonomy: New Challenges and Trends in Robot Perception) at the Robotics: Science and Systems Conference in 2023."
+  },
+  {
+    "name": "Roberto Del Prete",
+    "affiliation": "ESRIN, European Space Agency",
+    "bio": "Roberto Del Prete is an Internal Research Fellow at Φ-Lab, ESRIN. His research focuses on TinyML and edge computing, vision-based navigation, and onboard AI for the analysis of Synthetic Aperture Radar (SAR) raw data. He received the Best Presentation Award at the AI4Space@CVPR 2024 workshop and his poster featured in RSIP Vision's Computer Vision News (July 2024 issue). He has been a key contributor to high-impact ESA initiatives, including the Kanyini Mission, and has coauthored over 40 scientific publications."
+  },
+  {
+    "name": "Arunkumar Rathinam",
+    "affiliation": "University of Luxembourg",
+    "bio": "Arunkumar Rathinam is a Research Scientist at the Interdisciplinary Centre for Security, Reliability, and Trust (SnT) at the University of Luxembourg. He is a member of the Computer Vision, Imaging and Machine Intelligence (CVI2) research group within SnT. Before joining SnT, he was a Postdoctoral Associate at the Surrey Space Center, University of Surrey, UK. He earned his PhD from the University of New South Wales, Sydney, Australia, in 2019. His research focuses on developing machine learning algorithms for vision-based navigation for proximity operations in space. He has also created several open-source benchmark datasets, including SPARK 2022, SPARK 2024, and SPADES, aimed at advancing data driven approaches for space applications. He has also served as a co-organizer of the previous edition of AI4Space/SPARK challenge at ECCV 2022 and CVPR 2024."
+  }
+]

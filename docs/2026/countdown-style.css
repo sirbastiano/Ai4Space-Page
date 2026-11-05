@@ -1,0 +1,171 @@
+:root {
+    --color-light-blue: #8486a9;
+    --color-red: rgb(251, 96, 135);
+    --color-white: rgb(255, 255, 255);
+    --color-dark-blue: #343650;
+    --color-very-dark-blue: #1e1f29;
+    --color-black: #191a24;
+}
+
+.countdown-container {
+    display: flex; /* Use flexbox for centering */
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically if container has height */
+    margin-top: 20px; /* Add some space above the countdown */
+    margin-bottom: 20px; /* Add some space below the countdown */
+    z-index: 25; /* Ensure it's above other elements */
+    position: relative; /* Needed for z-index to work as expected */
+}
+
+.countdown-caption {
+    font-size: 1.5em; /* Adjusted from 1.3rem */
+    color: var(--color-white);
+    text-transform: uppercase;
+    text-align: center;
+    width: 90%;
+    margin-bottom: 1.5em; /* Adjusted from 3em */
+    letter-spacing: .3em; /* Adjusted from .4em */
+    font-family: 'Montserrat', Arial, sans-serif; /* Match hero font */
+    text-shadow: 0 0 8px rgba(0,0,0,0.5); /* Add text shadow for readability */
+}
+
+.countdown {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(80px, 140px)); /* Responsive column size */
+    gap: 15px; /* Space between items */
+    justify-content: center; /* Center grid items if they don't fill width */
+    width: auto; /* Adjust width based on content */
+    max-width: 600px; /* Max width of the countdown */
+    margin: 0 auto; /* Center the countdown block */
+}
+
+.time-wrapper {
+    text-align: center; /* Center the metric text below the number */
+}
+
+.time-content {
+    height: 90px; /* Adjusted height */
+    box-shadow: 0px 6px 2px -2px rgb(25, 26, 36, 0.7);
+    background-color: var(--color-very-dark-blue);
+    border-radius: 8px; /* Slightly larger radius */
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0.8em; /* Space between number and metric */
+    display: flex; /* For centering the number */
+    align-items: center; /* Vertically center */
+    justify-content: center; /* Horizontally center */
+}
+
+.time {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-dark-blue);
+    position: relative;
+}
+
+/* Visual effect for the flip card illusion - top half */
+.time::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0; /* Ensure it covers the left edge */
+    right: 0; /* Ensure it covers the right edge */
+    width: 100%;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 0.1); /* Darker shade for top half */
+    z-index: 1; /* Above the number but below rings if any */
+    border-bottom: 1px solid rgba(0,0,0,0.2); /* Line in the middle */
+}
+
+.time > span {
+    display: block;
+    color: var(--color-red);
+    font-family: 'Red Hat Text', 'Montserrat', sans-serif; /* Added Montserrat as fallback */
+    font-size: 3em; /* Adjusted from 2.5em */
+    font-weight: 700;
+    z-index: 2; /* Above the ::before pseudo-element */
+    position: relative; /* Ensure z-index applies */
+}
+
+.rings {
+    position: absolute;
+    top: 50%;
+    left: 0; /* Align to the left edge of .time-content */
+    right: 0; /* Align to the right edge of .time-content */
+    width: 100%;
+    height: 2px;
+    background-color: rgba(0, 0, 0, 0.25); /* Darker line */
+    z-index: 3; /* Above number and ::before */
+}
+
+.rings::before, .rings::after {
+    content: "";
+    position: absolute;
+    width: 8px; /* Slightly larger rings */
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-black); /* Match darkest background */
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically on the line */
+}
+
+.rings::before {
+    left: -4px; /* Adjust to sit on the edge */
+}
+
+.rings::after {
+    right: -4px; /* Adjust to sit on the edge */
+}
+
+.metric {
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--color-light-blue);
+    font-size: 0.75em; /* Adjusted from .6rem */
+    letter-spacing: 2px; /* Adjusted from 3px */
+    font-family: 'Montserrat', Arial, sans-serif; /* Match hero font */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .countdown-caption {
+        font-size: 1.2em;
+        margin-bottom: 1em;
+    }
+    .countdown {
+        grid-template-columns: repeat(4, minmax(60px, 100px));
+        gap: 10px;
+    }
+    .time-content {
+        height: 70px;
+    }
+    .time > span {
+        font-size: 2.5em;
+    }
+    .metric {
+        font-size: 0.65em;
+    }
+}
+
+@media (max-width: 480px) {
+    .countdown-caption {
+        font-size: 1em;
+    }
+    .countdown {
+        grid-template-columns: repeat(2, minmax(80px, 120px)); /* 2x2 grid on small screens */
+        row-gap: 20px; /* Add gap between rows */
+    }
+    .time-content {
+        height: 80px; /* Adjust for potentially larger text or to maintain shape */
+    }
+    .time > span {
+        font-size: 2.8em;
+    }
+    .metric {
+        font-size: 0.7em;
+    }
+}

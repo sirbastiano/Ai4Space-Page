@@ -32,6 +32,37 @@
             box-shadow: 0 10px 24px rgba(248, 87, 166, 0.35);
         }
 
+        .tentative-stamp {
+            margin: 0 auto 0.6em;
+            padding: 0.1em 0.45em;
+            width: fit-content;
+            border: 0.08em solid #ff3b3b;
+            border-radius: 0.12em;
+            color: #ff3b3b;
+            background: rgba(0, 0, 0, 0.35);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(3rem, 11vw, 8rem);
+            line-height: 1.1;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transform: rotate(-6deg);
+            text-shadow: 0 0 18px rgba(255, 59, 59, 0.45);
+        }
+
+        .tentative-note {
+            text-align: center;
+            color: #ffd6d6;
+            font-size: 1.05em;
+            margin: 0 auto 1.5em;
+            text-shadow: 0 0 8px rgba(0,0,0,0.8);
+        }
+
+        .cta-button.last-edition-button {
+            background: transparent;
+            border: 2px solid #fff;
+        }
+
         @media (max-width: 768px) {
             .main-hero-title {
                 font-size: 2em;
@@ -336,6 +367,8 @@
 
                 <!-- New Countdown Timer -->
                 <div class="countdown-container" style="margin-top: 15em;">
+                    <div class="tentative-stamp" role="note">Tentative</div>
+                    <p class="tentative-note">The program, speakers and dates for CVPR 2027 are provisional and may change.</p>
                     <h1 class="main-hero-title">🚀 5th AI4Space Workshop</h1>
                     <h3 style="font-size: larger;" class="main-hero-title">(In conjunction with CVPR 2027)</h3>
                     <h2 class="countdown-caption">Submission Deadline</h2>
@@ -397,6 +430,7 @@
                     <div class="text-center" style="margin-bottom:166px; display: flex; gap: 1em; flex-wrap: wrap; justify-content: center;">
                         <a href="call4paper.html" class="cta-button">Call for Papers</a>
                         <a href="https://openreview.net/group?id=thecvf.com/CVPR/2027/Workshop/AI4Space" class="cta-button" target="_blank" rel="noopener noreferrer">Submit Paper</a>
+                        <a href="2026/index.html" class="cta-button last-edition-button">Explore our last edition</a>
                     </div>
                     <div class="hero-countdown center-countdown" id="hero-countdown"></div>
                 </div>
