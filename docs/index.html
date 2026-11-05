@@ -33,27 +33,24 @@
         }
 
         .tentative-stamp {
-            margin: 0 auto 0.6em;
-            padding: 0.1em 0.45em;
+            margin: 0 auto 0.5em;
+            padding: 0.2em 0.7em;
             width: fit-content;
-            border: 0.08em solid #ff3b3b;
-            border-radius: 0.12em;
-            color: #ff3b3b;
-            background: rgba(0, 0, 0, 0.35);
+            border: 2px solid rgba(255, 138, 128, 0.85);
+            border-radius: 6px;
+            color: #ff8a80;
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
-            font-size: clamp(3rem, 11vw, 8rem);
-            line-height: 1.1;
-            letter-spacing: 0.08em;
+            font-size: clamp(1.4rem, 4vw, 2.4rem);
+            line-height: 1.2;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            transform: rotate(-6deg);
-            text-shadow: 0 0 18px rgba(255, 59, 59, 0.45);
         }
 
         .tentative-note {
             text-align: center;
-            color: #ffd6d6;
-            font-size: 1.05em;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95em;
             margin: 0 auto 1.5em;
             text-shadow: 0 0 8px rgba(0,0,0,0.8);
         }
@@ -66,6 +63,10 @@
         @media (max-width: 768px) {
             .main-hero-title {
                 font-size: 2em;
+            }
+
+            .tentative-stamp {
+                margin-top: 5.5rem;
             }
 
             .deadline-extension-banner {
