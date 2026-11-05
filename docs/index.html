@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="landing.css?v=20261105b">
+    <link rel="stylesheet" href="landing.css?v=focus1">
 </head>
 <body class="landing">
 
@@ -30,11 +30,8 @@
         </div>
     </nav>
 
-    <header class="hero">
-        <canvas id="hero-canvas" aria-hidden="true"></canvas>
-        <div class="hero-scanlines" aria-hidden="true"></div>
-
-        <div class="hero-grid">
+    <header class="intro">
+        <div class="intro-inner">
             <div class="hero-copy">
                 <div class="tentative-stamp" role="note">Tentative</div>
                 <p class="tentative-note">The program, speakers and dates for CVPR 2027 are provisional and may change.</p>
@@ -59,19 +56,47 @@
                     <a href="2026/index.html" class="btn btn-ghost">Explore our last edition</a>
                 </div>
             </div>
-
-            <div class="hero-stage-wrap">
-                <div class="hero-stage" aria-hidden="true"></div>
-                <div class="channel-bar" role="group" aria-label="Simulation channels">
-                    <button class="channel-btn active" type="button" aria-pressed="true">CH-1<strong>Mars surface ops</strong></button>
-                    <button class="channel-btn" type="button" aria-pressed="false">CH-2<strong>Autonomous GNC</strong></button>
-                    <button class="channel-btn" type="button" aria-pressed="false">CH-3<strong>Earth response</strong></button>
-                </div>
-            </div>
         </div>
-
-        <a href="#key-dates" class="scroll-cue">▼ SCROLL</a>
+        <a href="#scenes" class="scroll-cue">▼ SCROLL TO EXPLORE</a>
     </header>
+
+    <section class="scenes" id="scenes" aria-label="Simulated mission scenes">
+        <div class="scenes-pin">
+            <canvas id="hero-canvas" aria-hidden="true"></canvas>
+            <div class="hero-scanlines" aria-hidden="true"></div>
+            <nav class="scene-rail" aria-label="Scenes">
+                <button type="button" class="active" aria-current="step"><span>01</span> Mars</button>
+                <button type="button" aria-current="false"><span>02</span> Launch</button>
+                <button type="button" aria-current="false"><span>03</span> Earth</button>
+            </nav>
+        </div>
+        <div class="scene-panels">
+            <article class="scene-panel">
+                <div class="scene-card">
+                    <p class="sec-label">01 / Mars surface ops</p>
+                    <h2>Robots that explore <em>together</em>.</h2>
+                    <p>Three rovers and a scout helicopter share one map, split the unexplored frontier between them and send the nearest rover to every promising sample site.</p>
+                    <p class="scene-topics">AI for space robotics and autonomous operations</p>
+                </div>
+            </article>
+            <article class="scene-panel">
+                <div class="scene-card">
+                    <p class="sec-label">02 / Autonomous GNC</p>
+                    <h2>Rockets that <em>fly themselves home</em>.</h2>
+                    <p>The upper stage lights while still attached, the booster flips and returns to land, and the upper stage climbs from a parking orbit into its transfer orbit.</p>
+                    <p class="scene-topics">Vision and learning for guidance, navigation, and control</p>
+                </div>
+            </article>
+            <article class="scene-panel">
+                <div class="scene-card">
+                    <p class="sec-label">03 / Earth response</p>
+                    <h2>Constellations that <em>respond</em> to a changing Earth.</h2>
+                    <p>Satellites detect floods and wildfires onboard, relay the alert over inter-satellite links, re-task a neighbour to confirm and downlink it to the nearest ground station.</p>
+                    <p class="scene-topics">Distributed AI for mission operations and adaptive sensing</p>
+                </div>
+            </article>
+        </div>
+    </section>
 
     <main>
 
@@ -107,13 +132,6 @@
                             vision-based navigation, onboard learning, sim-to-real transfer for robotics, multi-sensor fusion for Earth observation,
                             and AI-driven mission planning—shaping the future of intelligent space exploration.
                         </p>
-                        <div class="topic-tags">
-                            <span>Vision-based navigation</span>
-                            <span>Onboard learning</span>
-                            <span>Sim-to-real robotics</span>
-                            <span>Multi-sensor Earth observation</span>
-                            <span>AI mission planning</span>
-                        </div>
                     </div>
                     <aside class="panel">
                         <ul class="stat-list">
@@ -128,9 +146,88 @@
             </div>
         </section>
 
+        <section id="focus" class="section">
+            <div class="section-inner fade-in-section">
+                <p class="sec-label">// 03 — Areas of focus</p>
+                <h2>Areas of Focus</h2>
+                <p class="focus-intro">AI4Space 2027 invites work across the full pipeline, from onboard hardware to mission design. Two areas of particular growth get a spotlight this year:</p>
+                <div class="focus-spotlights">
+                    <article class="panel focus-spotlight">
+                        <span class="focus-tag">New in 2027</span>
+                        <h3>Agentic AI</h3>
+                        <p>For autonomous mission orchestration and the automation of space system and subsystem design, reflecting emerging trends and growing interest within the space community.</p>
+                    </article>
+                    <article class="panel focus-spotlight">
+                        <span class="focus-tag">New in 2027</span>
+                        <h3>Emerging computing and sensing</h3>
+                        <p>Integrating AI with new computing paradigms and sensing technologies, such as neuromorphic computing and sensing, to enable new capabilities and applications for future space missions.</p>
+                    </article>
+                </div>
+                <h3 class="focus-subhead">Topics</h3>
+                <div class="focus-grid">
+                    <article class="panel focus-card spot">
+                        <span class="focus-num">01<em>Spotlight</em></span>
+                        <h3>Agentic AI for mission and space system design</h3>
+                        <p>Tool-using agents for systems engineering, multi-agent design workflows, requirements generation and traceability, automated design-space exploration, and agent-assisted verification and validation.</p>
+                    </article>
+                    <article class="panel focus-card spot">
+                        <span class="focus-num">02<em>Spotlight</em></span>
+                        <h3>Emerging computing paradigms and sensing technologies</h3>
+                        <p>Neuromorphic computing, event-based sensing, and in-memory computing.</p>
+                    </article>
+                    <article class="panel focus-card">
+                        <span class="focus-num">03</span>
+                        <h3>Foundation and multimodal models for space data</h3>
+                        <p>Multimodal reasoning across imagery, telemetry, geospatial metadata, and scientific measurements; pretraining on EO and astronomy datasets; and evaluation protocols.</p>
+                    </article>
+                    <article class="panel focus-card">
+                        <span class="focus-num">04</span>
+                        <h3>Distributed AI for mission operations and adaptive sensing</h3>
+                        <p>Federated and distributed learning, tip-and-cue architectures, event-driven operations, and autonomous mission orchestration.</p>
+                    </article>
+                    <article class="panel focus-card">
+                        <span class="focus-num">05</span>
+                        <h3>Vision and learning for guidance, navigation, and control</h3>
+                        <p>Rendezvous and docking, pose estimation, entry, descent, and landing (EDL), and space object tracking.</p>
+                    </article>
+                    <article class="panel focus-card">
+                        <span class="focus-num">06</span>
+                        <h3>AI for space robotics and autonomous operations</h3>
+                        <p>Perception, planning, control, multi-robot coordination, and learning-based dynamics modeling.</p>
+                    </article>
+                    <article class="panel focus-card">
+                        <span class="focus-num">07</span>
+                        <h3>Machine learning for astronomy and planetary science</h3>
+                        <p>Planetary mapping, astronomical image analysis, anomaly detection, risk-aware decision-making for space exploration, and physics-informed modeling.</p>
+                    </article>
+                    <article class="panel focus-card">
+                        <span class="focus-num">08</span>
+                        <h3>Edge AI under tight compute and energy constraints</h3>
+                        <p>Quantization, pruning, neural architecture search, and parameter-efficient adaptation of foundation models.</p>
+                    </article>
+                    <article class="panel focus-card">
+                        <span class="focus-num">09</span>
+                        <h3>Onboard AI computing platforms</h3>
+                        <p>AI accelerators, hardware–software co-design, and integration with flight computing systems.</p>
+                    </article>
+                    <article class="panel focus-card">
+                        <span class="focus-num">10</span>
+                        <h3>Trustworthy and resilient AI for space</h3>
+                        <p>Uncertainty estimation, out-of-distribution detection, explainability, fault diagnosis and recovery, and safety assurance.</p>
+                    </article>
+                    <article class="panel focus-card">
+                        <span class="focus-num">11</span>
+                        <h3>Datasets, benchmarks, and data-centric AI for space</h3>
+                        <p>Automated labeling, synthetic data generation, adaptation across sensors and missions, bridging the sim-to-real gap, and benchmark development.</p>
+                    </article>
+                </div>
+                <a href="call4paper.html" class="btn btn-ghost focus-cta">Full call for papers →</a>
+            </div>
+        </section>
+
         <section id="speakers" class="section">
             <div class="section-inner fade-in-section">
-                <p class="sec-label">// 03 — Keynotes</p>
+                <p class="sec-label">// 04 — Keynotes</p>
                 <h2>Keynote Speakers</h2>
                 <div class="speakers-grid">
                     <article class="panel speaker-card">
@@ -140,8 +237,7 @@
                             <p class="speaker-role">Technical Fellow in AI and Co-head of the Artificial Intelligence Group, NASA Jet Propulsion Laboratory</p>
                             <p class="speaker-talk">Distributed Autonomy in Space Operations and Earth Observation</p>
                             <p class="bio-preview">Dr. Steve Chien is a Technical Fellow in Artificial Intelligence and Co-head of the Artificial Intelligence Group at the Jet Propulsion Laboratory (JPL), California Institute of Technology, with decades of experience developing and deploying AI for space missions. His work on autonomous science, automated planning and scheduling, and intelligent spacecraft operations, including Earth Observing One, ESA's Rosetta Orbiter, and NASA's Mars 2020 mission, provides a strong perspective on the transition of AI from research to operational space systems and on enabling increasingly autonomous spacecraft.</p>
-                            <button class="bio-toggle" type="button" aria-expanded="false">Expand</button>
-                            <div class="speaker-actions"><a href="https://ai.jpl.nasa.gov/public/people/chien/" target="_blank" rel="noopener noreferrer" class="speaker-link">Website ↗</a></div>
+                            <div class="speaker-actions"><button class="bio-toggle" type="button" aria-expanded="false">Expand</button><a href="https://ai.jpl.nasa.gov/public/people/chien/" target="_blank" rel="noopener noreferrer" class="speaker-link">Website ↗</a></div>
                         </div>
                     </article>
                     <article class="panel speaker-card">
@@ -151,8 +247,7 @@
                             <p class="speaker-role">Assistant Professor, Politecnico di Milano (DART Lab)</p>
                             <p class="speaker-talk">Disruptive Computing and Sensing Paradigms for EdgeAI in Space</p>
                             <p class="bio-preview">Dr. Paolo Panicucci is an Assistant Professor at Politecnico di Milano and a researcher at the Deep-space Astrodynamics Research and Technology Laboratory (DART Lab), specializing in computer vision, vision-based navigation, and spacecraft autonomy. His experience in autonomous GNC and projects such as EXTREMA and LUMIO brings expertise in AI-enabled perception and navigation, while his talk on ESA ION-V will introduce neuromorphic computing and sensing for Earth Observation.</p>
-                            <button class="bio-toggle" type="button" aria-expanded="false">Expand</button>
-                            <div class="speaker-actions"><a href="https://dart.polimi.it/member/?p=paolo+panicucci" target="_blank" rel="noopener noreferrer" class="speaker-link">Website ↗</a></div>
+                            <div class="speaker-actions"><button class="bio-toggle" type="button" aria-expanded="false">Expand</button><a href="https://dart.polimi.it/member/?p=paolo+panicucci" target="_blank" rel="noopener noreferrer" class="speaker-link">Website ↗</a></div>
                         </div>
                     </article>
                     <article class="panel speaker-card">
@@ -162,8 +257,7 @@
                             <p class="speaker-role">Chief Technology Officer, Redwire</p>
                             <p class="speaker-talk">Automating Satellite Manufacturing and Design</p>
                             <p class="bio-preview">Al Tadros is the CTO of Redwire. With over 30 years of experience in aerospace engineering and leadership, he specializes in AI-enabled autonomy, machine vision, robotics, and rendezvous and proximity operations. Previously, he served as Chief Growth Officer and Executive Vice President of Space Infrastructure at Redwire and Vice President of Space Infrastructure and Civil Space at Maxar Technologies, contributing to 13 space missions and advancing in-space manufacturing, satellite servicing, and autonomous systems. He leads Redwire’s involvement in Stanford University’s Center for AEroSpace Autonomy Research, focusing on AI-driven autonomous reasoning in space. He has served on national space technology advisory boards, holds patents in attitude control systems, and contributed to early telerobotics research for the International Space Station.</p>
-                            <button class="bio-toggle" type="button" aria-expanded="false">Expand</button>
-                            <div class="speaker-actions"><a href="https://aiaa.org/people/al-tadros/" target="_blank" rel="noopener noreferrer" class="speaker-link">Website ↗</a></div>
+                            <div class="speaker-actions"><button class="bio-toggle" type="button" aria-expanded="false">Expand</button><a href="https://aiaa.org/people/al-tadros/" target="_blank" rel="noopener noreferrer" class="speaker-link">Website ↗</a></div>
                         </div>
                     </article>
                     <article class="panel speaker-card">
@@ -173,8 +267,7 @@
                             <p class="speaker-role">Associate Professor, Georgia Tech | Director, Planetary Robotics Lab</p>
                             <p class="speaker-talk">AI for Risk-Aware Decision Making in Space Robotics</p>
                             <p class="bio-preview">Dr. Masahiro (Hiro) Ono is an Associate Professor at the School of Aerospace Engineering at Georgia Tech and Director of the Planetary Robotics Lab (PRL). Prior to joining Georgia Tech, he spent 13 years at NASA’s JPL, where he developed autonomous navigation algorithms for the Perseverance Mars rover, led the development of Exobiology Extant Life Surveyor, a snake-like robot designed to explore the potentially habitable subsurface ocean of Enceladus, and led multiple research initiatives in AI and robotics. He also served as Supervisor of JPL’s Robotic Surface Mobility Group and as a rover operator for Perseverance.</p>
-                            <button class="bio-toggle" type="button" aria-expanded="false">Expand</button>
-                            <div class="speaker-actions"><a href="https://ae.gatech.edu/directory/person/masahiro-hiro-ono" target="_blank" rel="noopener noreferrer" class="speaker-link">Website ↗</a></div>
+                            <div class="speaker-actions"><button class="bio-toggle" type="button" aria-expanded="false">Expand</button><a href="https://ae.gatech.edu/directory/person/masahiro-hiro-ono" target="_blank" rel="noopener noreferrer" class="speaker-link">Website ↗</a></div>
                         </div>
                     </article>
                 </div>
@@ -183,7 +276,7 @@
 
         <section id="panelists" class="section">
             <div class="section-inner fade-in-section">
-                <p class="sec-label">// 04 — Fishbowl session</p>
+                <p class="sec-label">// 05 — Fishbowl session</p>
                 <h2>Fishbowl Speakers</h2>
                 <div class="panelists-grid">
                     <div class="panel panelist-card">
@@ -204,7 +297,7 @@
 
         <section id="challenge" class="section">
             <div class="section-inner fade-in-section">
-                <p class="sec-label">// 05 — Challenge</p>
+                <p class="sec-label">// 06 — Challenge</p>
                 <h2>The SPARK Challenge</h2>
                 <div class="panel challenge-panel">
                     <div>
@@ -225,7 +318,7 @@
 
         <section id="sponsors" class="section">
             <div class="section-inner fade-in-section">
-                <p class="sec-label">// 06 — Support</p>
+                <p class="sec-label">// 07 — Support</p>
                 <h2>Our Sponsors</h2>
                 <div class="sponsors-grid">
                     <a href="https://setantaspace.com/" target="_blank" rel="noopener noreferrer" class="sponsor-card"><img src="logos/setanta-space.png" alt="Setanta Space logo"></a>
@@ -237,7 +330,7 @@
 
         <section id="contact" class="section">
             <div class="section-inner fade-in-section">
-                <p class="sec-label">// 07 — Comms</p>
+                <p class="sec-label">// 08 — Comms</p>
                 <h2>Get In Touch</h2>
                 <div class="panel contact-panel">
                     <p>Questions? Ideas? Want to collaborate? Reach out to the AI4Space organizing team.</p>
@@ -253,11 +346,11 @@
 
     <script src="app.js?v=20260604c"></script>
     <script src="countdown.js"></script>
-    <script src="hero-sim.js?v=20261105f"></script>
+    <script src="hero-sim.js?v=scroll3"></script>
     <script>
         document.querySelectorAll('.bio-toggle').forEach(btn => {
             btn.addEventListener('click', () => {
-                const bio = btn.previousElementSibling;
+                const bio = btn.closest('.speaker-body').querySelector('.bio-preview');
                 const expanded = bio.classList.toggle('expanded');
                 btn.textContent = expanded ? 'Collapse' : 'Expand';
                 btn.setAttribute('aria-expanded', expanded);

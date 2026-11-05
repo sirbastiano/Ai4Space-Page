@@ -5,13 +5,14 @@
 (function () {
     'use strict';
 
-    const hero = document.querySelector('.hero');
+    const block = document.querySelector('.scenes');
+    const pin = document.querySelector('.scenes-pin');
     const canvas = document.getElementById('hero-canvas');
-    const stageEl = document.querySelector('.hero-stage');
-    if (!hero || !canvas || !stageEl || !canvas.getContext) return;
+    if (!block || !pin || !canvas || !canvas.getContext) return;
 
     const ctx = canvas.getContext('2d');
-    const buttons = Array.from(document.querySelectorAll('.channel-btn'));
+    const panels = Array.from(document.querySelectorAll('.scene-panel'));
+    const ticks = Array.from(document.querySelectorAll('.scene-rail button'));
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const COL = {
@@ -28,7 +29,6 @@
     };
     const TAU = Math.PI * 2;
     const DEG = Math.PI / 180;
-    const CHANNEL_SECONDS = 14;
     const FADE_SECONDS = 0.35;
 
     let W = 0, H = 0, dpr = 1, small = false;
@@ -1113,29 +1113,33 @@
     }
 
     /* =====================================================================
-     * Console: layout, starfield, shared HUD, channel switching, loop.
+     * Pinned scene viewer: one full-screen canvas inside a sticky wrapper. The text panel
+     * crossing the middle of the screen picks the scene; the rail ticks jump to a panel.
      * ===================================================================== */
     const scenes = [mars, gnc, earth];
-    let current = 0, chanT = 0, trans = null, running = false, last = 0, heroVisible = true;
+    let current = 0, trans = null, running = false, last = 0, inView = false;
 
     function layout() {
-        const hr = hero.getBoundingClientRect();
-        const sr = stageEl.getBoundingClientRect();
+        const r = pin.getBoundingClientRect();
         dpr = Math.min(window.devicePixelRatio || 1, 2);
-        W = Math.round(hr.width);
-        H = Math.round(hr.height);
-        small = W < 760;
+        W = Math.round(r.width);
+        H = Math.round(r.height);
+        small = W < 900;
         canvas.width = Math.round(W * dpr);
         canvas.height = Math.round(H * dpr);
         canvas.style.width = `${W}px`;
         canvas.style.height = `${H}px`;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        stage = { x: sr.left - hr.left, y: sr.top - hr.top, w: sr.width, h: sr.height };
+        // Desktop: scene sits right of the text column. Phone: upper part of the screen.
+        const top = 84;
+        stage = small
+            ? { x: 12, y: top, w: W - 24, h: Math.max(260, H * 0.62 - top) }
+            : { x: Math.round(W * 0.4), y: top, w: Math.round(W * 0.6) - 130, h: H - top - 28 };
         stars = Array.from({ length: Math.round((W * H) / 6000) }, () => ({ x: rand(0, W), y: rand(0, H), r: rand(0.3, 1.2), p: rand(0, TAU) }));
         scenes.forEach((sc) => sc.resize());
     }
 
-    function drawStars() {
+    function drawBackdrop() {
         for (let i = 0; i < stars.length; i++) {
             const st = stars[i];
             ctx.globalAlpha = 0.35 + 0.35 * Math.sin(met * 0.8 + st.p);
@@ -1143,23 +1147,17 @@
             ctx.fillRect(st.x, st.y, st.r, st.r);
         }
         ctx.globalAlpha = 1;
-    }
-
-    function drawHud(scene) {
-        const { x, y, w, h } = stage;
-        ctx.fillStyle = 'rgba(5, 8, 13, 0.35)';
-        ctx.fillRect(x, y, w, h);
-        ctx.strokeStyle = 'rgba(90, 209, 255, 0.08)';
+        ctx.strokeStyle = 'rgba(90, 209, 255, 0.06)';
         ctx.beginPath();
-        const gs = small ? 40 : 56;
-        for (let gx = x + gs; gx < x + w; gx += gs) { ctx.moveTo(gx, y); ctx.lineTo(gx, y + h); }
-        for (let gy = y + gs; gy < y + h; gy += gs) { ctx.moveTo(x, gy); ctx.lineTo(x + w, gy); }
+        const gs = small ? 40 : 64;
+        for (let gx = gs; gx < W; gx += gs) { ctx.moveTo(gx, 0); ctx.lineTo(gx, H); }
+        for (let gy = gs; gy < H; gy += gs) { ctx.moveTo(0, gy); ctx.lineTo(W, gy); }
         ctx.stroke();
     }
 
     function drawHudOverlay(scene) {
         const { x, y, w, h } = stage;
-        brackets(x, y, w, h, 18, COL.cyan);
+        brackets(x, y, w, h, 18, 'rgba(90, 209, 255, 0.55)');
         text(scene.title, x + 14, y + 24, COL.cyan, small ? 11 : 13, 'left', 600);
         if (!small) text(scene.subtitle, x + 14, y + 41, COL.dim, 10);
 
@@ -1191,9 +1189,8 @@
 
     function render() {
         ctx.clearRect(0, 0, W, H);
-        drawStars();
+        drawBackdrop();
         const scene = scenes[current];
-        drawHud(scene);
         ctx.save();
         ctx.beginPath(); ctx.rect(stage.x, stage.y, stage.w, stage.h); ctx.clip();
         scene.draw();
@@ -1202,48 +1199,53 @@
         if (trans) {
             const a = trans.t < FADE_SECONDS ? trans.t / FADE_SECONDS : 1 - (trans.t - FADE_SECONDS) / FADE_SECONDS;
             ctx.fillStyle = `rgba(5, 8, 13, ${clamp(a, 0, 1)})`;
-            ctx.fillRect(stage.x, stage.y, stage.w, stage.h);
+            ctx.fillRect(0, 0, W, H);
         }
-        buttons.forEach((b, i) => {
-            const on = i === (trans ? trans.to : current);
-            b.classList.toggle('active', on);
-            b.setAttribute('aria-pressed', String(on));
-            b.style.setProperty('--p', on && !reduceMotion ? String(clamp(chanT / CHANNEL_SECONDS, 0, 1)) : on ? '1' : '0');
+        const shown = trans ? trans.to : current;
+        ticks.forEach((b, i) => {
+            b.classList.toggle('active', i === shown);
+            b.setAttribute('aria-current', i === shown ? 'step' : 'false');
         });
     }
 
-    function step(dt) {
+    /* dt drives the simulations (clamped); fadeDt is real elapsed time so a slow device
+     * never leaves the crossfade half-finished. */
+    function step(dt, fadeDt) {
         met += dt;
         if (trans) {
             const before = trans.t;
-            trans.t += dt;
-            if (before < FADE_SECONDS && trans.t >= FADE_SECONDS) current = trans.to;
+            trans.t += fadeDt === undefined ? dt : fadeDt;
+            if (before < FADE_SECONDS && trans.t >= FADE_SECONDS) {
+                current = trans.to;
+                if (scenes[current] === gnc) gnc.reset(); // launch always plays from liftoff
+            }
             if (trans.t >= FADE_SECONDS * 2) trans = null;
-        } else {
-            chanT += dt;
-            if (chanT >= CHANNEL_SECONDS) switchTo((current + 1) % scenes.length);
         }
         scenes[current].update(dt);
     }
 
-    function switchTo(i) {
-        chanT = 0;
-        if (reduceMotion) { current = i; render(); return; }
-        if (i === current && !trans) return;
+    function setScene(i) {
+        if (i === (trans ? trans.to : current)) return;
+        if (reduceMotion || !running) {
+            current = i;
+            trans = null;
+            render();
+            return;
+        }
         trans = { to: i, t: 0 };
     }
 
     function frame(now) {
         if (!running) return;
-        const dt = Math.min(0.05, (now - last) / 1000);
+        const elapsed = (now - last) / 1000;
         last = now;
-        step(dt);
+        step(Math.min(0.05, elapsed), Math.min(FADE_SECONDS, elapsed));
         render();
         requestAnimationFrame(frame);
     }
 
     function updateRunning() {
-        const shouldRun = !reduceMotion && heroVisible && !document.hidden;
+        const shouldRun = !reduceMotion && inView && !document.hidden;
         if (shouldRun && !running) {
             running = true;
             last = performance.now();
@@ -1253,7 +1255,9 @@
         }
     }
 
-    buttons.forEach((b, i) => b.addEventListener('click', () => switchTo(i)));
+    ticks.forEach((b, i) => b.addEventListener('click', () => {
+        if (panels[i]) panels[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    }));
 
     let resizeTimer = 0;
     window.addEventListener('resize', () => {
@@ -1263,17 +1267,27 @@
     document.addEventListener('visibilitychange', updateRunning);
     if ('IntersectionObserver' in window) {
         new IntersectionObserver((entries) => {
-            heroVisible = entries[0].isIntersecting;
+            inView = entries[0].isIntersecting;
             updateRunning();
-        }).observe(hero);
+        }).observe(block);
+        // A panel becomes active when it crosses the horizontal middle of the viewport.
+        const picker = new IntersectionObserver((entries) => {
+            entries.forEach((e) => { if (e.isIntersecting) setScene(panels.indexOf(e.target)); });
+        }, { rootMargin: '-50% 0px -50% 0px' });
+        panels.forEach((p) => picker.observe(p));
+    } else {
+        inView = true;
+        updateRunning();
     }
 
     layout(); // each scene's resize() also seeds it on first call
+    if (new URLSearchParams(location.search).has('simdebug')) window.__hero = { step, render, scenes, setScene };
     if (reduceMotion) {
-        // Still frames: advance each simulation a few seconds so every channel has something to show.
+        // Still frames: advance each simulation a few seconds so every scene has something to show.
         scenes.forEach((sc) => { for (let k = 0; k < 240; k++) sc.update(1 / 30); });
         render();
     } else {
+        render();
         updateRunning();
     }
     loadLand();
